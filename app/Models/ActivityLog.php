@@ -48,6 +48,11 @@ class ActivityLog extends Model
      */
     public static function log(string $action, string $description, $model = null, array $properties = [])
     {
+        // Skip logging if user is not authenticated
+        if (!auth()->check()) {
+            return null;
+        }
+        
         return static::create([
             'user_id' => auth()->id(),
             'action' => $action,
