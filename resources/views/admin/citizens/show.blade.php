@@ -102,9 +102,8 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-600">Status</label>
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                        {{ $citizen->status == 'Aktif' ? 'bg-green-100 text-green-800' : 
-                                           ($citizen->status == 'Pindah' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
-                                        {{ $citizen->status }}
+                                        {{ $citizen->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                        {{ $citizen->is_active ? 'Aktif' : 'Tidak Aktif' }}
                                     </span>
                                 </div>
                             </div>

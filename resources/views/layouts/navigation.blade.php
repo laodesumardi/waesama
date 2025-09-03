@@ -26,6 +26,10 @@
                         <x-nav-link :href="route('admin.users')" :active="request()->routeIs('admin.users*')">
                             {{ __('Manajemen Pengguna') }}
                         </x-nav-link>
+                        
+                        <x-nav-link :href="route('admin.activity-logs')" :active="request()->routeIs('admin.activity-logs')">
+                            {{ __('Log Aktivitas') }}
+                        </x-nav-link>
                     @endif
                 </div>
             </div>
@@ -92,6 +96,10 @@
             @if(auth()->user()->role === 'admin')
                 <x-responsive-nav-link :href="route('admin.users')" :active="request()->routeIs('admin.users*')">
                     {{ __('Manajemen Pengguna') }}
+                </x-responsive-nav-link>
+                
+                <x-responsive-nav-link :href="route('admin.activity-logs')" :active="request()->routeIs('admin.activity-logs')">
+                    {{ __('Log Aktivitas') }}
                 </x-responsive-nav-link>
             @endif
         </div>

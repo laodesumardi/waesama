@@ -163,14 +163,13 @@
 
                             <!-- Status -->
                             <div>
-                                <label for="status" class="block text-sm font-medium text-gray-700">Status *</label>
-                                <select name="status" id="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 @error('status') border-red-500 @enderror">
+                                <label for="is_active" class="block text-sm font-medium text-gray-700">Status *</label>
+                                <select name="is_active" id="is_active" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 @error('is_active') border-red-500 @enderror">
                                     <option value="">Pilih Status</option>
-                                    <option value="Aktif" {{ old('status') == 'Aktif' ? 'selected' : '' }}>Aktif</option>
-                                    <option value="Pindah" {{ old('status') == 'Pindah' ? 'selected' : '' }}>Pindah</option>
-                                    <option value="Meninggal" {{ old('status') == 'Meninggal' ? 'selected' : '' }}>Meninggal</option>
+                                    <option value="1" {{ old('is_active') == '1' ? 'selected' : '' }}>Aktif</option>
+                                    <option value="0" {{ old('is_active') == '0' ? 'selected' : '' }}>Tidak Aktif</option>
                                 </select>
-                                @error('status')
+                                @error('is_active')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>

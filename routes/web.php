@@ -31,12 +31,18 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin,pegawai'
     Route::get('/users/{user}/edit', [AdminController::class, 'userEdit'])->name('users.edit');
     Route::put('/users/{user}', [AdminController::class, 'userUpdate'])->name('users.update');
     Route::delete('/users/{user}', [AdminController::class, 'userDestroy'])->name('users.destroy');
+    
+    // Activity Logs
+    Route::get('/activity-logs', [AdminController::class, 'activityLogs'])->name('activity-logs');
 });
 
 // Service Requests and Documents Routes
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin,pegawai'])->group(function () {
     // Citizens Management
     Route::resource('citizens', CitizenController::class);
+    Route::get('citizens-export', [CitizenController::class, 'export'])->name('citizens.export');
+    Route::post('citizens-import', [CitizenController::class, 'import'])->name('citizens.import');
+    Route::get('citizens-template', [CitizenController::class, 'downloadTemplate'])->name('citizens.template');
     // Service Requests
     Route::resource('service-requests', \App\Http\Controllers\ServiceRequestController::class);
     Route::post('service-requests/{serviceRequest}/process', [\App\Http\Controllers\ServiceRequestController::class, 'process'])->name('service-requests.process');

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Citizen;
 use App\Models\Village;
+use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -127,9 +128,27 @@ class AdminController extends Controller
                 }
             })
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->paginate(15);
 
-        return view('admin.users.index', compact('users'));
+        // Recent activity logs
+        $recentActivities = ActivityLog::with('user')
+            ->recent(7)
+            ->orderBy('created_at', 'desc')
+            ->limit(10)
+            ->get();
+
+        // User statistics
+        $userStats = [
+            'total' => User::count(),
+            'active' => User::where('is_active', true)->count(),
+            'inactive' => User::where('is_active', false)->count(),
+            'admin' => User::where('role', 'admin')->count(),
+            'pegawai' => User::where('role', 'pegawai')->count(),
+            'masyarakat' => User::where('role', 'masyarakat')->count(),
+            'today_logins' => User::whereDate('last_login_at', today())->count(),
+        ];
+
+        return view('admin.users.index', compact('users', 'recentActivities', 'userStats'));
     }
 
     public function userCreate()
@@ -160,7 +179,15 @@ class AdminController extends Controller
         $userData['is_active'] = $request->has('is_active');
         $userData['email_verified_at'] = now();
 
-        User::create($userData);
+        $user = User::create($userData);
+
+        // Log activity
+        ActivityLog::log(
+            'user_created',
+            "Membuat pengguna baru: {$user->name} ({$user->email})",
+            $user,
+            ['role' => $user->role, 'employee_id' => $user->employee_id]
+        );
 
         return redirect()->route('admin.users')
             ->with('success', 'Pengguna berhasil dibuat!');
@@ -193,10 +220,20 @@ class AdminController extends Controller
             'is_active' => 'boolean'
         ]);
         
+        $oldData = $user->only(['name', 'email', 'role', 'is_active']);
+        
         $user->update($request->only([
             'name', 'email', 'role', 'phone', 'employee_id', 
             'position', 'department', 'is_active'
         ]));
+        
+        // Log activity
+        ActivityLog::log(
+            'user_updated',
+            "Memperbarui data pengguna: {$user->name}",
+            $user,
+            ['old_data' => $oldData, 'new_data' => $user->only(['name', 'email', 'role', 'is_active'])]
+        );
         
         return redirect()->route('admin.users.show', $user->id)
             ->with('success', 'Data pengguna berhasil diperbarui.');
@@ -210,9 +247,52 @@ class AdminController extends Controller
             return back()->with('error', 'Anda tidak dapat menghapus akun sendiri.');
         }
         
+        // Log activity before deletion
+        ActivityLog::log(
+            'user_deleted',
+            "Menghapus pengguna: {$user->name} ({$user->email})",
+            null,
+            ['deleted_user' => $user->only(['name', 'email', 'role', 'employee_id'])]
+        );
+        
         $user->delete();
         
         return redirect()->route('admin.users')
             ->with('success', 'Pengguna berhasil dihapus.');
+    }
+    
+    public function activityLogs(Request $request)
+    {
+        $query = ActivityLog::with('user');
+        
+        // Search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('description', 'like', "%{$search}%")
+                  ->orWhere('action', 'like', "%{$search}%")
+                  ->orWhereHas('user', function($userQuery) use ($search) {
+                      $userQuery->where('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+        
+        // Action filter
+        if ($request->filled('action')) {
+            $query->where('action', $request->action);
+        }
+        
+        // Date range filter
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+        
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+        
+        $activityLogs = $query->orderBy('created_at', 'desc')->paginate(20);
+        
+        return view('admin.activity-logs.index', compact('activityLogs'));
     }
 }
