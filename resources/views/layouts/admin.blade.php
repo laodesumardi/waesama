@@ -18,83 +18,86 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased bg-gray-100">
+        <!-- Sidebar Overlay -->
+        <div id="sidebar-overlay" class="sidebar-overlay hidden lg:hidden"></div>
+        
         <div class="flex h-screen">
             <!-- Sidebar -->
-            <div id="sidebar" class="admin-sidebar text-white w-64 min-h-screen flex flex-col lg:relative lg:translate-x-0 fixed -translate-x-full z-50">
-                <!-- Logo -->
-                <div class="flex items-center justify-center h-16" style="background-color: #002347;">
+            <div id="sidebar" class="admin-sidebar text-white w-64 min-h-screen flex flex-col lg:relative lg:translate-x-0 fixed -translate-x-full z-50 transition-transform duration-300 ease-in-out">
+                <!-- Logo - Sticky Header -->
+                <div class="flex items-center justify-center h-16 sticky top-0 z-10" style="background-color: #002347;">
                     <h1 class="text-xl font-bold">Admin Panel</h1>
                 </div>
 
-                <!-- Navigation Menu -->
-                <nav class="flex-1 px-4 py-6 space-y-2">
+                <!-- Navigation Menu - Scrollable -->
+                <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
                     <!-- Dashboard -->
-                    <a href="{{ route('dashboard') }}" 
-                       class="admin-nav-item flex items-center px-4 py-3 text-gray-300 hover:text-white {{ request()->routeIs('dashboard') ? 'active text-white' : '' }}">
+                    <a href="{{ route('admin.dashboard') }}" 
+                       class="admin-nav-item flex items-center px-4 py-3 text-gray-300 hover:text-white rounded-lg transition-all duration-200 {{ request()->routeIs('admin.dashboard') ? 'bg-white/20 border-r-4 border-white text-white' : '' }}">
                         <i class="fas fa-tachometer-alt w-5 h-5 mr-3"></i>
-                        <span>Dashboard</span>
+                        <span class="font-medium">Dashboard</span>
                     </a>
 
                     <!-- Data Penduduk -->
                     @if(auth()->user()->role === 'admin' || auth()->user()->role === 'pegawai')
                     <a href="{{ route('admin.citizens.index') }}" 
-                       class="admin-nav-item flex items-center px-4 py-3 text-gray-300 hover:text-white {{ request()->routeIs('admin.citizens.*') ? 'active text-white' : '' }}">
+                       class="admin-nav-item flex items-center px-4 py-3 text-gray-300 hover:text-white rounded-lg transition-all duration-200 {{ request()->routeIs('admin.citizens.*') ? 'bg-white/20 border-r-4 border-white text-white' : '' }}">
                         <i class="fas fa-users w-5 h-5 mr-3"></i>
-                        <span>Data Penduduk</span>
+                        <span class="font-medium">Data Penduduk</span>
                     </a>
                     @endif
 
                     <!-- Service Requests -->
                     @if(auth()->user()->role === 'admin' || auth()->user()->role === 'pegawai')
                     <a href="{{ route('admin.service-requests.index') }}" 
-                       class="admin-nav-item flex items-center px-4 py-3 text-gray-300 hover:text-white {{ request()->routeIs('admin.service-requests.*') ? 'active text-white' : '' }}">
+                       class="admin-nav-item flex items-center px-4 py-3 text-gray-300 hover:text-white rounded-lg transition-all duration-200 {{ request()->routeIs('admin.service-requests.*') ? 'bg-white/20 border-r-4 border-white text-white' : '' }}">
                         <i class="fas fa-file-alt w-5 h-5 mr-3"></i>
-                        <span>Layanan Surat</span>
+                        <span class="font-medium">Layanan Surat</span>
                     </a>
                     @endif
 
                     <!-- Documents -->
                     @if(auth()->user()->role === 'admin' || auth()->user()->role === 'pegawai')
                     <a href="{{ route('admin.documents.index') }}" 
-                       class="admin-nav-item flex items-center px-4 py-3 text-gray-300 hover:text-white {{ request()->routeIs('admin.documents.*') ? 'active text-white' : '' }}">
+                       class="admin-nav-item flex items-center px-4 py-3 text-gray-300 hover:text-white rounded-lg transition-all duration-200 {{ request()->routeIs('admin.documents.*') ? 'bg-white/20 border-r-4 border-white text-white' : '' }}">
                         <i class="fas fa-folder w-5 h-5 mr-3"></i>
-                        <span>Dokumen</span>
+                        <span class="font-medium">Dokumen</span>
                     </a>
                     @endif
 
                     <!-- News Management -->
                     @if(auth()->user()->role === 'admin' || auth()->user()->role === 'pegawai')
                     <a href="{{ route('admin.news.index') }}" 
-                       class="admin-nav-item flex items-center px-4 py-3 text-gray-300 hover:text-white {{ request()->routeIs('admin.news.*') ? 'active text-white' : '' }}">
+                       class="admin-nav-item flex items-center px-4 py-3 text-gray-300 hover:text-white rounded-lg transition-all duration-200 {{ request()->routeIs('admin.news.*') ? 'bg-white/20 border-r-4 border-white text-white' : '' }}">
                         <i class="fas fa-newspaper w-5 h-5 mr-3"></i>
-                        <span>Berita</span>
+                        <span class="font-medium">Berita</span>
                     </a>
                     @endif
 
                     <!-- Gallery Management -->
                     @if(auth()->user()->role === 'admin' || auth()->user()->role === 'pegawai')
                     <a href="{{ route('admin.galleries.index') }}"
-                       class="admin-nav-item flex items-center px-4 py-3 text-gray-300 hover:text-white {{ request()->routeIs('admin.galleries.*') ? 'active text-white' : '' }}">
+                       class="admin-nav-item flex items-center px-4 py-3 text-gray-300 hover:text-white rounded-lg transition-all duration-200 {{ request()->routeIs('admin.galleries.*') ? 'bg-white/20 border-r-4 border-white text-white' : '' }}">
                         <i class="fas fa-images w-5 h-5 mr-3"></i>
-                        <span>Galeri</span>
+                        <span class="font-medium">Galeri</span>
                     </a>
                     @endif
 
                     <!-- User Management -->
                     @if(auth()->user()->role === 'admin')
                     <a href="{{ route('admin.users') }}" 
-                       class="admin-nav-item flex items-center px-4 py-3 text-gray-300 hover:text-white {{ request()->routeIs('admin.users*') ? 'active text-white' : '' }}">
+                       class="admin-nav-item flex items-center px-4 py-3 text-gray-300 hover:text-white rounded-lg transition-all duration-200 {{ request()->routeIs('admin.users*') ? 'bg-white/20 border-r-4 border-white text-white' : '' }}">
                         <i class="fas fa-user-cog w-5 h-5 mr-3"></i>
-                        <span>Manajemen Pengguna</span>
+                        <span class="font-medium">Manajemen Pengguna</span>
                     </a>
                     @endif
 
                     <!-- Activity Logs -->
                     @if(auth()->user()->role === 'admin')
                     <a href="{{ route('admin.activity-logs') }}" 
-                       class="admin-nav-item flex items-center px-4 py-3 text-gray-300 hover:text-white {{ request()->routeIs('admin.activity-logs') ? 'active text-white' : '' }}">
+                       class="admin-nav-item flex items-center px-4 py-3 text-gray-300 hover:text-white rounded-lg transition-all duration-200 {{ request()->routeIs('admin.activity-logs') ? 'bg-white/20 border-r-4 border-white text-white' : '' }}">
                         <i class="fas fa-history w-5 h-5 mr-3"></i>
-                        <span>Log Aktivitas</span>
+                        <span class="font-medium">Log Aktivitas</span>
                     </a>
                     @endif
 
@@ -103,9 +106,9 @@
 
                     <!-- Profile Menu -->
                     <a href="{{ route('profile.edit') }}" 
-                       class="admin-nav-item flex items-center px-4 py-3 text-gray-300 hover:text-white {{ request()->routeIs('profile.*') ? 'active text-white' : '' }}">
+                       class="admin-nav-item flex items-center px-4 py-3 text-gray-300 hover:text-white rounded-lg transition-all duration-200 {{ request()->routeIs('profile.*') ? 'bg-white/20 border-r-4 border-white text-white' : '' }}">
                         <i class="fas fa-user-edit w-5 h-5 mr-3"></i>
-                        <span>Profil Saya</span>
+                        <span class="font-medium">Profil Saya</span>
                     </a>
                 </nav>
 
@@ -113,25 +116,25 @@
             </div>
 
             <!-- Main Content -->
-            <div class="flex-1 flex flex-col overflow-hidden">
+            <div class="flex-1 flex flex-col overflow-hidden lg:ml-0">
                 <!-- Top Header -->
-                <header class="admin-header shadow-sm border-b border-gray-200">
-                    <div class="flex items-center justify-between px-6 py-4">
+                <header class="admin-header shadow-sm border-b border-gray-200 relative z-30">
+                    <div class="flex items-center justify-between px-4 lg:px-6 py-4">
                         <!-- Mobile menu button -->
-                        <button id="sidebar-toggle" class="admin-mobile-menu-btn lg:hidden">
+                        <button id="sidebar-toggle" class="admin-mobile-menu-btn lg:hidden p-2 rounded-lg">
                             <i class="fas fa-bars text-xl"></i>
                         </button>
 
                         <!-- Page Title -->
                         @isset($header)
-                            <div class="flex-1">
-                                <h1 class="text-2xl font-semibold" style="color: white;">{{ $header }}</h1>
+                            <div class="flex-1 ml-4 lg:ml-0">
+                                <h1 class="text-xl lg:text-2xl font-semibold" style="color: white;">{{ $header }}</h1>
                             </div>
                         @endisset
 
                         <!-- Notification & Logout -->
-                        <div class="flex items-center space-x-3">
-                            <button class="p-2 rounded-lg text-white hover:bg-white/10 transition-colors">
+                        <div class="flex items-center space-x-2 lg:space-x-3">
+                            <button class="p-2 rounded-lg text-white hover:bg-white/10 transition-colors hidden sm:block">
                                 <i class="fas fa-bell text-lg"></i>
                             </button>
                             <form method="POST" action="{{ route('logout') }}" class="inline">
@@ -145,7 +148,7 @@
                 </header>
 
                 <!-- Page Content -->
-                <main class="admin-content flex-1 overflow-x-hidden overflow-y-auto p-6">
+                <main class="admin-content flex-1 overflow-x-hidden overflow-y-auto p-4 lg:p-6">
                     <div class="fade-in">
                         {{ $slot }}
                     </div>
@@ -159,95 +162,74 @@
 
 
         <script>
-            // Enhanced Sidebar Management
             class SidebarManager {
                 constructor() {
                     this.sidebar = document.getElementById('sidebar');
                     this.overlay = document.getElementById('sidebar-overlay');
                     this.toggleBtn = document.getElementById('sidebar-toggle');
                     this.isOpen = false;
+                    
                     this.init();
                 }
-
+                
                 init() {
-                    this.setupEventListeners();
-                    this.handleResize();
+                    this.toggleBtn?.addEventListener('click', () => this.toggle());
+                    this.overlay?.addEventListener('click', () => this.close());
                     window.addEventListener('resize', () => this.handleResize());
-                }
-
-                setupEventListeners() {
-                    // Toggle sidebar on button click
-                    this.toggleBtn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        this.toggle();
-                    });
-
-                    // Close sidebar when clicking overlay
-                    this.overlay.addEventListener('click', () => {
-                        this.close();
-                    });
-
-                    // Close sidebar on escape key
+                    
+                    // Handle escape key
                     document.addEventListener('keydown', (e) => {
-                        if (e.key === 'Escape' && this.isOpen) {
+                        if (e.key === 'Escape' && this.isOpen && window.innerWidth < 1024) {
                             this.close();
                         }
                     });
-
-                    // Prevent sidebar from closing when clicking inside it
-                    this.sidebar.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                    });
                 }
-
+                
                 toggle() {
-                    if (this.isOpen) {
-                        this.close();
-                    } else {
-                        this.open();
-                    }
+                    this.isOpen ? this.close() : this.open();
                 }
-
+                
                 open() {
-                    if (window.innerWidth < 1024) {
-                        // Add smooth opening animation
-                        this.sidebar.classList.add('open');
-                        this.sidebar.classList.remove('-translate-x-full');
-                        this.overlay.classList.remove('hidden');
-                        this.overlay.classList.add('show');
-                        this.overlay.classList.remove('hide');
-                        
-                        // Prevent body scroll with smooth transition
-                        document.body.style.overflow = 'hidden';
-                        document.body.style.transition = 'all 0.3s ease';
-                        
-                        // Add focus trap for accessibility
-                        this.trapFocus();
-                        
-                        this.isOpen = true;
-                    }
-                }
-
-                close() {
-                    // Add smooth closing animation
-                    this.sidebar.classList.remove('open');
-                    this.sidebar.classList.add('-translate-x-full');
-                    this.overlay.classList.add('hide');
-                    this.overlay.classList.remove('show');
+                    this.sidebar.classList.remove('-translate-x-full');
+                    this.sidebar.classList.add('open');
+                    this.overlay.classList.remove('hidden');
+                    this.overlay.classList.add('show');
+                    this.isOpen = true;
                     
-                    // Delay hiding overlay to allow animation
-                    setTimeout(() => {
-                        this.overlay.classList.add('hidden');
-                    }, 300);
+                    // Prevent body scroll
+                    document.body.style.overflow = 'hidden';
+                    
+                    // Focus trap for accessibility
+                    this.trapFocus();
+                }
+                
+                close() {
+                    this.sidebar.classList.add('-translate-x-full');
+                    this.sidebar.classList.remove('open');
+                    this.overlay.classList.remove('show');
+                    this.overlay.classList.add('hide');
                     
                     // Restore body scroll
                     document.body.style.overflow = '';
-                    document.body.style.transition = '';
                     
-                    // Remove focus trap
-                    this.removeFocusTrap();
+                    setTimeout(() => {
+                        this.overlay.classList.add('hidden');
+                        this.overlay.classList.remove('hide');
+                    }, 300);
                     
                     this.isOpen = false;
+                }
+                
+                handleResize() {
+                    if (window.innerWidth >= 1024) {
+                        this.sidebar.classList.remove('-translate-x-full', 'open');
+                        this.overlay.classList.add('hidden');
+                        this.overlay.classList.remove('show', 'hide');
+                        document.body.style.overflow = '';
+                        this.isOpen = false;
+                    } else if (!this.isOpen) {
+                        this.sidebar.classList.add('-translate-x-full');
+                    }
                 }
                 
                 trapFocus() {
@@ -257,51 +239,30 @@
                     const firstElement = focusableElements[0];
                     const lastElement = focusableElements[focusableElements.length - 1];
                     
-                    this.sidebar.addEventListener('keydown', this.handleTabKey = (e) => {
+                    firstElement?.focus();
+                    
+                    const handleTabKey = (e) => {
                         if (e.key === 'Tab') {
                             if (e.shiftKey) {
                                 if (document.activeElement === firstElement) {
-                                    lastElement.focus();
+                                    lastElement?.focus();
                                     e.preventDefault();
                                 }
                             } else {
                                 if (document.activeElement === lastElement) {
-                                    firstElement.focus();
+                                    firstElement?.focus();
                                     e.preventDefault();
                                 }
                             }
                         }
-                    });
+                    };
                     
-                    if (firstElement) firstElement.focus();
-                }
-                
-                removeFocusTrap() {
-                    if (this.handleTabKey) {
-                        this.sidebar.removeEventListener('keydown', this.handleTabKey);
-                    }
-                }
-
-                handleResize() {
-                    if (window.innerWidth >= 1024) {
-                        // Desktop: Always show sidebar
-                        this.sidebar.classList.remove('-translate-x-full', 'open');
-                        this.overlay.classList.add('hidden');
-                        document.body.style.overflow = '';
-                        this.isOpen = false;
-                    } else {
-                        // Mobile/Tablet: Hide sidebar by default
-                        if (!this.isOpen) {
-                            this.sidebar.classList.add('-translate-x-full');
-                            this.sidebar.classList.remove('open');
-                            this.overlay.classList.add('hidden');
-                        }
-                    }
+                    this.sidebar.addEventListener('keydown', handleTabKey);
                 }
             }
-
-            // Initialize when DOM is loaded
-            document.addEventListener('DOMContentLoaded', function() {
+            
+            // Initialize sidebar manager when DOM is loaded
+            document.addEventListener('DOMContentLoaded', () => {
                 new SidebarManager();
             });
         </script>
