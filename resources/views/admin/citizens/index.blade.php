@@ -174,8 +174,8 @@
                     </div>
 
                     <!-- Tabel Data -->
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
+                    <div class="admin-table-responsive overflow-x-auto">
+                        <table class="admin-table min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NIK</th>
@@ -196,8 +196,7 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $citizen->village->name }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                                {{ $citizen->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                            <span class="admin-badge {{ $citizen->is_active ? 'admin-badge-success' : 'admin-badge-danger' }} px-2 inline-flex text-xs leading-5 font-semibold rounded-full">
                                                 {{ $citizen->is_active ? 'Aktif' : 'Tidak Aktif' }}
                                             </span>
                                         </td>
@@ -223,6 +222,47 @@
                                 @endforelse
                             </tbody>
                         </table>
+                    </div>
+
+                    <!-- Mobile Cards (Hidden on desktop, shown on mobile) -->
+                    <div class="admin-mobile-cards hidden">
+                        @forelse($citizens as $citizen)
+                            <div class="admin-mobile-card">
+                                <div class="admin-mobile-card-header">
+                                    {{ $citizen->name }}
+                                </div>
+                                <div class="admin-mobile-card-content">
+                                    <div class="admin-mobile-card-label">NIK:</div>
+                                    <div class="admin-mobile-card-value">{{ $citizen->nik }}</div>
+                                    <div class="admin-mobile-card-label">Jenis Kelamin:</div>
+                                    <div class="admin-mobile-card-value">{{ $citizen->gender == 'L' ? 'Laki-laki' : 'Perempuan' }}</div>
+                                    <div class="admin-mobile-card-label">Desa:</div>
+                                    <div class="admin-mobile-card-value">{{ $citizen->village->name }}</div>
+                                    <div class="admin-mobile-card-label">Status:</div>
+                                    <div class="admin-mobile-card-value">
+                                        <span class="admin-badge {{ $citizen->is_active ? 'admin-badge-success' : 'admin-badge-danger' }}">
+                                            {{ $citizen->is_active ? 'Aktif' : 'Tidak Aktif' }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="mt-3 flex space-x-2">
+                                    <a href="{{ route('admin.citizens.show', $citizen) }}" class="admin-btn-primary text-xs px-3 py-1">Lihat</a>
+                                    <a href="{{ route('admin.citizens.edit', $citizen) }}" class="admin-btn-secondary text-xs px-3 py-1">Edit</a>
+                                    <form action="{{ route('admin.citizens.destroy', $citizen) }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 hover:text-red-900 text-xs px-3 py-1 border border-red-600 rounded" 
+                                                onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                            Hapus
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="admin-mobile-card text-center text-gray-500">
+                                Tidak ada data penduduk.
+                            </div>
+                        @endforelse
                     </div>
 
                     <!-- Pagination -->

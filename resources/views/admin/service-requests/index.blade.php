@@ -4,12 +4,12 @@
     </x-slot>
 
     <div class="space-y-6">
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+        <div class="admin-card bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 text-gray-900">
                     <!-- Header dengan tombol tambah -->
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-lg font-medium text-gray-900">Daftar Permohonan Surat</h3>
-                        <a href="{{ route('admin.service-requests.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        <a href="{{ route('admin.service-requests.create') }}" class="admin-btn-primary">
                             <i class="fas fa-plus"></i> Tambah Permohonan
                         </a>
                     </div>
@@ -18,9 +18,9 @@
                     <div class="row mb-3">
                         <div class="col-md-3">
                             <form method="GET" action="{{ route('admin.service-requests.index') }}">
-                                <div class="input-group">
-                                    <input type="text" name="search" class="form-control" placeholder="Cari nomor permohonan, nama..." value="{{ request('search') }}">
-                                    <button class="btn btn-outline-secondary" type="submit">
+                                <div class="flex">
+                                    <input type="text" name="search" class="admin-input flex-1" placeholder="Cari nomor permohonan, nama..." value="{{ request('search') }}">
+                                    <button class="admin-btn-secondary ml-2" type="submit">
                                         <i class="fas fa-search"></i>
                                     </button>
                                 </div>
@@ -28,7 +28,7 @@
                         </div>
                         <div class="col-md-2">
                             <form method="GET" action="{{ route('admin.service-requests.index') }}">
-                                <select name="status" class="form-select" onchange="this.form.submit()">
+                                <select name="status" class="admin-select" onchange="this.form.submit()">
                                     <option value="">Semua Status</option>
                                     <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
                                     <option value="processing" {{ request('status') == 'processing' ? 'selected' : '' }}>Diproses</option>
@@ -40,7 +40,7 @@
                         </div>
                         <div class="col-md-2">
                             <form method="GET" action="{{ route('admin.service-requests.index') }}">
-                                <select name="service_type" class="form-select" onchange="this.form.submit()">
+                                <select name="service_type" class="admin-select" onchange="this.form.submit()">
                                     <option value="">Semua Jenis</option>
                                     <option value="surat_keterangan_domisili" {{ request('service_type') == 'surat_keterangan_domisili' ? 'selected' : '' }}>Surat Keterangan Domisili</option>
                                     <option value="surat_keterangan_usaha" {{ request('service_type') == 'surat_keterangan_usaha' ? 'selected' : '' }}>Surat Keterangan Usaha</option>
@@ -52,15 +52,15 @@
                             </form>
                         </div>
                         <div class="col-md-2">
-                            <a href="{{ route('admin.service-requests.index') }}" class="btn btn-secondary">
+                            <a href="{{ route('admin.service-requests.index') }}" class="admin-btn-secondary">
                                 <i class="fas fa-redo"></i> Reset
                             </a>
                         </div>
                     </div>
 
                     <!-- Tabel Data -->
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped">
+                    <div class="admin-table-responsive">
+                        <table class="admin-table table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -88,7 +88,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <span class="badge bg-info">
+                                        <span class="admin-badge admin-badge-info">
                                             {{ str_replace('_', ' ', ucwords($request->service_type, '_')) }}
                                         </span>
                                     </td>
@@ -97,45 +97,45 @@
                                     <td>{!! $request->priority_badge !!}</td>
                                     <td>{{ $request->created_at->format('d/m/Y H:i') }}</td>
                                     <td>
-                                        <div class="btn-group" role="group">
-                                            <a href="{{ route('admin.service-requests.show', $request) }}" class="btn btn-sm btn-info" title="Lihat">
+                                        <div class="flex space-x-1" role="group">
+                                            <a href="{{ route('admin.service-requests.show', $request) }}" class="admin-btn-info text-xs px-2 py-1" title="Lihat">
                                                 <i class="fas fa-eye"></i>
                                             </a>
                                             @if($request->canBeProcessed())
-                                            <a href="{{ route('admin.service-requests.edit', $request) }}" class="btn btn-sm btn-warning" title="Edit">
+                                            <a href="{{ route('admin.service-requests.edit', $request) }}" class="admin-btn-warning text-xs px-2 py-1" title="Edit">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                             @endif
                                             @if($request->status === 'pending')
-                                            <form action="{{ route('admin.service-requests.process', $request) }}" method="POST" style="display: inline;">
+                                            <form action="{{ route('admin.service-requests.process', $request) }}" method="POST" class="inline">
                                                 @csrf
                                                 @method('PATCH')
-                                                <button type="submit" class="btn btn-sm btn-primary" title="Proses" onclick="return confirm('Yakin ingin memproses permohonan ini?')">
+                                                <button type="submit" class="admin-btn-primary text-xs px-2 py-1" title="Proses" onclick="return confirm('Yakin ingin memproses permohonan ini?')">
                                                     <i class="fas fa-play"></i>
                                                 </button>
                                             </form>
                                             @endif
                                             @if($request->status === 'processing')
-                                            <form action="{{ route('admin.service-requests.approve', $request) }}" method="POST" style="display: inline;">
+                                            <form action="{{ route('admin.service-requests.approve', $request) }}" method="POST" class="inline">
                                                 @csrf
                                                 @method('PATCH')
-                                                <button type="submit" class="btn btn-sm btn-success" title="Setujui" onclick="return confirm('Yakin ingin menyetujui permohonan ini?')">
+                                                <button type="submit" class="admin-btn-success text-xs px-2 py-1" title="Setujui" onclick="return confirm('Yakin ingin menyetujui permohonan ini?')">
                                                     <i class="fas fa-check"></i>
                                                 </button>
                                             </form>
-                                            <form action="{{ route('admin.service-requests.reject', $request) }}" method="POST" style="display: inline;">
+                                            <form action="{{ route('admin.service-requests.reject', $request) }}" method="POST" class="inline">
                                                 @csrf
                                                 @method('PATCH')
-                                                <button type="submit" class="btn btn-sm btn-danger" title="Tolak" onclick="return confirm('Yakin ingin menolak permohonan ini?')">
+                                                <button type="submit" class="admin-btn-danger text-xs px-2 py-1" title="Tolak" onclick="return confirm('Yakin ingin menolak permohonan ini?')">
                                                     <i class="fas fa-times"></i>
                                                 </button>
                                             </form>
                                             @endif
                                             @if($request->canBeProcessed())
-                                            <form action="{{ route('admin.service-requests.destroy', $request) }}" method="POST" style="display: inline;">
+                                            <form action="{{ route('admin.service-requests.destroy', $request) }}" method="POST" class="inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger" title="Hapus" onclick="return confirm('Yakin ingin menghapus permohonan ini?')">
+                                                <button type="submit" class="admin-btn-danger text-xs px-2 py-1" title="Hapus" onclick="return confirm('Yakin ingin menghapus permohonan ini?')">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>

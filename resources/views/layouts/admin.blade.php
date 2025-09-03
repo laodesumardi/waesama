@@ -20,7 +20,7 @@
     <body class="font-sans antialiased bg-gray-100">
         <div class="flex h-screen">
             <!-- Sidebar -->
-            <div id="sidebar" class="text-white w-64 min-h-screen flex flex-col transition-all duration-300 ease-in-out" style="background-color: #003566;">
+            <div id="sidebar" class="admin-sidebar text-white w-64 min-h-screen flex flex-col lg:relative lg:translate-x-0 fixed -translate-x-full z-50">
                 <!-- Logo -->
                 <div class="flex items-center justify-center h-16" style="background-color: #002347;">
                     <h1 class="text-xl font-bold">Admin Panel</h1>
@@ -30,10 +30,7 @@
                 <nav class="flex-1 px-4 py-6 space-y-2">
                     <!-- Dashboard -->
                     <a href="{{ route('dashboard') }}" 
-                       class="flex items-center px-4 py-3 text-gray-300 rounded-lg hover:text-white transition-colors duration-200 {{ request()->routeIs('dashboard') ? 'text-white' : '' }}" 
-                       style="{{ request()->routeIs('dashboard') ? 'background-color: #004080;' : '' }}" 
-                       onmouseover="this.style.backgroundColor='#004080'" 
-                       onmouseout="this.style.backgroundColor='{{ request()->routeIs('dashboard') ? '#004080' : 'transparent' }}'">
+                       class="admin-nav-item flex items-center px-4 py-3 text-gray-300 hover:text-white {{ request()->routeIs('dashboard') ? 'active text-white' : '' }}">
                         <i class="fas fa-tachometer-alt w-5 h-5 mr-3"></i>
                         <span>Dashboard</span>
                     </a>
@@ -41,10 +38,7 @@
                     <!-- Data Penduduk -->
                     @if(auth()->user()->role === 'admin' || auth()->user()->role === 'pegawai')
                     <a href="{{ route('admin.citizens.index') }}" 
-                       class="flex items-center px-4 py-3 text-gray-300 rounded-lg hover:text-white transition-colors duration-200 {{ request()->routeIs('admin.citizens.*') ? 'text-white' : '' }}" 
-                       style="{{ request()->routeIs('admin.citizens.*') ? 'background-color: #004080;' : '' }}" 
-                       onmouseover="this.style.backgroundColor='#004080'" 
-                       onmouseout="this.style.backgroundColor='{{ request()->routeIs('admin.citizens.*') ? '#004080' : 'transparent' }}'">
+                       class="admin-nav-item flex items-center px-4 py-3 text-gray-300 hover:text-white {{ request()->routeIs('admin.citizens.*') ? 'active text-white' : '' }}">
                         <i class="fas fa-users w-5 h-5 mr-3"></i>
                         <span>Data Penduduk</span>
                     </a>
@@ -53,10 +47,7 @@
                     <!-- Service Requests -->
                     @if(auth()->user()->role === 'admin' || auth()->user()->role === 'pegawai')
                     <a href="{{ route('admin.service-requests.index') }}" 
-                       class="flex items-center px-4 py-3 text-gray-300 rounded-lg hover:text-white transition-colors duration-200 {{ request()->routeIs('admin.service-requests.*') ? 'text-white' : '' }}" 
-                       style="{{ request()->routeIs('admin.service-requests.*') ? 'background-color: #004080;' : '' }}" 
-                       onmouseover="this.style.backgroundColor='#004080'" 
-                       onmouseout="this.style.backgroundColor='{{ request()->routeIs('admin.service-requests.*') ? '#004080' : 'transparent' }}'">
+                       class="admin-nav-item flex items-center px-4 py-3 text-gray-300 hover:text-white {{ request()->routeIs('admin.service-requests.*') ? 'active text-white' : '' }}">
                         <i class="fas fa-file-alt w-5 h-5 mr-3"></i>
                         <span>Layanan Surat</span>
                     </a>
@@ -65,22 +56,34 @@
                     <!-- Documents -->
                     @if(auth()->user()->role === 'admin' || auth()->user()->role === 'pegawai')
                     <a href="{{ route('admin.documents.index') }}" 
-                       class="flex items-center px-4 py-3 text-gray-300 rounded-lg hover:text-white transition-colors duration-200 {{ request()->routeIs('admin.documents.*') ? 'text-white' : '' }}" 
-                       style="{{ request()->routeIs('admin.documents.*') ? 'background-color: #004080;' : '' }}" 
-                       onmouseover="this.style.backgroundColor='#004080'" 
-                       onmouseout="this.style.backgroundColor='{{ request()->routeIs('admin.documents.*') ? '#004080' : 'transparent' }}'">
+                       class="admin-nav-item flex items-center px-4 py-3 text-gray-300 hover:text-white {{ request()->routeIs('admin.documents.*') ? 'active text-white' : '' }}">
                         <i class="fas fa-folder w-5 h-5 mr-3"></i>
                         <span>Dokumen</span>
+                    </a>
+                    @endif
+
+                    <!-- News Management -->
+                    @if(auth()->user()->role === 'admin' || auth()->user()->role === 'pegawai')
+                    <a href="{{ route('admin.news.index') }}" 
+                       class="admin-nav-item flex items-center px-4 py-3 text-gray-300 hover:text-white {{ request()->routeIs('admin.news.*') ? 'active text-white' : '' }}">
+                        <i class="fas fa-newspaper w-5 h-5 mr-3"></i>
+                        <span>Berita</span>
+                    </a>
+                    @endif
+
+                    <!-- Gallery Management -->
+                    @if(auth()->user()->role === 'admin' || auth()->user()->role === 'pegawai')
+                    <a href="{{ route('admin.gallery.index') }}" 
+                       class="admin-nav-item flex items-center px-4 py-3 text-gray-300 hover:text-white {{ request()->routeIs('admin.gallery.*') ? 'active text-white' : '' }}">
+                        <i class="fas fa-images w-5 h-5 mr-3"></i>
+                        <span>Galeri</span>
                     </a>
                     @endif
 
                     <!-- User Management -->
                     @if(auth()->user()->role === 'admin')
                     <a href="{{ route('admin.users') }}" 
-                       class="flex items-center px-4 py-3 text-gray-300 rounded-lg hover:text-white transition-colors duration-200 {{ request()->routeIs('admin.users*') ? 'text-white' : '' }}" 
-                       style="{{ request()->routeIs('admin.users*') ? 'background-color: #004080;' : '' }}" 
-                       onmouseover="this.style.backgroundColor='#004080'" 
-                       onmouseout="this.style.backgroundColor='{{ request()->routeIs('admin.users*') ? '#004080' : 'transparent' }}'">
+                       class="admin-nav-item flex items-center px-4 py-3 text-gray-300 hover:text-white {{ request()->routeIs('admin.users*') ? 'active text-white' : '' }}">
                         <i class="fas fa-user-cog w-5 h-5 mr-3"></i>
                         <span>Manajemen Pengguna</span>
                     </a>
@@ -89,10 +92,7 @@
                     <!-- Activity Logs -->
                     @if(auth()->user()->role === 'admin')
                     <a href="{{ route('admin.activity-logs') }}" 
-                       class="flex items-center px-4 py-3 text-gray-300 rounded-lg hover:text-white transition-colors duration-200 {{ request()->routeIs('admin.activity-logs') ? 'text-white' : '' }}" 
-                       style="{{ request()->routeIs('admin.activity-logs') ? 'background-color: #004080;' : '' }}" 
-                       onmouseover="this.style.backgroundColor='#004080'" 
-                       onmouseout="this.style.backgroundColor='{{ request()->routeIs('admin.activity-logs') ? '#004080' : 'transparent' }}'">
+                       class="admin-nav-item flex items-center px-4 py-3 text-gray-300 hover:text-white {{ request()->routeIs('admin.activity-logs') ? 'active text-white' : '' }}">
                         <i class="fas fa-history w-5 h-5 mr-3"></i>
                         <span>Log Aktivitas</span>
                     </a>
@@ -105,10 +105,10 @@
             <!-- Main Content -->
             <div class="flex-1 flex flex-col overflow-hidden">
                 <!-- Top Header -->
-                <header class="bg-white shadow-sm border-b" style="border-color: #e5e7eb; background-color: #003566;">
+                <header class="admin-header shadow-sm border-b border-gray-200">
                     <div class="flex items-center justify-between px-6 py-4">
                         <!-- Mobile menu button -->
-                        <button id="sidebar-toggle" class="lg:hidden hover:text-white" style="color: white;">
+                        <button id="sidebar-toggle" class="admin-mobile-menu-btn lg:hidden">
                             <i class="fas fa-bars text-xl"></i>
                         </button>
 
@@ -121,7 +121,7 @@
 
                         <!-- Profile Dropdown -->
                          <div class="relative">
-                             <button id="profile-dropdown" class="flex items-center hover:text-white p-2 rounded-lg transition-colors duration-200" style="color: white;">
+                             <button id="profile-dropdown" class="admin-profile-btn flex items-center hover:text-white p-2 rounded-lg transition-colors duration-200">
                                  <div class="w-8 h-8 rounded-full flex items-center justify-center mr-3" style="background-color: #004080;">
                                      <i class="fas fa-user text-sm"></i>
                                  </div>
@@ -132,7 +132,7 @@
                                  <i class="fas fa-chevron-down text-sm"></i>
                              </button>
                              
-                             <div id="profile-menu" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-2 z-50">
+                             <div id="profile-menu" class="admin-dropdown hidden absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-2 z-50">
                                  <!-- User Info Header -->
                                  <div class="px-4 py-3 border-b border-gray-200">
                                      <div class="flex items-center">
@@ -149,7 +149,7 @@
                                  
                                  <!-- Menu Items -->
                                  <div class="py-1">
-                                     <a href="{{ route('profile.edit') }}" class="flex items-center px-4 py-2 text-sm hover:text-white" style="color: #003566;" onmouseover="this.style.backgroundColor='#004080'" onmouseout="this.style.backgroundColor='transparent'; this.style.color='#003566'">
+                                     <a href="{{ route('profile.edit') }}" class="admin-dropdown-item flex items-center px-4 py-2 text-sm hover:text-white" style="color: #003566;" onmouseover="this.style.backgroundColor='#004080'" onmouseout="this.style.backgroundColor='transparent'; this.style.color='#003566'">
                                          <i class="fas fa-user-edit w-4 h-4 mr-3"></i>
                                          <span>Edit Profile</span>
                                      </a>
@@ -158,7 +158,7 @@
                                      
                                      <form method="POST" action="{{ route('logout') }}">
                                          @csrf
-                                         <button type="submit" class="flex items-center w-full text-left px-4 py-2 text-sm hover:text-white" style="color: #dc2626;" onmouseover="this.style.backgroundColor='#dc2626'" onmouseout="this.style.backgroundColor='transparent'; this.style.color='#dc2626'">
+                                         <button type="submit" class="admin-dropdown-item flex items-center w-full text-left px-4 py-2 text-sm hover:text-white" style="color: #dc2626;" onmouseover="this.style.backgroundColor='#dc2626'" onmouseout="this.style.backgroundColor='transparent'; this.style.color='#dc2626'">
                                              <i class="fas fa-sign-out-alt w-4 h-4 mr-3"></i>
                                              <span>Logout</span>
                                          </button>
@@ -170,8 +170,10 @@
                 </header>
 
                 <!-- Page Content -->
-                <main class="flex-1 overflow-x-hidden overflow-y-auto p-6" style="background-color: #f8fafc;">
-                    {{ $slot }}
+                <main class="admin-content flex-1 overflow-x-hidden overflow-y-auto p-6">
+                    <div class="fade-in">
+                        {{ $slot }}
+                    </div>
                 </main>
             </div>
         </div>
@@ -180,52 +182,114 @@
         <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden hidden"></div>
 
         <script>
-            // Sidebar toggle for mobile
-            document.getElementById('sidebar-toggle').addEventListener('click', function() {
-                const sidebar = document.getElementById('sidebar');
-                const overlay = document.getElementById('sidebar-overlay');
-                
-                sidebar.classList.toggle('-translate-x-full');
-                overlay.classList.toggle('hidden');
-            });
-
-            // Close sidebar when clicking overlay
-            document.getElementById('sidebar-overlay').addEventListener('click', function() {
-                const sidebar = document.getElementById('sidebar');
-                const overlay = document.getElementById('sidebar-overlay');
-                
-                sidebar.classList.add('-translate-x-full');
-                overlay.classList.add('hidden');
-            });
-
-            // Profile dropdown toggle
-            document.getElementById('profile-dropdown').addEventListener('click', function() {
-                document.getElementById('profile-menu').classList.toggle('hidden');
-            });
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function(event) {
-                const dropdown = document.getElementById('profile-dropdown');
-                const menu = document.getElementById('profile-menu');
-                
-                if (!dropdown.contains(event.target)) {
-                    menu.classList.add('hidden');
+            // Enhanced Sidebar Management
+            class SidebarManager {
+                constructor() {
+                    this.sidebar = document.getElementById('sidebar');
+                    this.overlay = document.getElementById('sidebar-overlay');
+                    this.toggleBtn = document.getElementById('sidebar-toggle');
+                    this.isOpen = false;
+                    this.init();
                 }
-            });
 
-            // Make sidebar responsive
-            function handleResize() {
-                const sidebar = document.getElementById('sidebar');
-                const overlay = document.getElementById('sidebar-overlay');
-                
-                if (window.innerWidth >= 1024) {
-                    sidebar.classList.remove('-translate-x-full');
-                    overlay.classList.add('hidden');
+                init() {
+                    this.setupEventListeners();
+                    this.handleResize();
+                    window.addEventListener('resize', () => this.handleResize());
+                }
+
+                setupEventListeners() {
+                    // Toggle sidebar on button click
+                    this.toggleBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        this.toggle();
+                    });
+
+                    // Close sidebar when clicking overlay
+                    this.overlay.addEventListener('click', () => {
+                        this.close();
+                    });
+
+                    // Close sidebar on escape key
+                    document.addEventListener('keydown', (e) => {
+                        if (e.key === 'Escape' && this.isOpen) {
+                            this.close();
+                        }
+                    });
+
+                    // Prevent sidebar from closing when clicking inside it
+                    this.sidebar.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                    });
+                }
+
+                toggle() {
+                    if (this.isOpen) {
+                        this.close();
+                    } else {
+                        this.open();
+                    }
+                }
+
+                open() {
+                    if (window.innerWidth < 1024) {
+                        this.sidebar.classList.add('open');
+                        this.sidebar.classList.remove('-translate-x-full');
+                        this.overlay.classList.remove('hidden');
+                        document.body.style.overflow = 'hidden';
+                        this.isOpen = true;
+                    }
+                }
+
+                close() {
+                    this.sidebar.classList.remove('open');
+                    this.sidebar.classList.add('-translate-x-full');
+                    this.overlay.classList.add('hidden');
+                    document.body.style.overflow = '';
+                    this.isOpen = false;
+                }
+
+                handleResize() {
+                    if (window.innerWidth >= 1024) {
+                        // Desktop: Always show sidebar
+                        this.sidebar.classList.remove('-translate-x-full', 'open');
+                        this.overlay.classList.add('hidden');
+                        document.body.style.overflow = '';
+                        this.isOpen = false;
+                    } else {
+                        // Mobile/Tablet: Hide sidebar by default
+                        if (!this.isOpen) {
+                            this.sidebar.classList.add('-translate-x-full');
+                            this.sidebar.classList.remove('open');
+                            this.overlay.classList.add('hidden');
+                        }
+                    }
                 }
             }
 
-            window.addEventListener('resize', handleResize);
-            handleResize(); // Call on load
+            // Profile dropdown management
+            function initProfileDropdown() {
+                const dropdown = document.getElementById('profile-dropdown');
+                const menu = document.getElementById('profile-menu');
+
+                dropdown.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    menu.classList.toggle('hidden');
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function(event) {
+                    if (!dropdown.contains(event.target)) {
+                        menu.classList.add('hidden');
+                    }
+                });
+            }
+
+            // Initialize when DOM is loaded
+            document.addEventListener('DOMContentLoaded', function() {
+                new SidebarManager();
+                initProfileDropdown();
+            });
         </script>
     </body>
 </html>

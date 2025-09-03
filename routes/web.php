@@ -1,13 +1,18 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\NewsController;
+use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\CitizenController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Public Routes
+Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
+Route::get('/berita', [WelcomeController::class, 'news'])->name('news.index');
+Route::get('/berita/{id}', [WelcomeController::class, 'newsShow'])->name('news.show');
+Route::get('/galeri', [WelcomeController::class, 'gallery'])->name('gallery.index');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -34,6 +39,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin,pegawai'
     
     // Activity Logs
     Route::get('/activity-logs', [AdminController::class, 'activityLogs'])->name('activity-logs');
+    
+    // News Management
+    Route::resource('news', NewsController::class);
+    
+    // Gallery Management
+    Route::resource('galleries', GalleryController::class);
 });
 
 // Service Requests and Documents Routes
