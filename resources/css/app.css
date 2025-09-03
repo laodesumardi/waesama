@@ -51,10 +51,11 @@ body {
 
   /* Admin Panel Responsive Styles */
   .admin-sidebar {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     background: linear-gradient(180deg, #001d3d 0%, #001122 100%);
     box-shadow: 2px 0 15px rgba(0, 29, 61, 0.2);
     will-change: transform;
+    backdrop-filter: blur(10px);
   }
 
   /* Mobile Sidebar Styles */
@@ -67,11 +68,41 @@ body {
       height: 100vh;
       width: 280px;
       transform: translateX(-100%);
-      box-shadow: 4px 0 20px rgba(0, 29, 61, 0.3);
+      box-shadow: 4px 0 25px rgba(0, 29, 61, 0.4);
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .admin-sidebar.open {
       transform: translateX(0);
+      animation: slideInFromLeft 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      box-shadow: 8px 0 40px rgba(0, 29, 61, 0.5);
+    }
+    
+    .admin-sidebar:not(.open) {
+      animation: slideOutToLeft 0.3s cubic-bezier(0.55, 0.06, 0.68, 0.19);
+    }
+  }
+
+  /* Smooth slide animations */
+  @keyframes slideInFromLeft {
+    0% {
+      transform: translateX(-100%);
+      opacity: 0.7;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideOutToLeft {
+    0% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(-100%);
+      opacity: 0.7;
     }
   }
 
@@ -112,6 +143,133 @@ body {
     backdrop-filter: blur(10px);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
+    position: relative;
+    z-index: 30;
+  }
+
+  /* Profile Button Container */
+  .admin-profile-container {
+    position: relative;
+  }
+
+  /* Floating Profile Button Styles */
+  .admin-profile-btn {
+    backdrop-filter: blur(10px);
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    padding: 0;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .admin-profile-btn:hover {
+    transform: translateY(-3px) scale(1.1);
+    box-shadow: 0 12px 35px rgba(0, 64, 128, 0.3), 0 6px 15px rgba(0, 0, 0, 0.15);
+    filter: brightness(1.1);
+  }
+
+  .admin-profile-btn:active {
+    transform: translateY(-1px) scale(1.05);
+    transition: transform 0.1s ease;
+    box-shadow: 0 6px 20px rgba(0, 64, 128, 0.25);
+  }
+
+  /* Profile Dropdown Styles */
+  .admin-dropdown {
+    z-index: 999999 !important;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 300px;
+    min-width: 280px;
+    max-width: 320px;
+    background: white;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 8px 20px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 12px;
+    overflow: hidden;
+    animation: dropdownFadeIn 0.25s ease-out;
+    transform-origin: top right;
+    isolation: isolate;
+  }
+
+  @keyframes dropdownFadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95) translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  .admin-dropdown-item {
+    transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border-radius: 6px;
+    margin: 2px 4px;
+  }
+
+  .admin-dropdown-item:hover {
+    transform: translateX(4px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Floating Profile Button Responsive */
+  @media (max-width: 768px) {
+    .fixed.top-24.right-4 {
+      top: 5rem;
+      right: 1rem;
+    }
+    
+    .admin-dropdown {
+      width: 280px;
+      max-width: calc(100vw - 32px);
+      right: 0;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .fixed.top-24.right-4 {
+      top: 4.5rem;
+      right: 0.75rem;
+    }
+    
+    .admin-profile-btn {
+      width: 48px;
+      height: 48px;
+    }
+    
+    .admin-dropdown {
+      width: 260px;
+      max-width: calc(100vw - 24px);
+      right: 0;
+    }
+  }
+
+  /* Ensure dropdown appears above all content */
+  .admin-header {
+    z-index: 1000;
+    position: relative;
+  }
+
+  /* Profile Button Focus States */
+  .admin-profile-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(0, 64, 128, 0.2), 0 8px 32px rgba(0, 0, 0, 0.12);
+  }
+
+  .admin-dropdown-item:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: -2px;
+    background-color: #eff6ff;
   }
 
   /* Mobile Menu Button */
@@ -119,23 +277,44 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 8px;
+    padding: 10px;
     border-radius: 8px;
     color: white;
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
   }
 
   .admin-mobile-menu-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.15);
     transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(0, 29, 61, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   }
 
   .admin-mobile-menu-btn:active {
     transform: scale(0.95);
+    transition: transform 0.1s ease;
+  }
+  
+  .admin-mobile-menu-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease, height 0.3s ease;
+  }
+  
+  .admin-mobile-menu-btn:hover::before {
+    width: 100%;
+    height: 100%;
   }
 
   /* Sidebar Overlay */
@@ -144,8 +323,18 @@ body {
     inset: 0;
     background: rgba(0, 0, 0, 0.5);
     z-index: 40;
-    transition: opacity 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     backdrop-filter: blur(2px);
+  }
+
+  .sidebar-overlay.show {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .sidebar-overlay.hide {
+    opacity: 0;
+    visibility: hidden;
   }
 
   .sidebar-overlay.hidden {

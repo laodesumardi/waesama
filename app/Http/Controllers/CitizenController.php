@@ -119,7 +119,7 @@ class CitizenController extends Controller
             'birth_date' => 'required|date',
             'gender' => 'required|in:L,P',
             'address' => 'required|string',
-            'village_id' => 'required|exists:villages,id',
+            'village_name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
             'email' => 'nullable|email|max:255',
             'occupation' => 'nullable|string|max:255',
@@ -135,7 +135,17 @@ class CitizenController extends Controller
                 ->withInput();
         }
         
-        $citizen = Citizen::create($request->all());
+        // Handle village creation or find existing
+        $village = Village::firstOrCreate(
+            ['name' => $request->village_name],
+            ['name' => $request->village_name]
+        );
+        
+        // Prepare data for citizen creation
+        $citizenData = $request->except('village_name');
+        $citizenData['village_id'] = $village->id;
+        
+        $citizen = Citizen::create($citizenData);
         
         // Log activity
         ActivityLog::log(
@@ -179,7 +189,7 @@ class CitizenController extends Controller
             'birth_date' => 'required|date',
             'gender' => 'required|in:L,P',
             'address' => 'required|string',
-            'village_id' => 'required|exists:villages,id',
+            'village_name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
             'email' => 'nullable|email|max:255',
             'occupation' => 'nullable|string|max:255',
@@ -197,7 +207,17 @@ class CitizenController extends Controller
         
         $oldData = $citizen->only(['name', 'nik', 'status']);
         
-        $citizen->update($request->all());
+        // Handle village creation or find existing
+        $village = Village::firstOrCreate(
+            ['name' => $request->village_name],
+            ['name' => $request->village_name]
+        );
+        
+        // Prepare data for citizen update
+        $citizenData = $request->except('village_name');
+        $citizenData['village_id'] = $village->id;
+        
+        $citizen->update($citizenData);
         
         // Log activity
         ActivityLog::log(

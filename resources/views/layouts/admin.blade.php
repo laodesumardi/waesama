@@ -97,6 +97,16 @@
                         <span>Log Aktivitas</span>
                     </a>
                     @endif
+
+                    <!-- Divider -->
+                    <div class="border-t border-gray-600 my-4"></div>
+
+                    <!-- Profile Menu -->
+                    <a href="{{ route('profile.edit') }}" 
+                       class="admin-nav-item flex items-center px-4 py-3 text-gray-300 hover:text-white {{ request()->routeIs('profile.*') ? 'active text-white' : '' }}">
+                        <i class="fas fa-user-edit w-5 h-5 mr-3"></i>
+                        <span>Profil Saya</span>
+                    </a>
                 </nav>
 
 
@@ -119,53 +129,18 @@
                             </div>
                         @endisset
 
-                        <!-- Profile Dropdown -->
-                         <div class="relative">
-                             <button id="profile-dropdown" class="admin-profile-btn flex items-center hover:text-white p-2 rounded-lg transition-colors duration-200">
-                                 <div class="w-8 h-8 rounded-full flex items-center justify-center mr-3" style="background-color: #004080;">
-                                     <i class="fas fa-user text-sm"></i>
-                                 </div>
-                                 <div class="text-left mr-2">
-                                     <div class="text-sm font-medium">{{ Auth::user()->name }}</div>
-                                     <div class="text-xs opacity-75">{{ ucfirst(Auth::user()->role) }}</div>
-                                 </div>
-                                 <i class="fas fa-chevron-down text-sm"></i>
-                             </button>
-                             
-                             <div id="profile-menu" class="admin-dropdown hidden absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-2 z-50">
-                                 <!-- User Info Header -->
-                                 <div class="px-4 py-3 border-b border-gray-200">
-                                     <div class="flex items-center">
-                                         <div class="w-10 h-10 rounded-full flex items-center justify-center mr-3" style="background-color: #003566;">
-                                             <i class="fas fa-user text-white"></i>
-                                         </div>
-                                         <div>
-                                             <div class="text-sm font-medium text-gray-900">{{ Auth::user()->name }}</div>
-                                             <div class="text-xs text-gray-500">{{ Auth::user()->email }}</div>
-                                             <div class="text-xs text-gray-400">{{ ucfirst(Auth::user()->role) }}</div>
-                                         </div>
-                                     </div>
-                                 </div>
-                                 
-                                 <!-- Menu Items -->
-                                 <div class="py-1">
-                                     <a href="{{ route('profile.edit') }}" class="admin-dropdown-item flex items-center px-4 py-2 text-sm hover:text-white" style="color: #003566;" onmouseover="this.style.backgroundColor='#004080'" onmouseout="this.style.backgroundColor='transparent'; this.style.color='#003566'">
-                                         <i class="fas fa-user-edit w-4 h-4 mr-3"></i>
-                                         <span>Edit Profile</span>
-                                     </a>
-                                     
-                                     <div class="border-t border-gray-200 my-1"></div>
-                                     
-                                     <form method="POST" action="{{ route('logout') }}">
-                                         @csrf
-                                         <button type="submit" class="admin-dropdown-item flex items-center w-full text-left px-4 py-2 text-sm hover:text-white" style="color: #dc2626;" onmouseover="this.style.backgroundColor='#dc2626'" onmouseout="this.style.backgroundColor='transparent'; this.style.color='#dc2626'">
-                                             <i class="fas fa-sign-out-alt w-4 h-4 mr-3"></i>
-                                             <span>Logout</span>
-                                         </button>
-                                     </form>
-                                 </div>
-                             </div>
-                         </div>
+                        <!-- Notification & Logout -->
+                        <div class="flex items-center space-x-3">
+                            <button class="p-2 rounded-lg text-white hover:bg-white/10 transition-colors">
+                                <i class="fas fa-bell text-lg"></i>
+                            </button>
+                            <form method="POST" action="{{ route('logout') }}" class="inline">
+                                @csrf
+                                <button type="submit" class="p-2 rounded-lg text-white hover:bg-red-500/20 transition-colors" title="Logout">
+                                    <i class="fas fa-sign-out-alt text-lg"></i>
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </header>
 
@@ -180,6 +155,8 @@
 
         <!-- Mobile Sidebar Overlay -->
         <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden hidden"></div>
+
+
 
         <script>
             // Enhanced Sidebar Management
@@ -233,20 +210,76 @@
 
                 open() {
                     if (window.innerWidth < 1024) {
+                        // Add smooth opening animation
                         this.sidebar.classList.add('open');
                         this.sidebar.classList.remove('-translate-x-full');
                         this.overlay.classList.remove('hidden');
+                        this.overlay.classList.add('show');
+                        this.overlay.classList.remove('hide');
+                        
+                        // Prevent body scroll with smooth transition
                         document.body.style.overflow = 'hidden';
+                        document.body.style.transition = 'all 0.3s ease';
+                        
+                        // Add focus trap for accessibility
+                        this.trapFocus();
+                        
                         this.isOpen = true;
                     }
                 }
 
                 close() {
+                    // Add smooth closing animation
                     this.sidebar.classList.remove('open');
                     this.sidebar.classList.add('-translate-x-full');
-                    this.overlay.classList.add('hidden');
+                    this.overlay.classList.add('hide');
+                    this.overlay.classList.remove('show');
+                    
+                    // Delay hiding overlay to allow animation
+                    setTimeout(() => {
+                        this.overlay.classList.add('hidden');
+                    }, 300);
+                    
+                    // Restore body scroll
                     document.body.style.overflow = '';
+                    document.body.style.transition = '';
+                    
+                    // Remove focus trap
+                    this.removeFocusTrap();
+                    
                     this.isOpen = false;
+                }
+                
+                trapFocus() {
+                    const focusableElements = this.sidebar.querySelectorAll(
+                        'a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select'
+                    );
+                    const firstElement = focusableElements[0];
+                    const lastElement = focusableElements[focusableElements.length - 1];
+                    
+                    this.sidebar.addEventListener('keydown', this.handleTabKey = (e) => {
+                        if (e.key === 'Tab') {
+                            if (e.shiftKey) {
+                                if (document.activeElement === firstElement) {
+                                    lastElement.focus();
+                                    e.preventDefault();
+                                }
+                            } else {
+                                if (document.activeElement === lastElement) {
+                                    firstElement.focus();
+                                    e.preventDefault();
+                                }
+                            }
+                        }
+                    });
+                    
+                    if (firstElement) firstElement.focus();
+                }
+                
+                removeFocusTrap() {
+                    if (this.handleTabKey) {
+                        this.sidebar.removeEventListener('keydown', this.handleTabKey);
+                    }
                 }
 
                 handleResize() {
@@ -267,28 +300,9 @@
                 }
             }
 
-            // Profile dropdown management
-            function initProfileDropdown() {
-                const dropdown = document.getElementById('profile-dropdown');
-                const menu = document.getElementById('profile-menu');
-
-                dropdown.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    menu.classList.toggle('hidden');
-                });
-
-                // Close dropdown when clicking outside
-                document.addEventListener('click', function(event) {
-                    if (!dropdown.contains(event.target)) {
-                        menu.classList.add('hidden');
-                    }
-                });
-            }
-
             // Initialize when DOM is loaded
             document.addEventListener('DOMContentLoaded', function() {
                 new SidebarManager();
-                initProfileDropdown();
             });
         </script>
     </body>

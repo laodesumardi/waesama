@@ -74,16 +74,11 @@
 
                             <!-- Desa -->
                             <div>
-                                <label for="village_id" class="block text-sm font-medium text-gray-700">Desa *</label>
-                                <select name="village_id" id="village_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 @error('village_id') border-red-500 @enderror">
-                                    <option value="">Pilih Desa</option>
-                                    @foreach($villages as $village)
-                                        <option value="{{ $village->id }}" {{ old('village_id', $citizen->village_id) == $village->id ? 'selected' : '' }}>
-                                            {{ $village->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('village_id')
+                                <label for="village_name" class="block text-sm font-medium text-gray-700">Desa *</label>
+                                <input type="text" name="village_name" id="village_name" value="{{ old('village_name', $citizen->village->name ?? '') }}" 
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 @error('village_name') border-red-500 @enderror"
+                                       placeholder="Masukkan nama desa">
+                                @error('village_name')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
@@ -184,13 +179,18 @@
                             @enderror
                         </div>
 
-                        <!-- Submit Button -->
-                        <div class="mt-6 flex justify-end space-x-3">
-                            <a href="{{ route('admin.citizens.show', $citizen) }}" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">
+                        <!-- Tombol Aksi -->
+                        <div class="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4 pt-8 border-t border-gray-200">
+                            <!-- Tombol Batal -->
+                            <a href="{{ route('admin.citizens.show', $citizen) }}" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <i class="fas fa-times mr-2"></i>
                                 Batal
                             </a>
-                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                Perbarui
+
+                            <!-- Tombol Simpan -->
+                            <button type="submit" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <i class="fas fa-save mr-2"></i>
+                                Perbarui Data
                             </button>
                         </div>
                     </form>

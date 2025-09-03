@@ -15,7 +15,7 @@ class ProfileUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => [
                 'required',
@@ -25,6 +25,21 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
+            'phone' => ['nullable', 'string', 'max:20'],
         ];
+
+        // Add employment fields validation for admin and pegawai roles
+        if ($this->user()->role !== 'masyarakat') {
+            $rules['employee_id'] = [
+                'nullable',
+                'string',
+                'max:20',
+                Rule::unique(User::class)->ignore($this->user()->id),
+            ];
+            $rules['position'] = ['nullable', 'string', 'max:255'];
+            $rules['department'] = ['nullable', 'string', 'in:Pimpinan,Sekretariat,Pelayanan,IT,Keuangan,Umum'];
+        }
+
+        return $rules;
     }
 }
