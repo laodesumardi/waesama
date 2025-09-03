@@ -1,17 +1,22 @@
-<x-app-layout>
+<x-admin-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Manajemen Berita') }}
-            </h2>
-            <a href="{{ route('admin.news.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                Tambah Berita
-            </a>
-        </div>
+        Manajemen Berita
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-6">
+        <div class="max-w-7xl mx-auto">
+            <!-- Header Section -->
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold" style="color: #001d3d;">Daftar Berita</h2>
+                <a href="{{ route('admin.news.create') }}" 
+                   class="inline-flex items-center px-4 py-2 text-white font-medium rounded-lg transition-colors duration-200"
+                   style="background-color: #001d3d;" 
+                   onmouseover="this.style.backgroundColor='#003366'" 
+                   onmouseout="this.style.backgroundColor='#001d3d'">
+                    <i class="fas fa-plus mr-2"></i>
+                    Tambah Berita
+                </a>
+            </div>
             @if(session('success'))
                 <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
                     {{ session('success') }}
@@ -87,7 +92,12 @@
                     @else
                         <div class="text-center py-8">
                             <div class="text-gray-500 text-lg mb-4">Belum ada berita</div>
-                            <a href="{{ route('admin.news.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            <a href="{{ route('admin.news.create') }}" 
+                               class="inline-flex items-center px-4 py-2 text-white font-medium rounded-lg transition-colors duration-200"
+                               style="background-color: #001d3d;" 
+                               onmouseover="this.style.backgroundColor='#003366'" 
+                               onmouseout="this.style.backgroundColor='#001d3d'">
+                                <i class="fas fa-plus mr-2"></i>
                                 Tambah Berita Pertama
                             </a>
                         </div>
@@ -96,4 +106,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+</x-admin-layout>

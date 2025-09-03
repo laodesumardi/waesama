@@ -73,8 +73,8 @@
 
                     <!-- Gallery Management -->
                     @if(auth()->user()->role === 'admin' || auth()->user()->role === 'pegawai')
-                    <a href="{{ route('admin.gallery.index') }}" 
-                       class="admin-nav-item flex items-center px-4 py-3 text-gray-300 hover:text-white {{ request()->routeIs('admin.gallery.*') ? 'active text-white' : '' }}">
+                    <a href="{{ route('admin.galleries.index') }}"
+                       class="admin-nav-item flex items-center px-4 py-3 text-gray-300 hover:text-white {{ request()->routeIs('admin.galleries.*') ? 'active text-white' : '' }}">
                         <i class="fas fa-images w-5 h-5 mr-3"></i>
                         <span>Galeri</span>
                     </a>

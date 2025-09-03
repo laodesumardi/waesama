@@ -8,7 +8,7 @@
             <!-- Header Section -->
             <div class="flex items-center justify-between mb-6">
                 <div class="flex items-center">
-                    <a href="{{ route('admin.gallery.index') }}" 
+                    <a href="{{ route('admin.galleries.index') }}" 
                        class="inline-flex items-center px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200 mr-4">
                         <i class="fas fa-arrow-left mr-2"></i>
                         Back to Gallery
@@ -17,7 +17,7 @@
                 </div>
                 
                 <div class="flex space-x-2">
-                    <a href="{{ route('admin.gallery.edit', $gallery) }}" 
+                    <a href="{{ route('admin.galleries.edit', $gallery) }}" 
                        class="inline-flex items-center px-4 py-2 text-white font-medium rounded-lg transition-colors duration-200"
                        style="background-color: #f59e0b;" 
                        onmouseover="this.style.backgroundColor='#d97706'" 
@@ -26,7 +26,7 @@
                         Edit
                     </a>
                     
-                    <form action="{{ route('admin.gallery.destroy', $gallery) }}" 
+                    <form action="{{ route('admin.galleries.destroy', $gallery) }}" 
                           method="POST" 
                           class="inline"
                           onsubmit="return confirm('Are you sure you want to delete this gallery item?')">
@@ -149,7 +149,7 @@
                                 </a>
                             @endif
                             
-                            <a href="{{ route('admin.gallery.index') }}" 
+                            <a href="{{ route('admin.galleries.index') }}" 
                                class="inline-flex items-center px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200">
                                 <i class="fas fa-list mr-2"></i>
                                 Back to Gallery List

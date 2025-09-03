@@ -7,7 +7,7 @@
         <div class="max-w-4xl mx-auto">
             <!-- Header Section -->
             <div class="flex items-center mb-6">
-                <a href="{{ route('admin.gallery.index') }}" 
+                <a href="{{ route('admin.galleries.index') }}" 
                    class="inline-flex items-center px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200 mr-4">
                     <i class="fas fa-arrow-left mr-2"></i>
                     Back
@@ -17,7 +17,7 @@
 
             <!-- Form -->
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <form action="{{ route('admin.gallery.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.galleries.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <!-- Title -->
@@ -101,7 +101,7 @@
 
                     <!-- Submit Button -->
                     <div class="flex justify-end space-x-4">
-                        <a href="{{ route('admin.gallery.index') }}" 
+                        <a href="{{ route('admin.galleries.index') }}" 
                            class="px-6 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200">
                             Cancel
                         </a>

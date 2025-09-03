@@ -1,22 +1,33 @@
-<x-app-layout>
+<x-admin-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Detail Pengguna') }}
-            </h2>
-            <div class="flex space-x-2">
-                <a href="{{ route('admin.users') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                    Kembali
-                </a>
-                <a href="{{ route('admin.users.edit', $user->id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                    Edit
-                </a>
-            </div>
-        </div>
+        Detail Pengguna
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-6">
+        <div class="max-w-4xl mx-auto">
+            <!-- Header Section -->
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold" style="color: #001d3d;">Detail Pengguna</h2>
+                <div class="flex space-x-2">
+                    <a href="{{ route('admin.users') }}" 
+                       class="inline-flex items-center px-4 py-2 text-white font-medium rounded-lg transition-colors duration-200"
+                       style="background-color: #6b7280;" 
+                       onmouseover="this.style.backgroundColor='#4b5563'" 
+                       onmouseout="this.style.backgroundColor='#6b7280'">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Kembali
+                    </a>
+                    <a href="{{ route('admin.users.edit', $user->id) }}" 
+                       class="inline-flex items-center px-4 py-2 text-white font-medium rounded-lg transition-colors duration-200"
+                       style="background-color: #001d3d;" 
+                       onmouseover="this.style.backgroundColor='#003366'" 
+                       onmouseout="this.style.backgroundColor='#001d3d'">
+                        <i class="fas fa-edit mr-2"></i>
+                        Edit
+                    </a>
+                </div>
+            </div>
+            
             @if(session('success'))
                 <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
                     {{ session('success') }}
@@ -179,4 +190,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+</x-admin-layout>

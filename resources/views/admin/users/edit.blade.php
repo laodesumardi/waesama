@@ -1,19 +1,23 @@
-<x-app-layout>
+<x-admin-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Edit Pengguna') }}
-            </h2>
-            <div class="flex space-x-2">
-                <a href="{{ route('admin.users.show', $user->id) }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+        Edit Pengguna
+    </x-slot>
+
+    <div class="py-6">
+        <div class="max-w-4xl mx-auto">
+            <!-- Header Section -->
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold" style="color: #001d3d;">Edit Pengguna</h2>
+                <a href="{{ route('admin.users.show', $user->id) }}" 
+                   class="inline-flex items-center px-4 py-2 text-white font-medium rounded-lg transition-colors duration-200"
+                   style="background-color: #6b7280;" 
+                   onmouseover="this.style.backgroundColor='#4b5563'" 
+                   onmouseout="this.style.backgroundColor='#6b7280'">
+                    <i class="fas fa-times mr-2"></i>
                     Batal
                 </a>
             </div>
-        </div>
-    </x-slot>
-
-    <div class="py-12">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
+        
             @if($errors->any())
                 <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
                     <ul class="list-disc list-inside">
@@ -197,4 +201,4 @@
             }
         });
     </script>
-</x-app-layout>
+</x-admin-layout>
