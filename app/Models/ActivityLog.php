@@ -61,7 +61,7 @@ class ActivityLog extends Model
             'model_id' => $model ? $model->id : null,
             'ip_address' => request()->ip(),
             'user_agent' => request()->userAgent(),
-            'properties' => $properties
+            'properties' => json_encode($properties)
         ]);
     }
 
