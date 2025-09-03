@@ -4,6 +4,25 @@
     </x-slot>
 
     <div class="space-y-6">
+        <!-- Welcome Section -->
+        <div class="mb-6 md:mb-8">
+            <div class="admin-card admin-welcome-card rounded-xl shadow-lg p-4 sm:p-6 lg:p-8 bg-[#001d3d]">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="text-white text-center sm:text-left">
+                        <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold mb-2">Manajemen Pengguna</h2>
+                        <p class="text-blue-100 text-base sm:text-lg lg:text-xl">Kelola pengguna sistem dengan mudah dan efisien</p>
+                        <p class="text-blue-200 text-xs sm:text-sm mt-1">{{ now()->format('l, d F Y') }}</p>
+                    </div>
+                    <div class="text-white">
+                        <div class="bg-white bg-opacity-20 backdrop-blur-sm rounded-xl p-3 sm:p-4 text-center">
+                            <i class="fas fa-users text-2xl sm:text-3xl mb-2 block"></i>
+                            <p class="text-xs sm:text-sm font-medium">User Management</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="w-full">
             @if(session('success'))
                 <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
@@ -17,102 +36,211 @@
                 </div>
             @endif
 
-            <!-- User Statistics -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                <div class="bg-white overflow-hidden shadow rounded-lg">
-                    <div class="p-5">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0">
-                                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="ml-5 w-0 flex-1">
-                                <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">Total Pengguna</dt>
-                                    <dd class="text-lg font-medium text-gray-900">{{ $userStats['total'] ?? 0 }}</dd>
-                                </dl>
-                            </div>
+            <!-- Statistics Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 md:mb-8">
+                <!-- Total Pengguna -->
+                <div class="admin-card admin-stat-card bg-white rounded-xl shadow-md hover:shadow-lg border border-gray-100 p-4 sm:p-6 transition-all duration-300 hover:scale-105">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1">
+                            <p class="text-xs sm:text-sm font-medium text-gray-600 mb-1">Total Pengguna</p>
+                            <p class="text-2xl sm:text-3xl font-bold" style="color: #003566;">{{ $userStats['total'] ?? 0 }}</p>
+                            <p class="text-xs sm:text-sm text-blue-600 mt-1 flex items-center">
+                                <i class="fas fa-users mr-1"></i> Semua pengguna
+                            </p>
+                        </div>
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center flex-shrink-0" style="background-color: #e6f3ff;">
+                            <i class="fas fa-users text-lg sm:text-xl" style="color: #003566;"></i>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white overflow-hidden shadow rounded-lg">
-                    <div class="p-5">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0">
-                                <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v5a1 1 0 00.293.707l3 3a1 1 0 001.414-1.414L10 9.586V5z" clip-rule="evenodd"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="ml-5 w-0 flex-1">
-                                <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">Pengguna Aktif</dt>
-                                    <dd class="text-lg font-medium text-gray-900">{{ $userStats['active'] ?? 0 }}</dd>
-                                </dl>
-                            </div>
+                <!-- Pengguna Aktif -->
+                <div class="admin-card admin-stat-card bg-white rounded-xl shadow-md hover:shadow-lg border border-gray-100 p-4 sm:p-6 transition-all duration-300 hover:scale-105">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1">
+                            <p class="text-xs sm:text-sm font-medium text-gray-600 mb-1">Pengguna Aktif</p>
+                            <p class="text-2xl sm:text-3xl font-bold" style="color: #003566;">{{ $userStats['active'] ?? 0 }}</p>
+                            <p class="text-xs sm:text-sm text-green-600 mt-1 flex items-center">
+                                <i class="fas fa-user-check mr-1"></i> Status aktif
+                            </p>
+                        </div>
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center flex-shrink-0" style="background-color: #f0fdf4;">
+                            <i class="fas fa-user-check text-lg sm:text-xl" style="color: #16a34a;"></i>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white overflow-hidden shadow rounded-lg">
-                    <div class="p-5">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0">
-                                <div class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="ml-5 w-0 flex-1">
-                                <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">Admin</dt>
-                                    <dd class="text-lg font-medium text-gray-900">{{ $userStats['admin'] ?? 0 }}</dd>
-                                </dl>
-                            </div>
+                <!-- Admin -->
+                <div class="admin-card admin-stat-card bg-white rounded-xl shadow-md hover:shadow-lg border border-gray-100 p-4 sm:p-6 transition-all duration-300 hover:scale-105">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1">
+                            <p class="text-xs sm:text-sm font-medium text-gray-600 mb-1">Admin</p>
+                            <p class="text-2xl sm:text-3xl font-bold" style="color: #003566;">{{ $userStats['admin'] ?? 0 }}</p>
+                            <p class="text-xs sm:text-sm text-yellow-600 mt-1 flex items-center">
+                                <i class="fas fa-user-shield mr-1"></i> Role admin
+                            </p>
+                        </div>
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center flex-shrink-0" style="background-color: #fefce8;">
+                            <i class="fas fa-user-shield text-lg sm:text-xl" style="color: #ca8a04;"></i>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white overflow-hidden shadow rounded-lg">
-                    <div class="p-5">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0">
-                                <div class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="ml-5 w-0 flex-1">
-                                <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">Login Hari Ini</dt>
-                                    <dd class="text-lg font-medium text-gray-900">{{ $userStats['today_logins'] ?? 0 }}</dd>
-                                </dl>
-                            </div>
+                <!-- Login Hari Ini -->
+                <div class="admin-card admin-stat-card bg-white rounded-xl shadow-md hover:shadow-lg border border-gray-100 p-4 sm:p-6 transition-all duration-300 hover:scale-105">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1">
+                            <p class="text-xs sm:text-sm font-medium text-gray-600 mb-1">Login Hari Ini</p>
+                            <p class="text-2xl sm:text-3xl font-bold" style="color: #003566;">{{ $userStats['today_logins'] ?? 0 }}</p>
+                            <p class="text-xs sm:text-sm text-purple-600 mt-1 flex items-center">
+                                <i class="fas fa-sign-in-alt mr-1"></i> Hari ini
+                            </p>
+                        </div>
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center flex-shrink-0" style="background-color: #faf5ff;">
+                            <i class="fas fa-sign-in-alt text-lg sm:text-xl" style="color: #9333ea;"></i>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- User Management -->
-                <div class="lg:col-span-2">
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div class="p-6">
-                            <!-- Header dengan tombol tambah -->
-                            <div class="flex justify-between items-center mb-6">
-                                <h3 class="text-lg font-medium text-gray-900">Daftar Pengguna</h3>
-                                <a href="{{ route('register') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                    <i class="fas fa-plus"></i> Tambah Pengguna
-                                </a>
+            <!-- Quick Actions & Recent Activity -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 md:mb-8">
+                <!-- Quick Actions -->
+                <div class="admin-card bg-white rounded-xl shadow-md hover:shadow-lg border border-gray-100 p-4 sm:p-6 transition-all duration-300">
+                    <h3 class="text-lg sm:text-xl font-semibold mb-4 sm:mb-6" style="color: #003566;">Aksi Cepat</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                        <a href="{{ route('register') }}" class="admin-action-btn flex items-center p-3 sm:p-4 rounded-xl border-2 border-dashed border-gray-300 hover:border-blue-300 hover:bg-blue-50 transition-all duration-300 group">
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center mr-3 group-hover:scale-110 transition-transform duration-300" style="background-color: #e6f3ff;">
+                                <i class="fas fa-user-plus text-sm sm:text-base" style="color: #003566;"></i>
                             </div>
+                            <div>
+                                <p class="font-medium text-gray-900 text-sm sm:text-base">Tambah Pengguna</p>
+                                <p class="text-xs sm:text-sm text-gray-500">Buat akun baru</p>
+                            </div>
+                        </a>
+
+                        <a href="{{ route('admin.users', ['role' => 'admin']) }}" class="admin-action-btn flex items-center p-3 sm:p-4 rounded-xl border-2 border-dashed border-gray-300 hover:border-yellow-300 hover:bg-yellow-50 transition-all duration-300 group">
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center mr-3 group-hover:scale-110 transition-transform duration-300" style="background-color: #fefce8;">
+                                <i class="fas fa-user-shield text-sm sm:text-base" style="color: #ca8a04;"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-900 text-sm sm:text-base">Lihat Admin</p>
+                                <p class="text-xs sm:text-sm text-gray-500">Filter admin</p>
+                            </div>
+                        </a>
+
+                        <a href="{{ route('admin.users', ['role' => 'pegawai']) }}" class="admin-action-btn flex items-center p-3 sm:p-4 rounded-xl border-2 border-dashed border-gray-300 hover:border-green-300 hover:bg-green-50 transition-all duration-300 group">
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center mr-3 group-hover:scale-110 transition-transform duration-300" style="background-color: #f0fdf4;">
+                                <i class="fas fa-users text-sm sm:text-base" style="color: #16a34a;"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-900 text-sm sm:text-base">Lihat Pegawai</p>
+                                <p class="text-xs sm:text-sm text-gray-500">Filter pegawai</p>
+                            </div>
+                        </a>
+
+                        <a href="{{ route('admin.users', ['status' => 'active']) }}" class="admin-action-btn flex items-center p-3 sm:p-4 rounded-xl border-2 border-dashed border-gray-300 hover:border-purple-300 hover:bg-purple-50 transition-all duration-300 group">
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center mr-3 group-hover:scale-110 transition-transform duration-300" style="background-color: #faf5ff;">
+                                <i class="fas fa-user-check text-sm sm:text-base" style="color: #9333ea;"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-900 text-sm sm:text-base">Pengguna Aktif</p>
+                                <p class="text-xs sm:text-sm text-gray-500">Filter aktif</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="admin-card bg-white rounded-xl shadow-md hover:shadow-lg border border-gray-100 p-4 sm:p-6 transition-all duration-300">
+                    <h3 class="text-lg sm:text-xl font-semibold mb-4 sm:mb-6" style="color: #003566;">Aktivitas Terbaru</h3>
+                    <div class="space-y-3 sm:space-y-4">
+                        <div class="flex items-start space-x-3 p-2 sm:p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200">
+                            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background-color: #e6f3ff;">
+                                <i class="fas fa-user-plus text-xs sm:text-sm" style="color: #003566;"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-xs sm:text-sm font-medium text-gray-900 truncate">Pengguna baru ditambahkan</p>
+                                <p class="text-xs text-gray-500 truncate">Admin menambahkan pengguna baru</p>
+                                <p class="text-xs text-gray-400">2 jam yang lalu</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3 p-2 sm:p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200">
+                            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background-color: #fefce8;">
+                                <i class="fas fa-user-edit text-xs sm:text-sm" style="color: #ca8a04;"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-xs sm:text-sm font-medium text-gray-900 truncate">Data pengguna diperbarui</p>
+                                <p class="text-xs text-gray-500 truncate">Profil pengguna telah diperbarui</p>
+                                <p class="text-xs text-gray-400">4 jam yang lalu</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3 p-2 sm:p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200">
+                            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background-color: #f0fdf4;">
+                                <i class="fas fa-sign-in-alt text-xs sm:text-sm" style="color: #16a34a;"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-xs sm:text-sm font-medium text-gray-900 truncate">Login pengguna</p>
+                                <p class="text-xs text-gray-500 truncate">Pengguna berhasil login</p>
+                                <p class="text-xs text-gray-400">6 jam yang lalu</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 sm:mt-6">
+                        <a href="#" class="text-xs sm:text-sm font-medium hover:underline" style="color: #003566;">Lihat semua aktivitas →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Status -->
+            <div class="admin-card bg-white rounded-xl shadow-md hover:shadow-lg border border-gray-100 p-4 sm:p-6 transition-all duration-300 mb-6 md:mb-8">
+                <h3 class="text-lg sm:text-xl font-semibold mb-4 sm:mb-6" style="color: #003566;">Status Sistem</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+                    <div class="flex items-center space-x-3 p-3 sm:p-4 rounded-xl bg-green-50 border border-green-200">
+                        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center" style="background-color: #f0fdf4;">
+                            <i class="fas fa-server text-sm sm:text-base" style="color: #16a34a;"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs sm:text-sm font-medium text-gray-900">Server</p>
+                            <p class="text-xs text-green-600 flex items-center">
+                                <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>Online
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3 p-3 sm:p-4 rounded-xl bg-green-50 border border-green-200">
+                        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center" style="background-color: #f0fdf4;">
+                            <i class="fas fa-database text-sm sm:text-base" style="color: #16a34a;"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs sm:text-sm font-medium text-gray-900">Database</p>
+                            <p class="text-xs text-green-600 flex items-center">
+                                <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>Connected
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3 p-3 sm:p-4 rounded-xl bg-green-50 border border-green-200">
+                        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center" style="background-color: #f0fdf4;">
+                            <i class="fas fa-shield-alt text-sm sm:text-base" style="color: #16a34a;"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs sm:text-sm font-medium text-gray-900">Backup</p>
+                            <p class="text-xs text-green-600 flex items-center">
+                                <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>Updated
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Management Section -->
+            <div class="admin-card bg-white rounded-xl shadow-md hover:shadow-lg border border-gray-100 p-4 sm:p-6 transition-all duration-300">
+                <!-- Header dengan tombol tambah -->
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
+                    <h3 class="text-lg sm:text-xl font-semibold" style="color: #003566;">Daftar Pengguna</h3>
+                    <a href="{{ route('register') }}" class="inline-flex items-center px-4 py-2 rounded-xl text-white font-medium transition-all duration-300 hover:scale-105" style="background-color: #003566; hover:background-color: #001d3d;">
+                        <i class="fas fa-plus mr-2"></i> Tambah Pengguna
+                    </a>
+                </div>
 
                             <!-- Search and Filter -->
                             <form method="GET" action="{{ route('admin.users') }}" class="mb-6">
@@ -261,15 +389,15 @@
                     <!-- Pagination -->
                     <div class="mt-6">
                         {{ $users->links() }}
-                        </div>
                     </div>
                 </div>
+            </div>
 
+            <!-- Grid untuk Activity dan System Status -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
                 <!-- Activity Logs Panel -->
-                <div class="lg:col-span-1">
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div class="p-6">
-                            <h3 class="text-lg font-medium text-gray-900 mb-4">Aktivitas Terbaru</h3>
+                <div class="admin-card bg-white rounded-xl shadow-md hover:shadow-lg border border-gray-100 p-4 sm:p-6 transition-all duration-300">
+                    <h3 class="text-lg font-semibold mb-4" style="color: #003566;">Aktivitas Terbaru</h3>
                             
                             @if(isset($recentActivities) && $recentActivities->count() > 0)
                                 <div class="space-y-4">
@@ -324,6 +452,39 @@
                             @endif
                         </div>
                     </div>
+
+                <!-- System Status -->
+                <div class="admin-card bg-white rounded-xl shadow-md hover:shadow-lg border border-gray-100 p-4 sm:p-6 transition-all duration-300">
+                    <h3 class="text-lg font-semibold mb-4" style="color: #003566;">Status Sistem</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="flex items-center p-4 bg-green-50 rounded-lg">
+                        <div class="flex-shrink-0">
+                            <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900">Server</p>
+                            <p class="text-xs text-green-600">Online</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center p-4 bg-green-50 rounded-lg">
+                        <div class="flex-shrink-0">
+                            <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900">Database</p>
+                            <p class="text-xs text-green-600">Terhubung</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center p-4 bg-yellow-50 rounded-lg">
+                        <div class="flex-shrink-0">
+                            <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900">Backup</p>
+                            <p class="text-xs text-yellow-600">Terjadwal</p>
+                        </div>
                 </div>
             </div>
         </div>

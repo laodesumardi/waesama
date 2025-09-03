@@ -3,7 +3,7 @@
 // =============================================================
 
 import './bootstrap';
-import './page-transitions';
+// import './page-transitions'; // Disabled to remove loading effects
 import Alpine from 'alpinejs';
 
 // Alpine.js components will be added later when needed

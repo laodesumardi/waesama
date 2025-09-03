@@ -26,7 +26,10 @@
                     @auth
                         <a href="{{ route('dashboard') }}" class="btn-primary btn-ripple smooth-link">Dashboard</a>
                     @else
-                        <a href="{{ route('login') }}" class="btn-primary btn-ripple smooth-link">Login</a>
+                        <div class="flex items-center space-x-3">
+                            <a href="{{ route('login') }}" class="nav-link smooth-link hover:text-blue-600 transition-colors duration-200">Login</a>
+                            <a href="{{ route('register') }}" class="btn-primary btn-ripple smooth-link">Daftar</a>
+                        </div>
                     @endauth
                 </div>
                 <!-- Mobile menu button -->
@@ -49,6 +52,7 @@
                     <a href="{{ route('dashboard') }}" class="mobile-nav-link smooth-link">Dashboard</a>
                 @else
                     <a href="{{ route('login') }}" class="mobile-nav-link smooth-link">Login</a>
+                    <a href="{{ route('register') }}" class="mobile-nav-link smooth-link">Daftar</a>
                 @endauth
             </div>
         </div>

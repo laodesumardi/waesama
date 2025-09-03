@@ -1051,7 +1051,8 @@ body {
     @apply scale-105;
 }
 
-/* Page Transition Animations */
+/* Page Transition Animations - DISABLED */
+/*
 .page-transition {
     position: fixed;
     top: 0;
@@ -1086,8 +1087,10 @@ body {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+*/
 
-/* Page Content Animation */
+/* Page Content Animation - DISABLED */
+/*
 .page-content {
     opacity: 0;
     transform: translateY(20px);
@@ -1098,6 +1101,7 @@ body {
     opacity: 1;
     transform: translateY(0);
 }
+*/
 
 /* Smooth Link Transitions */
 .smooth-link {
@@ -1132,11 +1136,11 @@ body {
     box-shadow: 0 20px 40px rgba(0, 29, 61, 0.15);
 }
 
-/* Fade In Animation */
+/* Fade In Animation - DISABLED */
 .fade-in {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 1;
+    transform: translateY(0);
+    /* transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); */
 }
 
 .fade-in.visible {

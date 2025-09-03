@@ -185,9 +185,9 @@ class PageTransitions {
 }
 
 // Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    window.pageTransitions = new PageTransitions();
-});
+// document.addEventListener('DOMContentLoaded', () => {
+//     window.pageTransitions = new PageTransitions();
+// });
 
 // Add CSS animation for ripple effect
 const style = document.createElement('style');
