@@ -7,41 +7,44 @@
 
         <!-- Email Address -->
         <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+            <x-input-label for="email" :value="__('Email')" class="text-gray-700 font-medium" />
+            <x-text-input id="email" class="login-input block mt-2 w-full rounded-lg px-4 py-3" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" placeholder="Masukkan email Anda" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
         <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+        <div class="mt-6">
+            <x-input-label for="password" :value="__('Password')" class="text-gray-700 font-medium" />
 
-            <x-text-input id="password" class="block mt-1 w-full"
+            <x-text-input id="password" class="login-input block mt-2 w-full rounded-lg px-4 py-3"
                             type="password"
                             name="password"
-                            required autocomplete="current-password" />
+                            required autocomplete="current-password" 
+                            placeholder="Masukkan password Anda" />
 
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
         <!-- Remember Me -->
-        <div class="block mt-4">
+        <div class="block mt-6">
             <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800" name="remember">
-                <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
+                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
+                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
             </label>
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
+        <div class="flex flex-col space-y-4 mt-8">
+            <x-primary-button class="login-button w-full justify-center py-3 text-white font-semibold rounded-lg">
+                {{ __('Masuk') }}
             </x-primary-button>
+            
+            @if (Route::has('password.request'))
+                <div class="text-center">
+                    <a class="text-sm text-gray-600 hover:text-indigo-600 transition-colors duration-200" href="{{ route('password.request') }}">
+                        {{ __('Lupa password?') }}
+                    </a>
+                </div>
+            @endif
         </div>
     </form>
 </x-guest-layout>

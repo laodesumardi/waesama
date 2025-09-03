@@ -15,14 +15,18 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
-            <div>
+        <div class="login-container min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
+            <div class="mb-8">
                 <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+                    <x-application-logo class="login-logo w-24 h-24 fill-current text-white" />
                 </a>
             </div>
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
+            <div class="login-card w-full sm:max-w-md mt-6 px-8 py-8 overflow-hidden sm:rounded-xl">
+                <div class="text-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Selamat Datang</h2>
+                    <p class="text-gray-600">Silakan masuk ke akun Anda</p>
+                </div>
                 {{ $slot }}
             </div>
         </div>

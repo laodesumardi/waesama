@@ -8,4 +8,43 @@ body {
     font-family: 'Inter', sans-serif;
 }
 
+/* Login page improvements */
+.login-container {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+.login-card {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
+}
+
+.login-input {
+    transition: all 0.3s ease;
+    border: 2px solid #e5e7eb;
+}
+
+.login-input:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    transform: translateY(-1px);
+}
+
+.login-button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    transition: all 0.3s ease;
+    transform: translateY(0);
+}
+
+.login-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+.login-logo {
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+}
+
 /* Simple custom styles */
