@@ -1,0 +1,11 @@
+
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Basic custom styles for SIMKAM */
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Simple custom styles */

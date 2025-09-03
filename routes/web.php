@@ -1,0 +1,55 @@
+<?php
+
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\CitizenController;
+use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// Admin Routes
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin,pegawai'])->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    
+    // User Management
+    Route::get('/users', [AdminController::class, 'users'])->name('users');
+    Route::get('/users/create', [AdminController::class, 'userCreate'])->name('users.create');
+    Route::post('/users', [AdminController::class, 'userStore'])->name('users.store');
+    Route::get('/users/{user}', [AdminController::class, 'userShow'])->name('users.show');
+    Route::get('/users/{user}/edit', [AdminController::class, 'userEdit'])->name('users.edit');
+    Route::put('/users/{user}', [AdminController::class, 'userUpdate'])->name('users.update');
+    Route::delete('/users/{user}', [AdminController::class, 'userDestroy'])->name('users.destroy');
+});
+
+// Service Requests and Documents Routes
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin,pegawai'])->group(function () {
+    // Citizens Management
+    Route::resource('citizens', CitizenController::class);
+    // Service Requests
+    Route::resource('service-requests', \App\Http\Controllers\ServiceRequestController::class);
+    Route::post('service-requests/{serviceRequest}/process', [\App\Http\Controllers\ServiceRequestController::class, 'process'])->name('service-requests.process');
+    Route::post('service-requests/{serviceRequest}/approve', [\App\Http\Controllers\ServiceRequestController::class, 'approve'])->name('service-requests.approve');
+    Route::post('service-requests/{serviceRequest}/reject', [\App\Http\Controllers\ServiceRequestController::class, 'reject'])->name('service-requests.reject');
+    Route::post('service-requests/{serviceRequest}/complete', [\App\Http\Controllers\ServiceRequestController::class, 'complete'])->name('service-requests.complete');
+    
+    // Documents
+    Route::resource('documents', \App\Http\Controllers\DocumentController::class);
+    Route::get('documents/{document}/download', [\App\Http\Controllers\DocumentController::class, 'download'])->name('documents.download');
+    Route::get('documents/{document}/preview', [\App\Http\Controllers\DocumentController::class, 'preview'])->name('documents.preview');
+    Route::post('documents/{document}/deactivate', [\App\Http\Controllers\DocumentController::class, 'deactivate'])->name('documents.deactivate');
+    Route::post('documents/{document}/activate', [\App\Http\Controllers\DocumentController::class, 'activate'])->name('documents.activate');
+});
+
+require __DIR__.'/auth.php';
