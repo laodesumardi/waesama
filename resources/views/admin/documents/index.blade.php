@@ -1,17 +1,19 @@
-@extends('layouts.app')
+<x-admin-layout>
+    <x-slot name="header">
+        Manajemen Dokumen
+    </x-slot>
 
-@section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h3 class="card-title">Manajemen Dokumen</h3>
-                    <a href="{{ route('admin.documents.create') }}" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Buat Dokumen
-                    </a>
-                </div>
-                <div class="card-body">
+    <div class="space-y-6">
+        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="p-6 text-gray-900">
+                    <!-- Header dengan tombol tambah -->
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-medium text-gray-900">Daftar Dokumen</h3>
+                        <a href="{{ route('admin.documents.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            <i class="fas fa-plus"></i> Buat Dokumen
+                        </a>
+                    </div>
+
                     <!-- Filter dan Search -->
                     <div class="row mb-3">
                         <div class="col-md-3">
@@ -238,16 +240,16 @@
             </div>
         </div>
     </div>
-</div>
-@endsection
+            </div>
+        </div>
+    </div>
 
-@push('scripts')
-<script>
-    // Auto refresh setiap 60 detik untuk update statistik
-    setInterval(function() {
-        if (!document.hidden) {
-            location.reload();
-        }
-    }, 60000);
-</script>
-@endpush
+    <script>
+        // Auto refresh setiap 60 detik untuk update statistik
+        setInterval(function() {
+            if (!document.hidden) {
+                location.reload();
+            }
+        }, 60000);
+    </script>
+</x-admin-layout>

@@ -1,17 +1,10 @@
-<x-app-layout>
+<x-admin-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Manajemen Pengguna') }}
-            </h2>
-            <a href="{{ route('register') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                Tambah Pengguna
-            </a>
-        </div>
+        Manajemen Pengguna
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="space-y-6">
+        <div class="w-full">
             @if(session('success'))
                 <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
                     {{ session('success') }}
@@ -113,6 +106,14 @@
                 <div class="lg:col-span-2">
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6">
+                            <!-- Header dengan tombol tambah -->
+                            <div class="flex justify-between items-center mb-6">
+                                <h3 class="text-lg font-medium text-gray-900">Daftar Pengguna</h3>
+                                <a href="{{ route('register') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    <i class="fas fa-plus"></i> Tambah Pengguna
+                                </a>
+                            </div>
+
                             <!-- Search and Filter -->
                             <form method="GET" action="{{ route('admin.users') }}" class="mb-6">
                                 <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -327,4 +328,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+</x-admin-layout>

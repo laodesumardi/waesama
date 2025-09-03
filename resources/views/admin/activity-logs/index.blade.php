@@ -1,14 +1,10 @@
-<x-app-layout>
+<x-admin-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Log Aktivitas') }}
-            </h2>
-        </div>
+        <span>Log Aktivitas</span>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="space-y-6">
+        <div class="w-full">
             @if(session('success'))
                 <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
                     {{ session('success') }}
@@ -146,4 +142,6 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+        </div>
+    </div>
+</x-admin-layout>

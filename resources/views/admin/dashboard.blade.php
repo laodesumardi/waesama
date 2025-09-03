@@ -1,12 +1,10 @@
-<x-app-layout>
+<x-admin-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard Admin') }}
-        </h2>
+        Dashboard Admin
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="space-y-6">
+        <div class="w-full">
             <!-- Statistics Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <!-- Total Users -->
@@ -403,4 +401,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+</x-admin-layout>

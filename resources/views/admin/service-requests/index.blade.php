@@ -1,17 +1,19 @@
-@extends('layouts.app')
+<x-admin-layout>
+    <x-slot name="header">
+        Manajemen Permohonan Surat
+    </x-slot>
 
-@section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h3 class="card-title">Manajemen Permohonan Surat</h3>
-                    <a href="{{ route('admin.service-requests.create') }}" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Tambah Permohonan
-                    </a>
-                </div>
-                <div class="card-body">
+    <div class="space-y-6">
+        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="p-6 text-gray-900">
+                    <!-- Header dengan tombol tambah -->
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-medium text-gray-900">Daftar Permohonan Surat</h3>
+                        <a href="{{ route('admin.service-requests.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            <i class="fas fa-plus"></i> Tambah Permohonan
+                        </a>
+                    </div>
+
                     <!-- Filter dan Search -->
                     <div class="row mb-3">
                         <div class="col-md-3">
@@ -158,16 +160,13 @@
             </div>
         </div>
     </div>
-</div>
-@endsection
 
-@push('scripts')
-<script>
-    // Auto refresh setiap 30 detik untuk update status
-    setInterval(function() {
-        if (!document.hidden) {
-            location.reload();
-        }
-    }, 30000);
-</script>
-@endpush
+    <script>
+        // Auto refresh setiap 30 detik untuk update status
+        setInterval(function() {
+            if (!document.hidden) {
+                location.reload();
+            }
+        }, 30000);
+    </script>
+</x-admin-layout>

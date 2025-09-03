@@ -1,16 +1,13 @@
-@extends('layouts.app')
+<x-admin-layout>
+    <x-slot name="header">
+        <span>Tambah Permohonan Surat</span>
+    </x-slot>
 
-@section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Tambah Permohonan Surat</h3>
-                </div>
+    <div class="space-y-6">
+        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="p-6 text-gray-900">
                 <form action="{{ route('admin.service-requests.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <div class="card-body">
                         <div class="row">
                             <!-- Pilih Pemohon -->
                             <div class="col-md-6">
@@ -119,11 +116,11 @@
                         </div>
                     </div>
 
-                    <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">
+                    <div class="mt-6 flex justify-between">
+                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                             <i class="fas fa-save"></i> Simpan Permohonan
                         </button>
-                        <a href="{{ route('admin.service-requests.index') }}" class="btn btn-secondary">
+                        <a href="{{ route('admin.service-requests.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
                             <i class="fas fa-arrow-left"></i> Batal
                         </a>
                     </div>
@@ -131,10 +128,8 @@
             </div>
         </div>
     </div>
-</div>
-@endsection
 
-@push('scripts')
+    <script>
 <script>
 $(document).ready(function() {
     // Template variables untuk setiap jenis surat
@@ -233,4 +228,4 @@ $(document).ready(function() {
     }
 });
 </script>
-@endpush
+</x-admin-layout>
