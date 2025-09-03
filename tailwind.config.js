@@ -8,6 +8,13 @@ module.exports = {
         './resources/views/**/*.blade.php',
         './resources/js/**/*.js',
     ],
+    safelist: [
+        'login-container',
+        'login-card',
+        'login-input',
+        'login-button',
+        'login-logo',
+    ],
 
     theme: {
         extend: {
