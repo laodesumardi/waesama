@@ -138,7 +138,10 @@ class CitizenController extends Controller
         // Handle village creation or find existing
         $village = Village::firstOrCreate(
             ['name' => $request->village_name],
-            ['name' => $request->village_name]
+            [
+                'name' => $request->village_name,
+                'code' => 'V' . str_pad(Village::count() + 1, 3, '0', STR_PAD_LEFT)
+            ]
         );
         
         // Prepare data for citizen creation
@@ -210,7 +213,10 @@ class CitizenController extends Controller
         // Handle village creation or find existing
         $village = Village::firstOrCreate(
             ['name' => $request->village_name],
-            ['name' => $request->village_name]
+            [
+                'name' => $request->village_name,
+                'code' => 'V' . str_pad(Village::count() + 1, 3, '0', STR_PAD_LEFT)
+            ]
         );
         
         // Prepare data for citizen update
