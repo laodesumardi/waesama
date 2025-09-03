@@ -20,13 +20,13 @@
                     </div>
                 </div>
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="{{ route('welcome') }}" class="nav-link {{ request()->routeIs('welcome') ? 'active' : '' }}">Home</a>
-                    <a href="{{ route('news.index') }}" class="nav-link {{ request()->routeIs('news.*') ? 'active' : '' }}">Berita</a>
-                    <a href="{{ route('gallery.index') }}" class="nav-link {{ request()->routeIs('gallery.*') ? 'active' : '' }}">Galeri</a>
+                    <a href="{{ route('welcome') }}" class="nav-link smooth-link {{ request()->routeIs('welcome') ? 'active' : '' }}">Home</a>
+                    <a href="{{ route('news.index') }}" class="nav-link smooth-link {{ request()->routeIs('news.*') ? 'active' : '' }}">Berita</a>
+                    <a href="{{ route('gallery.index') }}" class="nav-link smooth-link {{ request()->routeIs('gallery.*') ? 'active' : '' }}">Galeri</a>
                     @auth
-                        <a href="{{ route('dashboard') }}" class="btn-primary">Dashboard</a>
+                        <a href="{{ route('dashboard') }}" class="btn-primary btn-ripple smooth-link">Dashboard</a>
                     @else
-                        <a href="{{ route('login') }}" class="btn-primary">Login</a>
+                        <a href="{{ route('login') }}" class="btn-primary btn-ripple smooth-link">Login</a>
                     @endauth
                 </div>
                 <!-- Mobile menu button -->
@@ -42,20 +42,20 @@
         <!-- Mobile menu -->
         <div class="md:hidden hidden" id="mobile-menu">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
-                <a href="{{ route('welcome') }}" class="mobile-nav-link {{ request()->routeIs('welcome') ? 'active' : '' }}">Home</a>
-                <a href="{{ route('news.index') }}" class="mobile-nav-link {{ request()->routeIs('news.*') ? 'active' : '' }}">Berita</a>
-                <a href="{{ route('gallery.index') }}" class="mobile-nav-link {{ request()->routeIs('gallery.*') ? 'active' : '' }}">Galeri</a>
+                <a href="{{ route('welcome') }}" class="mobile-nav-link smooth-link {{ request()->routeIs('welcome') ? 'active' : '' }}">Home</a>
+                <a href="{{ route('news.index') }}" class="mobile-nav-link smooth-link {{ request()->routeIs('news.*') ? 'active' : '' }}">Berita</a>
+                <a href="{{ route('gallery.index') }}" class="mobile-nav-link smooth-link {{ request()->routeIs('gallery.*') ? 'active' : '' }}">Galeri</a>
                 @auth
-                    <a href="{{ route('dashboard') }}" class="mobile-nav-link">Dashboard</a>
+                    <a href="{{ route('dashboard') }}" class="mobile-nav-link smooth-link">Dashboard</a>
                 @else
-                    <a href="{{ route('login') }}" class="mobile-nav-link">Login</a>
+                    <a href="{{ route('login') }}" class="mobile-nav-link smooth-link">Login</a>
                 @endauth
             </div>
         </div>
     </nav>
 
     <!-- Page Content -->
-    <main>
+    <main class="page-content">
         @yield('content')
     </main>
 
@@ -70,9 +70,9 @@
                 <div>
                     <h3 class="text-lg font-semibold mb-4" style="color: #001d3d;">Menu</h3>
                     <ul class="space-y-2">
-                        <li><a href="{{ route('welcome') }}" class="text-gray-600 hover:text-gray-900">Home</a></li>
-                        <li><a href="{{ route('news.index') }}" class="text-gray-600 hover:text-gray-900">Berita</a></li>
-                        <li><a href="{{ route('gallery.index') }}" class="text-gray-600 hover:text-gray-900">Galeri</a></li>
+                        <li><a href="{{ route('welcome') }}" class="text-gray-600 hover:text-gray-900 smooth-link">Home</a></li>
+                        <li><a href="{{ route('news.index') }}" class="text-gray-600 hover:text-gray-900 smooth-link">Berita</a></li>
+                        <li><a href="{{ route('gallery.index') }}" class="text-gray-600 hover:text-gray-900 smooth-link">Galeri</a></li>
                     </ul>
                 </div>
                 <div>

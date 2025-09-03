@@ -5,7 +5,7 @@
     <!-- Hero Section -->
     <section class="hero-section">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-            <div class="text-center">
+            <div class="text-center fade-in">
                 <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">
                     Selamat Datang di<br>
                     <span class="text-gradient">Kantor Camat</span>
@@ -14,8 +14,8 @@
                     Melayani masyarakat dengan profesional, transparan, dan akuntabel untuk kemajuan daerah
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="{{ route('news.index') }}" class="btn-secondary">Lihat Berita Terbaru</a>
-                    <a href="{{ route('gallery.index') }}" class="btn-outline">Galeri Kegiatan</a>
+                    <a href="{{ route('news.index') }}" class="btn-secondary btn-ripple smooth-link">Lihat Berita Terbaru</a>
+                    <a href="{{ route('gallery.index') }}" class="btn-outline btn-ripple smooth-link">Galeri Kegiatan</a>
                 </div>
             </div>
         </div>
@@ -23,37 +23,90 @@
 
     <!-- Latest News Section -->
     @if($latestNews->count() > 0)
-    <section class="py-16 bg-gray-50">
+    <section class="py-20 bg-gradient-to-br from-gray-50 to-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold mb-4" style="color: #001d3d;">Berita Terbaru</h2>
-                <p class="text-gray-600">Informasi dan update terkini dari Kantor Camat</p>
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6" style="color: #001d3d;">Berita Terbaru</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">Informasi dan update terkini dari Kantor Camat untuk masyarakat</p>
+                <div class="w-24 h-1 mx-auto mt-6 rounded-full" style="background-color: #001d3d;"></div>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                @foreach($latestNews as $news)
-                <article class="admin-card hover:shadow-lg transition-all duration-300">
+            
+            <!-- Featured News (First News) -->
+            @if($latestNews->first())
+            <div class="mb-16 fade-in">
+                <article class="bg-white rounded-2xl shadow-xl overflow-hidden card-hover">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-0">
+                        <div class="relative">
+                            @if($latestNews->first()->image)
+                                <img src="{{ asset('storage/' . $latestNews->first()->image) }}" alt="{{ $latestNews->first()->title }}" class="w-full h-64 lg:h-full object-cover">
+                            @else
+                                <div class="w-full h-64 lg:h-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                                    <svg class="w-24 h-24 text-white opacity-80" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            @endif
+                            <div class="absolute top-4 left-4">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium text-white" style="background-color: #001d3d;">
+                                    <i class="fas fa-star mr-1"></i> Berita Utama
+                                </span>
+                            </div>
+                        </div>
+                        <div class="p-8 lg:p-12 flex flex-col justify-center">
+                            <div class="flex items-center mb-4">
+                                <i class="fas fa-calendar-alt mr-2" style="color: #001d3d;"></i>
+                                <span class="text-gray-500 font-medium">{{ $latestNews->first()->published_at->format('d F Y') }}</span>
+                            </div>
+                            <h3 class="text-2xl lg:text-3xl font-bold mb-4 leading-tight" style="color: #001d3d;">{{ $latestNews->first()->title }}</h3>
+                            <p class="text-gray-600 text-lg mb-6 leading-relaxed">{{ Str::limit(strip_tags($latestNews->first()->content), 200) }}</p>
+                            <a href="{{ route('news.show', $latestNews->first()->id) }}" class="inline-flex items-center px-6 py-3 rounded-lg font-semibold text-white transition-all duration-300 hover:shadow-lg transform hover:scale-105" style="background-color: #001d3d;">
+                                Baca Selengkapnya
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            @endif
+            
+            <!-- Other News Grid -->
+            @if($latestNews->count() > 1)
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16" data-stagger="150">
+                @foreach($latestNews->skip(1) as $news)
+                <article class="bg-white rounded-xl shadow-lg overflow-hidden card-hover stagger-item">
                     @if($news->image)
-                        <img src="{{ asset('storage/' . $news->image) }}" alt="{{ $news->title }}" class="w-full h-48 object-cover rounded-t-lg">
+                        <img src="{{ asset('storage/' . $news->image) }}" alt="{{ $news->title }}" class="w-full h-56 object-cover">
                     @else
-                        <div class="w-full h-48 bg-gradient-to-br from-blue-100 to-blue-200 rounded-t-lg flex items-center justify-center">
-                            <svg class="w-16 h-16 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                        <div class="w-full h-56 bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center">
+                            <svg class="w-20 h-20 text-white opacity-80" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
                             </svg>
                         </div>
                     @endif
                     <div class="p-6">
-                        <h3 class="text-xl font-semibold mb-2" style="color: #001d3d;">{{ $news->title }}</h3>
-                        <p class="text-gray-600 mb-4">{{ Str::limit(strip_tags($news->content), 120) }}</p>
-                        <div class="flex justify-between items-center">
+                        <div class="flex items-center mb-3">
+                            <i class="fas fa-clock mr-2 text-gray-400"></i>
                             <span class="text-sm text-gray-500">{{ $news->published_at->format('d M Y') }}</span>
-                            <a href="{{ route('news.show', $news->id) }}" class="text-sm font-medium hover:underline" style="color: #001d3d;">Baca Selengkapnya</a>
                         </div>
+                        <h3 class="text-xl font-bold mb-3 leading-tight hover:underline" style="color: #001d3d;">
+                            <a href="{{ route('news.show', $news->id) }}">{{ $news->title }}</a>
+                        </h3>
+                        <p class="text-gray-600 mb-4 leading-relaxed">{{ Str::limit(strip_tags($news->content), 150) }}</p>
+                        <a href="{{ route('news.show', $news->id) }}" class="inline-flex items-center text-sm font-semibold hover:underline transition-colors duration-200" style="color: #001d3d;">
+                            Baca Selengkapnya
+                            <i class="fas fa-chevron-right ml-1"></i>
+                        </a>
                     </div>
                 </article>
                 @endforeach
             </div>
-            <div class="text-center mt-12">
-                <a href="{{ route('news.index') }}" class="btn-primary">Lihat Semua Berita</a>
+            @endif
+            
+            <div class="text-center fade-in">
+                <a href="{{ route('news.index') }}" class="inline-flex items-center px-8 py-4 text-lg font-semibold text-white rounded-xl btn-ripple smooth-link" style="background-color: #001d3d;">
+                    <i class="fas fa-newspaper mr-3"></i>
+                    Lihat Semua Berita
+                </a>
             </div>
         </div>
     </section>
@@ -63,20 +116,20 @@
     @if($latestGallery->count() > 0)
     <section class="py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
+            <div class="text-center mb-12 fade-in">
                 <h2 class="text-3xl font-bold mb-4" style="color: #001d3d;">Galeri Kegiatan</h2>
                 <p class="text-gray-600">Dokumentasi kegiatan dan program Kantor Camat</p>
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4" data-stagger="100">
                 @foreach($latestGallery as $gallery)
-                <div class="gallery-item group cursor-pointer">
+                <div class="gallery-item group cursor-pointer stagger-item">
                     <img src="{{ asset('storage/' . $gallery->image) }}" alt="{{ $gallery->title }}" class="w-full h-32 object-cover rounded-lg group-hover:scale-105 transition-transform duration-300">
                     <p class="text-sm text-center mt-2 text-gray-600">{{ $gallery->title }}</p>
                 </div>
                 @endforeach
             </div>
-            <div class="text-center mt-12">
-                <a href="{{ route('gallery.index') }}" class="btn-primary">Lihat Semua Galeri</a>
+            <div class="text-center mt-12 fade-in">
+                <a href="{{ route('gallery.index') }}" class="btn-primary btn-ripple smooth-link">Lihat Semua Galeri</a>
             </div>
         </div>
     </section>
