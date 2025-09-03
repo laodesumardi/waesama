@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('activity_logs', function (Blueprint $table) {
-            $table->string('model_type')->nullable()->after('description');
-            $table->unsignedBigInteger('model_id')->nullable()->after('model_type');
+            $table->string('model_type')->nullable();
+            $table->unsignedBigInteger('model_id')->nullable();
         });
     }
 
