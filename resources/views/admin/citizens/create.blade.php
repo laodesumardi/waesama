@@ -27,7 +27,7 @@
                 </div>
                 <div class="p-6 lg:p-8">
 
-                    <form action="{{ route('admin.citizens.store') }}" method="POST">
+                    <form action="{{ route('admin.citizens.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         <!-- Data Identitas -->
@@ -71,6 +71,32 @@
                                             {{ $message }}
                                         </p>
                                     @enderror
+                                </div>
+
+                                <!-- Foto -->
+                                <div class="md:col-span-2">
+                                    <label for="photo" class="block text-sm font-semibold text-gray-700 mb-2">
+                                        <i class="fas fa-camera text-blue-500 mr-1"></i>
+                                        Foto Penduduk
+                                    </label>
+                                    <div class="flex items-start space-x-4">
+                                        <div class="flex-shrink-0">
+                                            <div id="photo-preview" class="w-24 h-24 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center bg-gray-50">
+                                                <img src="{{ asset('images/default-avatar.svg') }}" alt="Default Avatar" class="w-16 h-16 text-gray-400">
+                                            </div>
+                                        </div>
+                                        <div class="flex-1">
+                                            <input type="file" name="photo" id="photo" accept="image/*"
+                                                   class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-all duration-200 @error('photo') border-red-500 ring-2 ring-red-200 @enderror">
+                                            <p class="mt-1 text-xs text-gray-500">Format: JPG, JPEG, PNG. Maksimal 2MB.</p>
+                                            @error('photo')
+                                                <p class="mt-2 text-sm text-red-600 flex items-center">
+                                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                                    {{ $message }}
+                                                </p>
+                                            @enderror
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <!-- Tempat Lahir -->
@@ -511,6 +537,46 @@
                     e.target.value = e.target.value.replace(/[^0-9+\-\s]/g, '');
                 });
             }
+
+            // Photo preview functionality
+            function previewPhoto(input) {
+                const previewContainer = document.getElementById('photo-preview');
+                
+                if (input.files && input.files[0]) {
+                    const file = input.files[0];
+                    
+                    // Validasi tipe file
+                    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+                    if (!allowedTypes.includes(file.type)) {
+                        alert('Hanya file JPG, JPEG, dan PNG yang diperbolehkan!');
+                        input.value = '';
+                        return;
+                    }
+                    
+                    // Validasi ukuran file (2MB = 2 * 1024 * 1024 bytes)
+                    if (file.size > 2 * 1024 * 1024) {
+                        alert('Ukuran file tidak boleh lebih dari 2MB!');
+                        input.value = '';
+                        return;
+                    }
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewContainer.innerHTML = `<img src="${e.target.result}" alt="Preview" class="w-16 h-16 object-cover rounded-lg border border-gray-300">`;
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                     previewContainer.innerHTML = '<img src="{{ asset(\'images/default-avatar.svg\') }}" alt="Default Avatar" class="w-16 h-16 text-gray-400">';
+                 }
+             }
+ 
+             // Photo input event listener
+             const photoInput = document.getElementById('photo');
+             if (photoInput) {
+                 photoInput.addEventListener('change', function(e) {
+                     previewPhoto(this);
+                 });
+             }
         });
     </script>
 </x-admin-layout>

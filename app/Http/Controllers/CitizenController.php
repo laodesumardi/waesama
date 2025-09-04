@@ -9,6 +9,7 @@ use App\Exports\CitizensExport;
 use App\Imports\CitizensImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
 class CitizenController extends Controller
@@ -95,7 +96,10 @@ class CitizenController extends Controller
             'inactive' => Citizen::where('is_active', false)->count(),
         ];
         
-        return view('admin.citizens.index', compact('citizens', 'villages', 'stats'));
+        // Chart data
+        $chartData = $this->getChartData();
+        
+        return view('admin.citizens.index', compact('citizens', 'villages', 'stats', 'chartData'));
     }
 
     /**
@@ -113,20 +117,34 @@ class CitizenController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nik' => 'required|string|size:16|unique:citizens,nik',
-            'name' => 'required|string|max:255',
+            'nik' => 'required|string|size:16|unique:citizens,nik|regex:/^[0-9]{16}$/',
+            'name' => 'required|string|max:255|regex:/^[a-zA-Z\s\.\-\']+$/',
             'birth_place' => 'required|string|max:255',
-            'birth_date' => 'required|date',
+            'birth_date' => 'required|date|before:today',
             'gender' => 'required|in:L,P',
-            'address' => 'required|string',
+            'address' => 'required|string|min:10',
             'village_name' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:20',
-            'email' => 'nullable|email|max:255',
+            'phone' => 'nullable|string|max:20|regex:/^[\+]?[0-9\-\(\)\s]+$/|min:10',
+            'email' => 'nullable|email:rfc,dns|max:255',
             'occupation' => 'nullable|string|max:255',
             'marital_status' => 'required|in:Belum Kawin,Kawin,Cerai Hidup,Cerai Mati',
             'religion' => 'required|in:Islam,Kristen,Katolik,Hindu,Buddha,Konghucu',
             'education' => 'nullable|string|max:255',
+            'photo' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
             'is_active' => 'required|boolean'
+        ], [
+            'nik.regex' => 'NIK harus berupa 16 digit angka.',
+            'nik.size' => 'NIK harus tepat 16 digit.',
+            'nik.unique' => 'NIK sudah terdaftar dalam sistem.',
+            'name.regex' => 'Nama hanya boleh mengandung huruf, spasi, titik, tanda hubung, dan apostrof.',
+            'birth_date.before' => 'Tanggal lahir harus sebelum hari ini.',
+            'address.min' => 'Alamat minimal 10 karakter.',
+            'phone.regex' => 'Format nomor telepon tidak valid.',
+            'phone.min' => 'Nomor telepon minimal 10 karakter.',
+            'email.email' => 'Format email tidak valid.',
+            'photo.image' => 'File harus berupa gambar.',
+            'photo.mimes' => 'Foto harus berformat JPEG, JPG, atau PNG.',
+            'photo.max' => 'Ukuran foto maksimal 2MB.',
         ]);
         
         if ($validator->fails()) {
@@ -144,9 +162,18 @@ class CitizenController extends Controller
             ]
         );
         
+        // Handle photo upload
+        $photoPath = null;
+        if ($request->hasFile('photo')) {
+            $photo = $request->file('photo');
+            $photoName = time() . '_' . $photo->getClientOriginalName();
+            $photoPath = $photo->storeAs('citizens/photos', $photoName, 'public');
+        }
+        
         // Prepare data for citizen creation
-        $citizenData = $request->except('village_name');
+        $citizenData = $request->except(['village_name', 'photo']);
         $citizenData['village_id'] = $village->id;
+        $citizenData['photo_path'] = $photoPath;
         
         $citizen = Citizen::create($citizenData);
         
@@ -186,20 +213,34 @@ class CitizenController extends Controller
     public function update(Request $request, Citizen $citizen)
     {
         $validator = Validator::make($request->all(), [
-            'nik' => 'required|string|size:16|unique:citizens,nik,' . $citizen->id,
-            'name' => 'required|string|max:255',
+            'nik' => 'required|string|size:16|unique:citizens,nik,' . $citizen->id . '|regex:/^[0-9]{16}$/',
+            'name' => 'required|string|max:255|regex:/^[a-zA-Z\s\.\-\']+$/',
             'birth_place' => 'required|string|max:255',
-            'birth_date' => 'required|date',
+            'birth_date' => 'required|date|before:today',
             'gender' => 'required|in:L,P',
-            'address' => 'required|string',
+            'address' => 'required|string|min:10',
             'village_name' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:20',
-            'email' => 'nullable|email|max:255',
+            'phone' => 'nullable|string|max:20|regex:/^[\+]?[0-9\-\(\)\s]+$/|min:10',
+            'email' => 'nullable|email:rfc,dns|max:255',
             'occupation' => 'nullable|string|max:255',
             'marital_status' => 'required|in:Belum Kawin,Kawin,Cerai Hidup,Cerai Mati',
             'religion' => 'required|in:Islam,Kristen,Katolik,Hindu,Buddha,Konghucu',
             'education' => 'nullable|string|max:255',
+            'photo' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
             'is_active' => 'required|boolean'
+        ], [
+            'nik.regex' => 'NIK harus berupa 16 digit angka.',
+            'nik.size' => 'NIK harus tepat 16 digit.',
+            'nik.unique' => 'NIK sudah terdaftar dalam sistem.',
+            'name.regex' => 'Nama hanya boleh mengandung huruf, spasi, titik, tanda hubung, dan apostrof.',
+            'birth_date.before' => 'Tanggal lahir harus sebelum hari ini.',
+            'address.min' => 'Alamat minimal 10 karakter.',
+            'phone.regex' => 'Format nomor telepon tidak valid.',
+            'phone.min' => 'Nomor telepon minimal 10 karakter.',
+            'email.email' => 'Format email tidak valid.',
+            'photo.image' => 'File harus berupa gambar.',
+            'photo.mimes' => 'Foto harus berformat JPEG, JPG, atau PNG.',
+            'photo.max' => 'Ukuran foto maksimal 2MB.',
         ]);
         
         if ($validator->fails()) {
@@ -219,9 +260,23 @@ class CitizenController extends Controller
             ]
         );
         
+        // Handle photo upload
+        $photoPath = $citizen->photo_path; // Keep existing photo if no new photo uploaded
+        if ($request->hasFile('photo')) {
+            // Delete old photo if exists
+            if ($citizen->photo_path && \Storage::disk('public')->exists($citizen->photo_path)) {
+                \Storage::disk('public')->delete($citizen->photo_path);
+            }
+            
+            $photo = $request->file('photo');
+            $photoName = time() . '_' . $photo->getClientOriginalName();
+            $photoPath = $photo->storeAs('citizens/photos', $photoName, 'public');
+        }
+        
         // Prepare data for citizen update
-        $citizenData = $request->except('village_name');
+        $citizenData = $request->except(['village_name', 'photo']);
         $citizenData['village_id'] = $village->id;
+        $citizenData['photo_path'] = $photoPath;
         
         $citizen->update($citizenData);
         
@@ -372,5 +427,163 @@ class CitizenController extends Controller
             'Content-Type' => 'text/csv',
             'Content-Disposition' => 'attachment; filename="template-import-penduduk.csv"'
         ]);
+    }
+
+    /**
+     * Handle bulk actions for citizens
+     */
+    public function bulkAction(Request $request)
+    {
+        $request->validate([
+            'action' => 'required|in:activate,deactivate,delete',
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'exists:citizens,id'
+        ]);
+
+        $action = $request->action;
+        $ids = $request->ids;
+        $citizens = Citizen::whereIn('id', $ids)->get();
+        
+        $successCount = 0;
+        $citizenNames = [];
+
+        foreach ($citizens as $citizen) {
+            $citizenNames[] = $citizen->name;
+            
+            switch ($action) {
+                case 'activate':
+                    $citizen->update(['is_active' => true]);
+                    $successCount++;
+                    break;
+                    
+                case 'deactivate':
+                    $citizen->update(['is_active' => false]);
+                    $successCount++;
+                    break;
+                    
+                case 'delete':
+                    $citizen->delete();
+                    $successCount++;
+                    break;
+            }
+        }
+
+        // Log bulk activity
+        $actionText = [
+            'activate' => 'mengaktifkan',
+            'deactivate' => 'menonaktifkan', 
+            'delete' => 'menghapus'
+        ];
+        
+        ActivityLog::log(
+            'citizens_bulk_' . $action,
+            "Bulk action: {$actionText[$action]} {$successCount} data penduduk",
+            null,
+            [
+                'action' => $action,
+                'count' => $successCount,
+                'citizen_names' => $citizenNames
+            ]
+        );
+
+        $message = "Berhasil {$actionText[$action]} {$successCount} data penduduk.";
+        return redirect()->route('admin.citizens.index')->with('success', $message);
+    }
+
+    /**
+     * Export selected citizens data to Excel
+     */
+    public function bulkExport(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'exists:citizens,id'
+        ]);
+
+        $ids = $request->ids;
+        $citizens = Citizen::whereIn('id', $ids)->with('village')->get();
+        
+        // Log export activity
+        ActivityLog::log(
+            'citizens_bulk_export',
+            "Bulk export: mengekspor {$citizens->count()} data penduduk",
+            null,
+            [
+                'count' => $citizens->count(),
+                'citizen_ids' => $ids
+            ]
+        );
+
+        return Excel::download(
+            new CitizensExport(['ids' => $ids]), 
+            'data-penduduk-selected-' . date('Y-m-d') . '.xlsx'
+        );
+    }
+
+    /**
+     * Get chart data for dashboard
+     */
+    private function getChartData()
+    {
+        // Age distribution data
+        $ageData = [
+            0, // 0-17
+            0, // 18-30
+            0, // 31-45
+            0, // 46-60
+            0  // 60+
+        ];
+
+        $citizens = Citizen::all();
+        foreach ($citizens as $citizen) {
+            $age = $citizen->age;
+            if ($age <= 17) {
+                $ageData[0]++;
+            } elseif ($age <= 30) {
+                $ageData[1]++;
+            } elseif ($age <= 45) {
+                $ageData[2]++;
+            } elseif ($age <= 60) {
+                $ageData[3]++;
+            } else {
+                $ageData[4]++;
+            }
+        }
+
+        // Gender distribution data
+        $genderData = [
+            Citizen::where('gender', 'L')->count(),
+            Citizen::where('gender', 'P')->count()
+        ];
+
+        // Religion distribution data
+        $religionStats = Citizen::selectRaw('religion, COUNT(*) as count')
+            ->groupBy('religion')
+            ->orderBy('count', 'desc')
+            ->get();
+        
+        $religionLabels = $religionStats->pluck('religion')->toArray();
+        $religionData = $religionStats->pluck('count')->toArray();
+
+        // Village distribution data
+        $villageStats = Citizen::with('village')
+            ->selectRaw('village_id, COUNT(*) as count')
+            ->groupBy('village_id')
+            ->orderBy('count', 'desc')
+            ->get();
+        
+        $villageLabels = $villageStats->map(function($item) {
+            return $item->village ? $item->village->name : 'Tidak Diketahui';
+        })->toArray();
+        $villageData = $villageStats->pluck('count')->toArray();
+
+        return [
+            'age' => $ageData,
+            'gender' => $genderData,
+            'religion' => $religionData,
+            'religionLabels' => $religionLabels,
+            'village' => $villageData,
+            'villageLabels' => $villageLabels
+        ];
     }
 }

@@ -14,7 +14,7 @@
                          </a>
                     </div>
 
-                    <form action="{{ route('admin.citizens.update', $citizen) }}" method="POST">
+                    <form action="{{ route('admin.citizens.update', $citizen) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         
@@ -155,6 +155,30 @@
                                 @enderror
                             </div>
 
+                            <!-- Foto -->
+                            <div>
+                                <label for="photo" class="block text-sm font-medium text-gray-700">Foto Penduduk</label>
+                                <div class="mt-1 flex items-center space-x-4">
+                                    <div class="flex-shrink-0">
+                                        <img id="photoPreview" 
+                                              src="{{ $citizen->photo_path ? asset('storage/' . $citizen->photo_path) : asset('images/default-avatar.svg') }}" 
+                                              alt="Preview" 
+                                              class="h-20 w-20 object-cover rounded-lg border border-gray-300">
+                                    </div>
+                                    <div class="flex-1">
+                                        <input type="file" name="photo" id="photo" accept="image/jpeg,image/jpg,image/png" 
+                                               class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 @error('photo') border-red-500 @enderror">
+                                        <p class="mt-1 text-xs text-gray-500">JPG, JPEG, PNG. Maksimal 2MB.</p>
+                                        @if($citizen->photo_path)
+                                            <p class="mt-1 text-xs text-green-600">Foto saat ini: {{ basename($citizen->photo_path) }}</p>
+                                        @endif
+                                    </div>
+                                </div>
+                                @error('photo')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
                             <!-- Status -->
                             <div>
                                 <label for="is_active" class="block text-sm font-medium text-gray-700">Status *</label>
@@ -198,4 +222,36 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Photo preview functionality
+        document.getElementById('photo').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const preview = document.getElementById('photoPreview');
+            
+            if (file) {
+                // Validate file type
+                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+                if (!allowedTypes.includes(file.type)) {
+                    alert('Hanya file JPG, JPEG, dan PNG yang diperbolehkan.');
+                    e.target.value = '';
+                    return;
+                }
+                
+                // Validate file size (2MB = 2 * 1024 * 1024 bytes)
+                if (file.size > 2 * 1024 * 1024) {
+                    alert('Ukuran file maksimal 2MB.');
+                    e.target.value = '';
+                    return;
+                }
+                
+                // Show preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
 </x-admin-layout>

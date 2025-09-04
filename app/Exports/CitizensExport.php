@@ -25,7 +25,12 @@ class CitizensExport implements FromCollection, WithHeadings, WithMapping, WithS
     {
         $query = Citizen::with('village');
         
-        // Apply filters
+        // If specific IDs are provided, filter by them
+        if (isset($this->filters['ids']) && is_array($this->filters['ids']) && count($this->filters['ids']) > 0) {
+            return $query->whereIn('id', $this->filters['ids'])->get();
+        }
+        
+        // Apply other filters
         if (isset($this->filters['search']) && $this->filters['search']) {
             $search = $this->filters['search'];
             $query->where(function($q) use ($search) {

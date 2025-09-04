@@ -126,6 +126,55 @@
         </div>
     </div>
 
+    <!-- Dashboard Charts -->
+    <div class="mb-6 md:mb-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Age Distribution Chart -->
+            <div class="admin-card bg-white rounded-xl shadow-lg p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">Distribusi Usia</h3>
+                    <i class="fas fa-chart-bar text-blue-600"></i>
+                </div>
+                <div class="h-64">
+                    <canvas id="ageChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Gender Distribution Chart -->
+            <div class="admin-card bg-white rounded-xl shadow-lg p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">Distribusi Jenis Kelamin</h3>
+                    <i class="fas fa-chart-pie text-pink-600"></i>
+                </div>
+                <div class="h-64">
+                    <canvas id="genderChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Religion Distribution Chart -->
+            <div class="admin-card bg-white rounded-xl shadow-lg p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">Distribusi Agama</h3>
+                    <i class="fas fa-chart-doughnut text-purple-600"></i>
+                </div>
+                <div class="h-64">
+                    <canvas id="religionChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Village Distribution Chart -->
+            <div class="admin-card bg-white rounded-xl shadow-lg p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">Distribusi per Desa</h3>
+                    <i class="fas fa-chart-bar text-green-600"></i>
+                </div>
+                <div class="h-64">
+                    <canvas id="villageChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Success Message -->
     @if(session('success'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
@@ -265,6 +314,40 @@
         </form>
     </div>
 
+    <!-- Bulk Actions Bar -->
+    <div id="bulkActionsBar" class="admin-card bg-blue-50 border border-blue-200 rounded-xl shadow-lg p-4 mb-4 hidden">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div class="flex items-center">
+                <i class="fas fa-check-square text-blue-600 mr-2"></i>
+                <span class="text-sm font-medium text-blue-900">
+                    <span id="selectedCount">0</span> data terpilih
+                </span>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <button type="button" onclick="bulkActivate()" class="inline-flex items-center px-3 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
+                    <i class="fas fa-check-circle mr-2"></i>
+                    Aktifkan
+                </button>
+                <button type="button" onclick="bulkDeactivate()" class="inline-flex items-center px-3 py-2 bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
+                    <i class="fas fa-pause-circle mr-2"></i>
+                    Nonaktifkan
+                </button>
+                <button type="button" onclick="bulkExport()" class="inline-flex items-center px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
+                    <i class="fas fa-download mr-2"></i>
+                    Export
+                </button>
+                <button type="button" onclick="bulkDelete()" class="inline-flex items-center px-3 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
+                    <i class="fas fa-trash mr-2"></i>
+                    Hapus
+                </button>
+                <button type="button" onclick="clearSelection()" class="inline-flex items-center px-3 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
+                    <i class="fas fa-times mr-2"></i>
+                    Batal
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Tabel Data -->
     <div class="admin-card bg-white rounded-xl shadow-lg overflow-hidden mb-6 md:mb-8">
         <div class="p-4 sm:p-6 border-b border-gray-200">
@@ -284,6 +367,12 @@
             <table class="admin-table min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
+                        <th class="px-4 sm:px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            <div class="flex items-center">
+                                <input type="checkbox" id="selectAll" class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" onchange="toggleSelectAll()">
+                                <label for="selectAll" class="ml-2 text-xs font-semibold text-gray-600 uppercase tracking-wider">Pilih</label>
+                            </div>
+                        </th>
                         <th class="px-4 sm:px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">NIK</th>
                         <th class="px-4 sm:px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Nama Lengkap</th>
                         <th class="px-4 sm:px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Jenis Kelamin</th>
@@ -295,6 +384,9 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                     @forelse($citizens as $citizen)
                         <tr class="hover:bg-gray-50 transition-colors duration-200">
+                            <td class="px-4 sm:px-6 py-4 whitespace-nowrap">
+                                <input type="checkbox" class="citizen-checkbox rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" value="{{ $citizen->id }}" onchange="updateBulkActions()">
+                            </td>
                             <td class="px-4 sm:px-6 py-4 whitespace-nowrap">
                                 <div class="text-sm font-medium text-gray-900">{{ $citizen->nik }}</div>
                             </td>
@@ -360,7 +452,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-4 sm:px-6 py-12 text-center">
+                            <td colspan="7" class="px-4 sm:px-6 py-12 text-center">
                                 <div class="flex flex-col items-center justify-center">
                                     <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4" style="background-color: #f3f4f6;">
                                         <i class="fas fa-users text-2xl text-gray-400"></i>
@@ -385,6 +477,7 @@
                 <div class="p-4 border-b border-gray-200 last:border-b-0">
                     <div class="flex items-start justify-between mb-3">
                         <div class="flex items-center">
+                            <input type="checkbox" class="citizen-checkbox rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 mr-3" value="{{ $citizen->id }}" onchange="updateBulkActions()">
                             <div class="w-10 h-10 rounded-full flex items-center justify-center mr-3" style="background-color: #e6f3ff;">
                                 <i class="fas fa-user text-sm" style="color: #003566;"></i>
                             </div>
@@ -692,5 +785,316 @@
                  element.style.pointerEvents = 'auto';
              }, 3000);
          }
+
+         // Bulk Actions Functions
+         function toggleSelectAll() {
+             const selectAllCheckbox = document.getElementById('selectAll');
+             const citizenCheckboxes = document.querySelectorAll('.citizen-checkbox');
+             
+             citizenCheckboxes.forEach(checkbox => {
+                 checkbox.checked = selectAllCheckbox.checked;
+             });
+             
+             updateBulkActions();
+         }
+
+         function updateBulkActions() {
+             const citizenCheckboxes = document.querySelectorAll('.citizen-checkbox');
+             const checkedBoxes = document.querySelectorAll('.citizen-checkbox:checked');
+             const bulkActionsBar = document.getElementById('bulkActionsBar');
+             const selectedCount = document.getElementById('selectedCount');
+             const selectAllCheckbox = document.getElementById('selectAll');
+             
+             selectedCount.textContent = checkedBoxes.length;
+             
+             if (checkedBoxes.length > 0) {
+                 bulkActionsBar.classList.remove('hidden');
+             } else {
+                 bulkActionsBar.classList.add('hidden');
+             }
+             
+             // Update select all checkbox state
+             if (checkedBoxes.length === citizenCheckboxes.length) {
+                 selectAllCheckbox.checked = true;
+                 selectAllCheckbox.indeterminate = false;
+             } else if (checkedBoxes.length > 0) {
+                 selectAllCheckbox.checked = false;
+                 selectAllCheckbox.indeterminate = true;
+             } else {
+                 selectAllCheckbox.checked = false;
+                 selectAllCheckbox.indeterminate = false;
+             }
+         }
+
+         function getSelectedIds() {
+             const checkedBoxes = document.querySelectorAll('.citizen-checkbox:checked');
+             return Array.from(checkedBoxes).map(checkbox => checkbox.value);
+         }
+
+         function clearSelection() {
+             const citizenCheckboxes = document.querySelectorAll('.citizen-checkbox');
+             const selectAllCheckbox = document.getElementById('selectAll');
+             
+             citizenCheckboxes.forEach(checkbox => {
+                 checkbox.checked = false;
+             });
+             selectAllCheckbox.checked = false;
+             selectAllCheckbox.indeterminate = false;
+             
+             updateBulkActions();
+         }
+
+         function bulkActivate() {
+             const selectedIds = getSelectedIds();
+             if (selectedIds.length === 0) {
+                 alert('Pilih minimal satu data untuk diaktifkan.');
+                 return;
+             }
+             
+             if (confirm(`Apakah Anda yakin ingin mengaktifkan ${selectedIds.length} data penduduk?`)) {
+                 performBulkAction('activate', selectedIds);
+             }
+         }
+
+         function bulkDeactivate() {
+             const selectedIds = getSelectedIds();
+             if (selectedIds.length === 0) {
+                 alert('Pilih minimal satu data untuk dinonaktifkan.');
+                 return;
+             }
+             
+             if (confirm(`Apakah Anda yakin ingin menonaktifkan ${selectedIds.length} data penduduk?`)) {
+                 performBulkAction('deactivate', selectedIds);
+             }
+         }
+
+         function bulkDelete() {
+             const selectedIds = getSelectedIds();
+             if (selectedIds.length === 0) {
+                 alert('Pilih minimal satu data untuk dihapus.');
+                 return;
+             }
+             
+             if (confirm(`PERINGATAN: Apakah Anda yakin ingin menghapus ${selectedIds.length} data penduduk? Tindakan ini tidak dapat dibatalkan!`)) {
+                 performBulkAction('delete', selectedIds);
+             }
+         }
+
+         function bulkExport() {
+             const selectedIds = getSelectedIds();
+             if (selectedIds.length === 0) {
+                 alert('Pilih minimal satu data untuk diekspor.');
+                 return;
+             }
+             
+             // Create form and submit for export
+             const form = document.createElement('form');
+             form.method = 'POST';
+             form.action = '{{ route("admin.citizens.bulk-export") }}';
+             
+             const csrfToken = document.createElement('input');
+             csrfToken.type = 'hidden';
+             csrfToken.name = '_token';
+             csrfToken.value = '{{ csrf_token() }}';
+             form.appendChild(csrfToken);
+             
+             selectedIds.forEach(id => {
+                 const input = document.createElement('input');
+                 input.type = 'hidden';
+                 input.name = 'ids[]';
+                 input.value = id;
+                 form.appendChild(input);
+             });
+             
+             document.body.appendChild(form);
+             form.submit();
+             document.body.removeChild(form);
+         }
+
+         function performBulkAction(action, ids) {
+             const form = document.createElement('form');
+             form.method = 'POST';
+             form.action = '{{ route("admin.citizens.bulk-action") }}';
+             
+             const csrfToken = document.createElement('input');
+             csrfToken.type = 'hidden';
+             csrfToken.name = '_token';
+             csrfToken.value = '{{ csrf_token() }}';
+             form.appendChild(csrfToken);
+             
+             const actionInput = document.createElement('input');
+             actionInput.type = 'hidden';
+             actionInput.name = 'action';
+             actionInput.value = action;
+             form.appendChild(actionInput);
+             
+             ids.forEach(id => {
+                 const input = document.createElement('input');
+                 input.type = 'hidden';
+                 input.name = 'ids[]';
+                 input.value = id;
+                 form.appendChild(input);
+             });
+             
+             document.body.appendChild(form);
+             form.submit();
+         }
+
+         // Chart.js initialization
+         document.addEventListener('DOMContentLoaded', function() {
+             // Age Distribution Chart
+             const ageCtx = document.getElementById('ageChart').getContext('2d');
+             new Chart(ageCtx, {
+                 type: 'bar',
+                 data: {
+                     labels: ['0-17', '18-30', '31-45', '46-60', '60+'],
+                     datasets: [{
+                         label: 'Jumlah Penduduk',
+                         data: @json($chartData['age'] ?? [0, 0, 0, 0, 0]),
+                         backgroundColor: [
+                             'rgba(59, 130, 246, 0.8)',
+                             'rgba(16, 185, 129, 0.8)',
+                             'rgba(245, 158, 11, 0.8)',
+                             'rgba(239, 68, 68, 0.8)',
+                             'rgba(139, 92, 246, 0.8)'
+                         ],
+                         borderColor: [
+                             'rgba(59, 130, 246, 1)',
+                             'rgba(16, 185, 129, 1)',
+                             'rgba(245, 158, 11, 1)',
+                             'rgba(239, 68, 68, 1)',
+                             'rgba(139, 92, 246, 1)'
+                         ],
+                         borderWidth: 1
+                     }]
+                 },
+                 options: {
+                     responsive: true,
+                     maintainAspectRatio: false,
+                     plugins: {
+                         legend: {
+                             display: false
+                         }
+                     },
+                     scales: {
+                         y: {
+                             beginAtZero: true,
+                             ticks: {
+                                 stepSize: 1
+                             }
+                         }
+                     }
+                 }
+             });
+
+             // Gender Distribution Chart
+             const genderCtx = document.getElementById('genderChart').getContext('2d');
+             new Chart(genderCtx, {
+                 type: 'doughnut',
+                 data: {
+                     labels: ['Laki-laki', 'Perempuan'],
+                     datasets: [{
+                         data: @json($chartData['gender'] ?? [0, 0]),
+                         backgroundColor: [
+                             'rgba(16, 185, 129, 0.8)',
+                             'rgba(236, 72, 153, 0.8)'
+                         ],
+                         borderColor: [
+                             'rgba(16, 185, 129, 1)',
+                             'rgba(236, 72, 153, 1)'
+                         ],
+                         borderWidth: 2
+                     }]
+                 },
+                 options: {
+                     responsive: true,
+                     maintainAspectRatio: false,
+                     plugins: {
+                         legend: {
+                             position: 'bottom'
+                         }
+                     }
+                 }
+             });
+
+             // Religion Distribution Chart
+             const religionCtx = document.getElementById('religionChart').getContext('2d');
+             new Chart(religionCtx, {
+                 type: 'doughnut',
+                 data: {
+                     labels: @json($chartData['religionLabels'] ?? []),
+                     datasets: [{
+                         data: @json($chartData['religion'] ?? []),
+                         backgroundColor: [
+                             'rgba(139, 92, 246, 0.8)',
+                             'rgba(59, 130, 246, 0.8)',
+                             'rgba(16, 185, 129, 0.8)',
+                             'rgba(245, 158, 11, 0.8)',
+                             'rgba(239, 68, 68, 0.8)',
+                             'rgba(236, 72, 153, 0.8)'
+                         ],
+                         borderColor: [
+                             'rgba(139, 92, 246, 1)',
+                             'rgba(59, 130, 246, 1)',
+                             'rgba(16, 185, 129, 1)',
+                             'rgba(245, 158, 11, 1)',
+                             'rgba(239, 68, 68, 1)',
+                             'rgba(236, 72, 153, 1)'
+                         ],
+                         borderWidth: 2
+                     }]
+                 },
+                 options: {
+                     responsive: true,
+                     maintainAspectRatio: false,
+                     plugins: {
+                         legend: {
+                             position: 'bottom'
+                         }
+                     }
+                 }
+             });
+
+             // Village Distribution Chart
+             const villageCtx = document.getElementById('villageChart').getContext('2d');
+             new Chart(villageCtx, {
+                 type: 'bar',
+                 data: {
+                     labels: @json($chartData['villageLabels'] ?? []),
+                     datasets: [{
+                         label: 'Jumlah Penduduk',
+                         data: @json($chartData['village'] ?? []),
+                         backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                         borderColor: 'rgba(16, 185, 129, 1)',
+                         borderWidth: 1
+                     }]
+                 },
+                 options: {
+                     responsive: true,
+                     maintainAspectRatio: false,
+                     plugins: {
+                         legend: {
+                             display: false
+                         }
+                     },
+                     scales: {
+                         y: {
+                             beginAtZero: true,
+                             ticks: {
+                                 stepSize: 1
+                             }
+                         },
+                         x: {
+                             ticks: {
+                                 maxRotation: 45
+                             }
+                         }
+                     }
+                 }
+             });
+         });
      </script>
+
+     <!-- Chart.js CDN -->
+     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
  </x-admin-layout>

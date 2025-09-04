@@ -19,6 +19,21 @@
                         </div>
                     </div>
 
+                    <!-- Foto Penduduk -->
+                    <div class="mb-6 flex justify-center">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="text-md font-semibold text-gray-800 mb-4 text-center">Foto Penduduk</h4>
+                            <div class="flex justify-center">
+                                <img src="{{ $citizen->photo_path ? asset('storage/' . $citizen->photo_path) : asset('images/default-avatar.svg') }}" 
+                                     alt="Foto {{ $citizen->name }}" 
+                                     class="h-32 w-32 object-cover rounded-lg border border-gray-300 shadow-sm">
+                            </div>
+                            @if(!$citizen->photo_path)
+                                <p class="text-xs text-gray-500 text-center mt-2">Foto belum tersedia</p>
+                            @endif
+                        </div>
+                    </div>
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Data Pribadi -->
                         <div class="bg-gray-50 p-4 rounded-lg">

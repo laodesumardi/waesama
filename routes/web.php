@@ -54,6 +54,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin,pegawai'
     Route::get('citizens-export', [CitizenController::class, 'export'])->name('citizens.export');
     Route::post('citizens-import', [CitizenController::class, 'import'])->name('citizens.import');
     Route::get('citizens-template', [CitizenController::class, 'downloadTemplate'])->name('citizens.template');
+    Route::post('citizens-bulk-action', [CitizenController::class, 'bulkAction'])->name('citizens.bulk-action');
+    Route::post('citizens-bulk-export', [CitizenController::class, 'bulkExport'])->name('citizens.bulk-export');
     // Service Requests
     Route::resource('service-requests', \App\Http\Controllers\ServiceRequestController::class);
     Route::post('service-requests/{serviceRequest}/process', [\App\Http\Controllers\ServiceRequestController::class, 'process'])->name('service-requests.process');
