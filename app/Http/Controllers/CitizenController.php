@@ -96,10 +96,7 @@ class CitizenController extends Controller
             'inactive' => Citizen::where('is_active', false)->count(),
         ];
         
-        // Chart data
-        $chartData = $this->getChartData();
-        
-        return view('admin.citizens.index', compact('citizens', 'villages', 'stats', 'chartData'));
+        return view('admin.citizens.index', compact('citizens', 'villages', 'stats'));
     }
 
     /**
@@ -520,70 +517,5 @@ class CitizenController extends Controller
         );
     }
 
-    /**
-     * Get chart data for dashboard
-     */
-    private function getChartData()
-    {
-        // Age distribution data
-        $ageData = [
-            0, // 0-17
-            0, // 18-30
-            0, // 31-45
-            0, // 46-60
-            0  // 60+
-        ];
 
-        $citizens = Citizen::all();
-        foreach ($citizens as $citizen) {
-            $age = $citizen->age;
-            if ($age <= 17) {
-                $ageData[0]++;
-            } elseif ($age <= 30) {
-                $ageData[1]++;
-            } elseif ($age <= 45) {
-                $ageData[2]++;
-            } elseif ($age <= 60) {
-                $ageData[3]++;
-            } else {
-                $ageData[4]++;
-            }
-        }
-
-        // Gender distribution data
-        $genderData = [
-            Citizen::where('gender', 'L')->count(),
-            Citizen::where('gender', 'P')->count()
-        ];
-
-        // Religion distribution data
-        $religionStats = Citizen::selectRaw('religion, COUNT(*) as count')
-            ->groupBy('religion')
-            ->orderBy('count', 'desc')
-            ->get();
-        
-        $religionLabels = $religionStats->pluck('religion')->toArray();
-        $religionData = $religionStats->pluck('count')->toArray();
-
-        // Village distribution data
-        $villageStats = Citizen::with('village')
-            ->selectRaw('village_id, COUNT(*) as count')
-            ->groupBy('village_id')
-            ->orderBy('count', 'desc')
-            ->get();
-        
-        $villageLabels = $villageStats->map(function($item) {
-            return $item->village ? $item->village->name : 'Tidak Diketahui';
-        })->toArray();
-        $villageData = $villageStats->pluck('count')->toArray();
-
-        return [
-            'age' => $ageData,
-            'gender' => $genderData,
-            'religion' => $religionData,
-            'religionLabels' => $religionLabels,
-            'village' => $villageData,
-            'villageLabels' => $villageLabels
-        ];
-    }
 }
