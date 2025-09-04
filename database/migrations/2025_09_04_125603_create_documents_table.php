@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('documents', function (Blueprint $table) {
+        if (!Schema::hasTable('documents')) {
+            Schema::create('documents', function (Blueprint $table) {
             $table->id();
             $table->foreignId('service_request_id')->constrained()->onDelete('cascade');
             $table->string('document_number')->unique();
@@ -27,7 +28,8 @@ return new class extends Migration
             
             $table->index(['service_request_id', 'is_active']);
             $table->index('template_name');
-        });
+            });
+        }
     }
 
     /**
