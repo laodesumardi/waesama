@@ -118,29 +118,53 @@ class ServiceRequest extends Model
     // Accessors
     public function getStatusBadgeAttribute()
     {
-        $badges = [
-            'draft' => 'bg-gray-100 text-gray-800',
-            'pending' => 'bg-yellow-100 text-yellow-800',
-            'processing' => 'bg-blue-100 text-blue-800',
-            'approved' => 'bg-green-100 text-green-800',
-            'rejected' => 'bg-red-100 text-red-800',
-            'completed' => 'bg-green-100 text-green-800',
-            'cancelled' => 'bg-gray-100 text-gray-800'
+        $statusConfig = [
+            'draft' => ['class' => 'bg-gray-100 text-gray-800', 'label' => 'Draft'],
+            'pending' => ['class' => 'bg-yellow-100 text-yellow-800', 'label' => 'Menunggu'],
+            'processing' => ['class' => 'bg-blue-100 text-blue-800', 'label' => 'Diproses'],
+            'approved' => ['class' => 'bg-green-100 text-green-800', 'label' => 'Disetujui'],
+            'rejected' => ['class' => 'bg-red-100 text-red-800', 'label' => 'Ditolak'],
+            'completed' => ['class' => 'bg-green-100 text-green-800', 'label' => 'Selesai'],
+            'cancelled' => ['class' => 'bg-gray-100 text-gray-800', 'label' => 'Dibatalkan']
         ];
         
-        return $badges[$this->status] ?? 'bg-gray-100 text-gray-800';
+        $config = $statusConfig[$this->status] ?? ['class' => 'bg-gray-100 text-gray-800', 'label' => ucfirst($this->status)];
+        
+        return '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ' . $config['class'] . '">' . $config['label'] . '</span>';
+    }
+
+    public function getServiceTypeBadgeAttribute()
+    {
+        $serviceTypeLabels = [
+            'surat_keterangan_tidak_mampu' => 'Surat Keterangan Tidak Mampu',
+            'surat_keterangan_domisili' => 'Surat Keterangan Domisili',
+            'surat_keterangan_usaha' => 'Surat Keterangan Usaha',
+            'surat_keterangan_kelahiran' => 'Surat Keterangan Kelahiran',
+            'surat_keterangan_kematian' => 'Surat Keterangan Kematian',
+            'surat_pengantar_nikah' => 'Surat Pengantar Nikah',
+            'surat_keterangan_penghasilan' => 'Surat Keterangan Penghasilan',
+            'surat_keterangan_belum_menikah' => 'Surat Keterangan Belum Menikah',
+            'surat_keterangan_ahli_waris' => 'Surat Keterangan Ahli Waris',
+            'surat_rekomendasi' => 'Surat Rekomendasi'
+        ];
+        
+        $label = $serviceTypeLabels[$this->service_type] ?? str_replace('_', ' ', ucwords($this->service_type, '_'));
+        
+        return '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">' . $label . '</span>';
     }
 
     public function getPriorityBadgeAttribute()
     {
-        $badges = [
-            'low' => 'bg-gray-100 text-gray-800',
-            'normal' => 'bg-blue-100 text-blue-800',
-            'high' => 'bg-orange-100 text-orange-800',
-            'urgent' => 'bg-red-100 text-red-800'
+        $priorityConfig = [
+            'low' => ['class' => 'bg-gray-100 text-gray-800', 'label' => 'Rendah'],
+            'normal' => ['class' => 'bg-blue-100 text-blue-800', 'label' => 'Normal'],
+            'high' => ['class' => 'bg-orange-100 text-orange-800', 'label' => 'Tinggi'],
+            'urgent' => ['class' => 'bg-red-100 text-red-800', 'label' => 'Mendesak']
         ];
         
-        return $badges[$this->priority] ?? 'bg-gray-100 text-gray-800';
+        $config = $priorityConfig[$this->priority] ?? ['class' => 'bg-blue-100 text-blue-800', 'label' => ucfirst($this->priority)];
+        
+        return '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ' . $config['class'] . '">' . $config['label'] . '</span>';
     }
 
     // Methods

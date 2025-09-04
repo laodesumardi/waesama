@@ -1,0 +1,125 @@
+/* Color Palette untuk Halaman Autentikasi */
+:root {
+    /* Primary Colors */
+    --primary-blue: #1e40af;
+    --primary-purple: #1e3a8a;
+    --primary-gradient: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-purple) 100%);
+    
+    /* Secondary Colors */
+    --secondary-blue: #1e40af;
+    --secondary-blue-hover: #1e3a8a;
+    --secondary-blue-light: rgba(30, 64, 175, 0.1);
+    
+    /* Glass Effect Colors */
+    --glass-bg: rgba(255, 255, 255, 0.95);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    
+    /* Text Colors */
+    --text-primary: #1f2937;
+    --text-secondary: #6b7280;
+    --text-white: #ffffff;
+    --text-blue-light: rgba(255, 255, 255, 0.8);
+    
+    /* Input Colors */
+    --input-border: #d1d5db;
+    --input-focus-border: var(--primary-blue);
+    --input-focus-shadow: rgba(30, 64, 175, 0.1);
+    
+    /* Button Colors */
+    --btn-primary-bg: var(--primary-gradient);
+    --btn-primary-shadow: rgba(30, 64, 175, 0.3);
+    --btn-primary-hover-shadow: 0 10px 25px var(--btn-primary-shadow);
+    
+    /* Icon Colors */
+    --icon-primary: var(--primary-blue);
+    --icon-secondary: #6b7280;
+    --icon-hover: #374151;
+}
+
+/* Base Styles */
+.gradient-bg {
+    background: var(--primary-gradient);
+}
+
+.glass-effect {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+}
+
+.input-focus:focus {
+    border-color: var(--input-focus-border);
+    box-shadow: 0 0 0 3px var(--input-focus-shadow);
+}
+
+.btn-primary {
+    background: var(--btn-primary-bg);
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--btn-primary-hover-shadow);
+}
+
+.text-primary {
+    color: var(--text-primary);
+}
+
+.text-secondary {
+    color: var(--text-secondary);
+}
+
+.text-blue-light {
+    color: var(--text-blue-light);
+}
+
+.icon-primary {
+    color: var(--icon-primary);
+}
+
+.icon-secondary {
+    color: var(--icon-secondary);
+}
+
+.icon-hover:hover {
+    color: var(--icon-hover);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .gradient-bg {
+        padding: 1rem;
+    }
+}
+
+/* Animation classes */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.slide-up {
+    animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

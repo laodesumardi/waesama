@@ -99,5 +99,10 @@
             mobileMenu.classList.toggle('hidden');
         });
     </script>
+    
+    <!-- Welcome form script -->
+    @if(request()->routeIs('welcome'))
+    <script src="{{ asset('js/welcome-form.js') }}"></script>
+    @endif
 </body>
 </html>

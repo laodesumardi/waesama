@@ -566,7 +566,7 @@
                     };
                     reader.readAsDataURL(file);
                 } else {
-                     previewContainer.innerHTML = '<img src="{{ asset(\'images/default-avatar.svg\') }}" alt="Default Avatar" class="w-16 h-16 text-gray-400">';
+                     previewContainer.innerHTML = '<img src="{{ asset("images/default-avatar.svg") }}" alt="Default Avatar" class="w-16 h-16 text-gray-400">';
                  }
              }
  

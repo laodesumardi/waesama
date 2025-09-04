@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" fill="none">
+  <defs>
+    <linearGradient id="galleryGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fff3e0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ffe0b2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="300" height="200" fill="url(#galleryGradient1)"/>
+  
+  <!-- Meeting Scene -->
+  <g transform="translate(50, 50)">
+    <!-- Table -->
+    <ellipse cx="100" cy="100" rx="80" ry="30" fill="#8d6e63" opacity="0.8"/>
+    
+    <!-- Chairs and People -->
+    <g transform="translate(50, 70)">
+      <!-- Person 1 -->
+      <circle cx="0" cy="0" r="12" fill="#ff9800"/>
+      <rect x="-8" y="12" width="16" height="25" fill="#ff8f00" rx="8"/>
+    </g>
+    
+    <g transform="translate(100, 60)">
+      <!-- Person 2 -->
+      <circle cx="0" cy="0" r="12" fill="#ff9800"/>
+      <rect x="-8" y="12" width="16" height="25" fill="#ff8f00" rx="8"/>
+    </g>
+    
+    <g transform="translate(150, 70)">
+      <!-- Person 3 -->
+      <circle cx="0" cy="0" r="12" fill="#ff9800"/>
+      <rect x="-8" y="12" width="16" height="25" fill="#ff8f00" rx="8"/>
+    </g>
+    
+    <g transform="translate(75, 120)">
+      <!-- Person 4 -->
+      <circle cx="0" cy="0" r="12" fill="#ff9800"/>
+      <rect x="-8" y="12" width="16" height="25" fill="#ff8f00" rx="8"/>
+    </g>
+    
+    <g transform="translate(125, 120)">
+      <!-- Person 5 -->
+      <circle cx="0" cy="0" r="12" fill="#ff9800"/>
+      <rect x="-8" y="12" width="16" height="25" fill="#ff8f00" rx="8"/>
+    </g>
+    
+    <!-- Documents on table -->
+    <rect x="80" y="90" width="15" height="20" fill="#ffffff" opacity="0.9"/>
+    <rect x="105" y="95" width="15" height="20" fill="#ffffff" opacity="0.9"/>
+  </g>
+  
+  <!-- Title -->
+  <text x="150" y="25" text-anchor="middle" fill="#e65100" font-family="Arial, sans-serif" font-size="14" font-weight="bold">Rapat Koordinasi</text>
+</svg>

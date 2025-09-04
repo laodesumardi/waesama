@@ -354,6 +354,58 @@
                 </div>
             </div>
 
+            <!-- Recent Service Requests -->
+            <div class="mt-8">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-900">Pengajuan Surat Terbaru</h3>
+                            <a href="{{ route('admin.service-requests.index') }}" class="text-sm text-blue-600 hover:text-blue-800">Lihat Semua</a>
+                        </div>
+                        
+                        @if(isset($recentServiceRequests) && $recentServiceRequests->count() > 0)
+                            <div class="space-y-3">
+                                @foreach($recentServiceRequests as $request)
+                                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                                    <div class="flex-1">
+                                        <div class="flex items-center justify-between">
+                                            <h4 class="text-sm font-medium text-gray-900">{{ $request->request_number }}</h4>
+                                            <span class="px-2 py-1 text-xs font-medium rounded-full
+                                                @if($request->status === 'pending') bg-yellow-100 text-yellow-800
+                                                @elseif($request->status === 'in_progress') bg-blue-100 text-blue-800
+                                                @elseif($request->status === 'completed') bg-green-100 text-green-800
+                                                @elseif($request->status === 'rejected') bg-red-100 text-red-800
+                                                @else bg-gray-100 text-gray-800
+                                                @endif">
+                                                {{ ucfirst($request->status) }}
+                                            </span>
+                                        </div>
+                                        <p class="text-sm text-gray-600 mt-1">{{ $request->citizen->name ?? 'N/A' }}</p>
+                                        <p class="text-xs text-gray-500">{{ ucwords(str_replace('_', ' ', $request->service_type)) }}</p>
+                                        <p class="text-xs text-gray-400 mt-1">{{ $request->created_at->diffForHumans() }}</p>
+                                    </div>
+                                    <div class="ml-4">
+                                        <a href="{{ route('admin.service-requests.show', $request) }}" 
+                                           class="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 transition-colors">
+                                            Lihat
+                                        </a>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="text-center py-8">
+                                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                <h3 class="mt-2 text-sm font-medium text-gray-900">Belum ada pengajuan surat</h3>
+                                <p class="mt-1 text-sm text-gray-500">Pengajuan surat dari warga akan muncul di sini.</p>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
             <!-- Quick Actions -->
             <div class="mt-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">

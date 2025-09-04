@@ -92,7 +92,7 @@ class CitizensExport implements FromCollection, WithHeadings, WithMapping, WithS
             $citizen->birth_date,
             $citizen->gender == 'L' ? 'Laki-laki' : 'Perempuan',
             $citizen->address,
-            $citizen->village->name,
+            $citizen->village->name ?? 'Tidak ada data',
             $citizen->phone,
             $citizen->email,
             $citizen->occupation,

@@ -700,6 +700,185 @@ body {
     }
   }
 
+  /* Mobile Swipe Actions */
+  .mobile-card-container {
+    position: relative;
+    overflow: hidden;
+    background: white;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .mobile-card-content {
+    position: relative;
+    z-index: 2;
+    background: white;
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border-radius: 12px;
+    touch-action: pan-y;
+  }
+
+  .mobile-card-actions {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    z-index: 1;
+    padding-right: 16px;
+  }
+
+  .mobile-action-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 8px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .mobile-action-btn:active {
+    transform: scale(0.95);
+  }
+
+  .mobile-action-view {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+  }
+
+  .mobile-action-edit {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+  }
+
+  .mobile-action-delete {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+  }
+
+  .mobile-action-approve {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+  }
+
+  .mobile-action-reject {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+  }
+
+  /* Touch-friendly improvements */
+  @media (max-width: 768px) {
+    .mobile-card-container {
+      margin: 8px 0;
+    }
+
+    .mobile-card-content {
+      padding: 20px;
+      min-height: 120px;
+    }
+
+    /* Larger touch targets */
+    .mobile-touch-target {
+      min-height: 48px;
+      min-width: 48px;
+      padding: 12px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .mobile-touch-target:active {
+      transform: scale(0.98);
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    /* Status badges - larger for mobile */
+    .mobile-status-badge {
+      padding: 8px 12px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Improved typography for mobile */
+    .mobile-card-title {
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 1.4;
+      margin-bottom: 4px;
+    }
+
+    .mobile-card-subtitle {
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 12px;
+    }
+
+    .mobile-card-info {
+      font-size: 13px;
+      color: #374151;
+      line-height: 1.5;
+    }
+
+    .mobile-card-label {
+      font-size: 12px;
+      color: #9ca3af;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  /* Swipe indicator */
+  .swipe-indicator {
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    transform: translateY(-50%);
+    opacity: 0.3;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .mobile-card-container:hover .swipe-indicator {
+    opacity: 0.6;
+  }
+
+  /* Pull to refresh indicator */
+  .pull-to-refresh {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(59, 130, 246, 0.9);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 0 0 12px 12px;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateX(-50%) translateY(-100%);
+  }
+
+  .pull-to-refresh.active {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
   /* Tablet Responsive Styles */
   @media (min-width: 769px) and (max-width: 1023px) {
     .admin-content {
@@ -1077,6 +1256,9 @@ body {
     background: linear-gradient(135deg, #001d3d 0%, #003566 100%);
     position: relative;
     overflow: hidden;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
 }
 
 .hero-section::before {
@@ -1088,6 +1270,33 @@ body {
     bottom: 0;
     background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>') repeat;
     opacity: 0.3;
+    z-index: 1;
+}
+
+.hero-section img {
+    transition: transform 0.3s ease;
+}
+
+.hero-section:hover img {
+    transform: scale(1.02);
+}
+
+/* Responsive Hero Section */
+@media (max-width: 768px) {
+    .hero-section {
+        min-height: 60vh;
+        padding: 2rem 0;
+    }
+    
+    .hero-section h1 {
+        font-size: 2.5rem !important;
+        line-height: 1.2;
+    }
+    
+    .hero-section p {
+        font-size: 1rem !important;
+        margin-bottom: 1.5rem;
+    }
 }
 
 .text-gradient {
@@ -1096,6 +1305,21 @@ body {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    animation: gradientShift 3s ease-in-out infinite alternate;
+}
+
+@keyframes gradientShift {
+    0% {
+        background: linear-gradient(135deg, #ffd60a 0%, #ffb700 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+    }
+    100% {
+        background: linear-gradient(135deg, #ffb700 0%, #ffd60a 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+    }
 }
 
 /* Navigation Styles */
@@ -1246,11 +1470,76 @@ body {
 /* Card Hover Animations */
 .card-hover {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.card-hover::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+    z-index: 1;
 }
 
 .card-hover:hover {
     transform: translateY(-8px);
     box-shadow: 0 20px 40px rgba(0, 29, 61, 0.15);
+}
+
+.card-hover:hover::before {
+    left: 100%;
+}
+
+/* News Card Enhancements */
+.news-card {
+    background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+    border: 1px solid rgba(0, 29, 61, 0.1);
+}
+
+.news-card:hover {
+    border-color: rgba(0, 29, 61, 0.2);
+}
+
+/* Responsive News Cards */
+@media (max-width: 768px) {
+    .news-card {
+        margin-bottom: 1.5rem;
+    }
+    
+    .news-card:hover {
+        transform: translateY(-4px);
+    }
+}
+
+/* Gallery Item Enhancements */
+.gallery-item {
+    background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+    border: 1px solid rgba(0, 29, 61, 0.1);
+    transition: all 0.3s ease;
+}
+
+.gallery-item:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(0, 29, 61, 0.12);
+    border-color: rgba(0, 29, 61, 0.2);
+}
+
+/* Responsive Gallery Items */
+@media (max-width: 1024px) {
+    .gallery-item {
+        margin-bottom: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .gallery-item:hover {
+        transform: translateY(-4px) scale(1.01);
+    }
 }
 
 /* Fade In Animation - DISABLED */
@@ -1330,6 +1619,61 @@ body {
 /* Smooth Scroll */
 html {
     scroll-behavior: smooth;
+}
+
+/* Register Form Enhancements */
+.register-form-container {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    min-height: 100vh;
+}
+
+.register-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.form-section {
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.form-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.form-section-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Input field improvements */
+input[type="text"], input[type="email"], input[type="tel"], input[type="password"], input[type="date"], select, textarea {
+    transition: all 0.2s ease-in-out;
+}
+
+input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus, input[type="password"]:focus, input[type="date"]:focus, select:focus, textarea:focus {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Responsive form layout */
+@media (max-width: 640px) {
+    .register-card {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+    
+    .form-section-title {
+        font-size: 0.75rem;
+    }
 }
 
 /* Simple custom styles */

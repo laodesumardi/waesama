@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Citizen;
 use App\Models\Village;
 use App\Models\ActivityLog;
+use App\Models\ServiceRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -88,6 +89,12 @@ class AdminController extends Controller
         ->orderBy('date')
         ->get();
         
+        // Pengajuan surat terbaru
+        $recentServiceRequests = ServiceRequest::with(['citizen'])
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+        
         return view('admin.dashboard', compact(
             'totalUsers',
             'totalAdmin', 
@@ -105,7 +112,8 @@ class AdminController extends Controller
             'villageStats',
             'usersByRole',
             'populationByGender',
-            'loginStats'
+            'loginStats',
+            'recentServiceRequests'
         ));
     }
 

@@ -29,7 +29,7 @@
 
             <!-- Page Content -->
             <main class="page-content">
-                {{ $slot }}
+                {{ $slot ?? '' }}
             </main>
         </div>
     </body>

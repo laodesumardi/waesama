@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" fill="none">
+  <defs>
+    <linearGradient id="galleryGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e8eaf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#c5cae9;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="300" height="200" fill="url(#galleryGradient2)"/>
+  
+  <!-- Presentation Scene -->
+  <g transform="translate(30, 40)">
+    <!-- Presenter -->
+    <g transform="translate(50, 80)">
+      <circle cx="0" cy="0" r="15" fill="#3f51b5"/>
+      <rect x="-10" y="15" width="20" height="35" fill="#303f9f" rx="10"/>
+      <!-- Pointing arm -->
+      <rect x="10" y="20" width="20" height="4" fill="#303f9f" rx="2"/>
+    </g>
+    
+    <!-- Presentation Board -->
+    <rect x="80" y="30" width="120" height="80" fill="#ffffff" stroke="#757575" stroke-width="2"/>
+    <rect x="90" y="40" width="100" height="60" fill="#e3f2fd"/>
+    
+    <!-- Chart on board -->
+    <rect x="100" y="50" width="15" height="30" fill="#2196f3"/>
+    <rect x="120" y="60" width="15" height="20" fill="#1976d2"/>
+    <rect x="140" y="55" width="15" height="25" fill="#1565c0"/>
+    <rect x="160" y="45" width="15" height="35" fill="#0d47a1"/>
+    
+    <!-- Audience -->
+    <g transform="translate(20, 130)">
+      <!-- Person 1 -->
+      <circle cx="0" cy="0" r="10" fill="#3f51b5"/>
+      <rect x="-6" y="10" width="12" height="20" fill="#303f9f" rx="6"/>
+    </g>
+    
+    <g transform="translate(50, 135)">
+      <!-- Person 2 -->
+      <circle cx="0" cy="0" r="10" fill="#3f51b5"/>
+      <rect x="-6" y="10" width="12" height="20" fill="#303f9f" rx="6"/>
+    </g>
+    
+    <g transform="translate(80, 130)">
+      <!-- Person 3 -->
+      <circle cx="0" cy="0" r="10" fill="#3f51b5"/>
+      <rect x="-6" y="10" width="12" height="20" fill="#303f9f" rx="6"/>
+    </g>
+    
+    <g transform="translate(110, 135)">
+      <!-- Person 4 -->
+      <circle cx="0" cy="0" r="10" fill="#3f51b5"/>
+      <rect x="-6" y="10" width="12" height="20" fill="#303f9f" rx="6"/>
+    </g>
+    
+    <g transform="translate(140, 130)">
+      <!-- Person 5 -->
+      <circle cx="0" cy="0" r="10" fill="#3f51b5"/>
+      <rect x="-6" y="10" width="12" height="20" fill="#303f9f" rx="6"/>
+    </g>
+    
+    <g transform="translate(170, 135)">
+      <!-- Person 6 -->
+      <circle cx="0" cy="0" r="10" fill="#3f51b5"/>
+      <rect x="-6" y="10" width="12" height="20" fill="#303f9f" rx="6"/>
+    </g>
+  </g>
+  
+  <!-- Title -->
+  <text x="150" y="25" text-anchor="middle" fill="#1565c0" font-family="Arial, sans-serif" font-size="14" font-weight="bold">Sosialisasi Program</text>
+</svg>

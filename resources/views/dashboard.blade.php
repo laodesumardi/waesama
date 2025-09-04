@@ -116,15 +116,7 @@
                     </div>
                 </a>
 
-                <a href="{{ route('admin.documents.create') }}" class="admin-action-btn flex items-center p-3 sm:p-4 rounded-xl border-2 border-dashed border-gray-300 hover:border-sky-300 hover:bg-sky-50 transition-all duration-300 group">
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center mr-3 group-hover:scale-110 transition-transform duration-300" style="background-color: #f0f9ff;">
-                        <i class="fas fa-file-upload text-sm sm:text-base" style="color: #0ea5e9;"></i>
-                    </div>
-                    <div>
-                        <p class="font-medium text-gray-900 text-sm sm:text-base">Upload Dokumen</p>
-                        <p class="text-xs sm:text-sm text-gray-500">File baru</p>
-                    </div>
-                </a>
+
 
                 <a href="{{ route('admin.users') }}" class="admin-action-btn flex items-center p-3 sm:p-4 rounded-xl border-2 border-dashed border-gray-300 hover:border-green-300 hover:bg-green-50 transition-all duration-300 group">
                     <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center mr-3 group-hover:scale-110 transition-transform duration-300" style="background-color: #f0fdf4;">

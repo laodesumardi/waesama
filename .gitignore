@@ -20,3 +20,45 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+
+# Deployment and backup files
+*.ps1
+*.sh
+backup_*.sql
+*backup*.sql
+*-backup.*
+test-debug.php
+index-root.php
+webhook.php
+
+# Documentation files (deployment related)
+DEPLOYMENT*.md
+PANDUAN*.md
+PUTTY*.md
+MANUAL*.md
+SOLUSI*.md
+PERBAIKAN*.md
+QUICK*.md
+UPLOAD*.md
+COPY-PASTE*.md
+GITHUB-WEBHOOK*.md
+HOSTINGER*.md
+
+# SQL fix and setup files
+insert-*.sql
+fix-*.sql
+create-roles*.sql
+database-migration*.sql
+password-*fix*.sql
+
+# Sample and temporary files
+sample_*.xlsx
+*.tmp
+*.cache
+*.log
+
+# Deployment packages
+deployment-package*/
+manual-deployment-package*/
+deployment-temp*/
+deployment-files*/

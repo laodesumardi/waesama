@@ -1,0 +1,592 @@
+/* Mobile and Responsive Design Fixes */
+/* Kantor Camat Waesama - Mobile Layout Improvements */
+
+/* Base responsive settings */
+* {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    min-width: 320px;
+    overflow-x: hidden;
+}
+
+/* Container fixes for mobile */
+.container, .max-w-7xl, .max-w-6xl, .max-w-5xl, .max-w-4xl {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+    .container, .max-w-7xl, .max-w-6xl, .max-w-5xl, .max-w-4xl {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .container, .max-w-7xl, .max-w-6xl, .max-w-5xl, .max-w-4xl {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+}
+
+/* Grid system fixes */
+.grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+@media (min-width: 640px) {
+    .sm\:grid-cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .sm\:grid-cols-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .sm\:grid-cols-4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 768px) {
+    .md\:grid-cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .md\:grid-cols-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .md\:grid-cols-4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .md\:grid-cols-5 {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1024px) {
+    .lg\:grid-cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .lg\:grid-cols-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .lg\:grid-cols-4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .lg\:grid-cols-5 {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+}
+
+/* Flexbox fixes */
+.flex {
+    display: flex;
+}
+
+.flex-col {
+    flex-direction: column;
+}
+
+.flex-row {
+    flex-direction: row;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+@media (min-width: 640px) {
+    .sm\:flex-row {
+        flex-direction: row;
+    }
+    .sm\:justify-center {
+        justify-content: center;
+    }
+}
+
+@media (min-width: 768px) {
+    .md\:flex {
+        display: flex;
+    }
+    .md\:flex-row {
+        flex-direction: row;
+    }
+    .md\:items-center {
+        align-items: center;
+    }
+    .md\:justify-between {
+        justify-content: space-between;
+    }
+}
+
+@media (min-width: 1024px) {
+    .lg\:flex {
+        display: flex;
+    }
+    .lg\:flex-row {
+        flex-direction: row;
+    }
+}
+
+/* Form elements mobile fixes */
+input, select, textarea, button {
+    font-size: 16px; /* Prevents zoom on iOS */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+input[type="url"],
+select,
+textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    background-color: #ffffff;
+    font-size: 16px;
+    line-height: 1.5;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Button fixes */
+button {
+    cursor: pointer;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.15s ease-in-out;
+    min-height: 44px; /* Touch target size */
+}
+
+.btn-primary {
+    background-color: #3b82f6;
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background-color: #2563eb;
+}
+
+/* Navigation mobile fixes */
+.mobile-menu {
+    display: none;
+}
+
+@media (max-width: 1023px) {
+    .lg\:hidden {
+        display: none !important;
+    }
+    
+    .mobile-menu {
+        display: block;
+    }
+    
+    .mobile-menu-toggle {
+        display: block;
+        background: none;
+        border: none;
+        padding: 0.5rem;
+        cursor: pointer;
+    }
+}
+
+@media (min-width: 1024px) {
+    .lg\:flex {
+        display: flex !important;
+    }
+    
+    .lg\:hidden {
+        display: none !important;
+    }
+    
+    .mobile-menu {
+        display: none !important;
+    }
+}
+
+/* Card and content spacing */
+.card, .bg-white {
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.p-4 {
+    padding: 1rem;
+}
+
+.p-6 {
+    padding: 1.5rem;
+}
+
+@media (max-width: 767px) {
+    .md\:p-6 {
+        padding: 1rem !important;
+    }
+    
+    .md\:p-8 {
+        padding: 1rem !important;
+    }
+}
+
+/* Text sizing for mobile */
+.text-4xl {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+}
+
+.text-3xl {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+}
+
+@media (max-width: 767px) {
+    .md\:text-5xl {
+        font-size: 2.25rem !important;
+        line-height: 2.5rem !important;
+    }
+    
+    .md\:text-4xl {
+        font-size: 1.875rem !important;
+        line-height: 2.25rem !important;
+    }
+    
+    .text-4xl {
+        font-size: 1.875rem;
+        line-height: 2.25rem;
+    }
+    
+    .text-3xl {
+        font-size: 1.5rem;
+        line-height: 2rem;
+    }
+}
+
+/* Image responsive fixes */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.h-64 {
+    height: 16rem;
+}
+
+@media (max-width: 767px) {
+    .md\:h-96 {
+        height: 12rem !important;
+    }
+    
+    .h-64 {
+        height: 12rem;
+    }
+}
+
+/* Spacing utilities */
+.gap-4 {
+    gap: 1rem;
+}
+
+.gap-6 {
+    gap: 1.5rem;
+}
+
+.gap-8 {
+    gap: 2rem;
+}
+
+@media (max-width: 767px) {
+    .gap-8 {
+        gap: 1rem;
+    }
+    
+    .gap-6 {
+        gap: 1rem;
+    }
+}
+
+/* Table responsive */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+table {
+    min-width: 600px;
+    width: 100%;
+}
+
+@media (max-width: 767px) {
+    .hidden.lg\:block {
+        display: none !important;
+    }
+    
+    .lg\:hidden {
+        display: block !important;
+    }
+}
+
+/* Sidebar mobile fixes */
+.sidebar {
+    transition: transform 0.3s ease-in-out;
+}
+
+@media (max-width: 1023px) {
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        z-index: 50;
+        transform: translateX(-100%);
+    }
+    
+    .sidebar.mobile-open {
+        transform: translateX(0);
+    }
+    
+    .mobile-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 40;
+        display: none;
+    }
+    
+    .mobile-overlay.active {
+        display: block;
+    }
+}
+
+/* Form validation styling */
+.error {
+    color: #ef4444;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.success {
+    color: #10b981;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Loading states */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Print styles */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    body {
+        font-size: 12pt;
+        line-height: 1.4;
+    }
+    
+    .container {
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+}
+
+/* Accessibility improvements */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Focus styles */
+*:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+button:focus,
+input:focus,
+select:focus,
+textarea:focus,
+a:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    input,
+    select,
+    textarea {
+        border-width: 2px;
+    }
+    
+    button {
+        border: 2px solid currentColor;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-primary: #1f2937;
+        --bg-secondary: #374151;
+        --text-primary: #f9fafb;
+        --text-secondary: #d1d5db;
+        --border-color: #4b5563;
+    }
+}
+
+/* Additional mobile-specific fixes */
+@media (max-width: 480px) {
+    .container {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+    
+    .text-lg {
+        font-size: 1rem;
+    }
+    
+    .text-xl {
+        font-size: 1.125rem;
+    }
+    
+    .text-2xl {
+        font-size: 1.25rem;
+    }
+    
+    button {
+        padding: 0.875rem 1rem;
+        font-size: 0.875rem;
+    }
+    
+    input,
+    select,
+    textarea {
+        padding: 0.875rem;
+        font-size: 16px;
+    }
+}
+
+/* Landscape orientation fixes */
+@media (max-height: 500px) and (orientation: landscape) {
+    .min-h-screen {
+        min-height: 100vh;
+    }
+    
+    .py-12 {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+}
+
+/* iOS Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+    .min-h-screen {
+        min-height: -webkit-fill-available;
+    }
+}
+
+/* Android Chrome specific fixes */
+@media screen and (max-width: 767px) {
+    select {
+        background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23666' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>");
+        background-repeat: no-repeat;
+        background-position: right 0.7rem center;
+        background-size: 0.65rem auto;
+        padding-right: 2.5rem;
+    }
+}
+
+/* Ensure all interactive elements are touch-friendly */
+a, button, input, select, textarea, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+}
+
+/* Fix for sticky elements on mobile */
+.sticky {
+    position: -webkit-sticky;
+    position: sticky;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+}

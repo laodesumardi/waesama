@@ -1,137 +1,194 @@
-@extends('layouts.app')
+@extends('layouts.admin')
+
+@section('title', 'Edit Dokumen')
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid px-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-gray-800">Edit Dokumen</h1>
+            <p class="text-muted">Ubah informasi dokumen {{ $document->document_number }}</p>
+        </div>
+        <a href="{{ route('admin.documents.show', $document) }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Kembali
+        </a>
+    </div>
+
     <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Edit Dokumen</h3>
+        <div class="col-lg-8">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Form Edit Dokumen</h6>
                 </div>
-                <form action="{{ route('admin.documents.update', $document) }}" method="POST">
-                    @csrf
-                    @method('PUT')
-                    <div class="card-body">
+                <div class="card-body">
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form action="{{ route('admin.documents.update', $document) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        
                         <div class="row">
-                            <!-- Informasi Dokumen Saat Ini -->
-                            <div class="col-12">
-                                <div class="alert alert-info">
-                                    <h6><i class="fas fa-info-circle"></i> Informasi Dokumen Saat Ini</h6>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <strong>Nomor Dokumen:</strong> {{ $document->document_number }}<br>
-                                            <strong>Template:</strong> {{ str_replace('_', ' ', ucwords($document->template_name, '_')) }}<br>
-                                            <strong>Status:</strong> 
-                                            @if($document->is_active)
-                                                <span class="badge bg-success">Aktif</span>
-                                            @else
-                                                <span class="badge bg-secondary">Tidak Aktif</span>
-                                            @endif
-                                        </div>
-                                        <div class="col-md-6">
-                                            <strong>Dibuat:</strong> {{ $document->created_at->format('d/m/Y H:i') }}<br>
-                                            <strong>Download:</strong> {{ number_format($document->download_count) }} kali<br>
-                                            <strong>Ukuran:</strong> {{ $document->formatted_file_size }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Permohonan Terkait (Read-only) -->
-                            @if($document->serviceRequest)
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Permohonan Terkait</label>
-                                    <div class="form-control-plaintext border rounded p-2 bg-light">
-                                        <a href="{{ route('admin.service-requests.show', $document->serviceRequest) }}" class="text-decoration-none">
-                                            {{ $document->serviceRequest->request_number }} - {{ $document->serviceRequest->citizen->name }}
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            @endif
-
-                            <!-- Template (Read-only) -->
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Template Dokumen</label>
-                                    <div class="form-control-plaintext border rounded p-2 bg-light">
-                                        {{ str_replace('_', ' ', ucwords($document->template_name, '_')) }}
-                                    </div>
-                                    <div class="form-text">Template tidak dapat diubah. Buat dokumen baru jika perlu menggunakan template lain.</div>
-                                </div>
-                            </div>
-
-                            <!-- Masa Berlaku -->
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="valid_until" class="form-label">Berlaku Sampai</label>
-                                    <input type="date" name="valid_until" id="valid_until" class="form-control @error('valid_until') is-invalid @enderror" value="{{ old('valid_until', $document->valid_until?->format('Y-m-d')) }}" min="{{ date('Y-m-d') }}">
-                                    @error('valid_until')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    <label for="service_request_id" class="form-label">Permohonan Layanan <span class="text-danger">*</span></label>
+                                    <select class="form-select @error('service_request_id') is-invalid @enderror" id="service_request_id" name="service_request_id" required>
+                                        <option value="">Pilih Permohonan</option>
+                                        @foreach($serviceRequests as $request)
+                                            <option value="{{ $request->id }}" 
+                                                {{ old('service_request_id', $document->service_request_id) == $request->id ? 'selected' : '' }}>
+                                                {{ $request->service_type }} - {{ $request->citizen->name ?? 'Unknown' }}
+                                                ({{ $request->created_at->format('d/m/Y') }})
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('service_request_id')
+                                        <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
-                                    <div class="form-text">Kosongkan jika dokumen tidak memiliki masa berlaku</div>
                                 </div>
                             </div>
-
-                            <!-- Catatan -->
+                            
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="notes" class="form-label">Catatan</label>
-                                    <textarea name="notes" id="notes" class="form-control @error('notes') is-invalid @enderror" rows="3" placeholder="Catatan tambahan untuk dokumen...">{{ old('notes', $document->notes) }}</textarea>
-                                    @error('notes')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    <label for="template_name" class="form-label">Nama Template <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control @error('template_name') is-invalid @enderror" 
+                                           id="template_name" name="template_name" 
+                                           value="{{ old('template_name', $document->template_name) }}" 
+                                           placeholder="Contoh: Surat Keterangan Domisili" required>
+                                    @error('template_name')
+                                        <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Template Variables -->
-                        <div class="row">
-                            <div class="col-12">
-                                <h5 class="mb-3">Data Template</h5>
-                                <div class="alert alert-warning">
-                                    <i class="fas fa-exclamation-triangle"></i> 
-                                    <strong>Perhatian:</strong> Mengubah data template akan menghasilkan dokumen PDF baru dan menggantikan file yang sudah ada.
-                                </div>
-                                <div id="variables-container" class="row">
-                                    <!-- Variables will be populated by JavaScript -->
-                                </div>
+                        
+                        <div class="mb-3">
+                            <label for="document_file" class="form-label">File Dokumen</label>
+                            <input type="file" class="form-control @error('document_file') is-invalid @enderror" 
+                                   id="document_file" name="document_file" accept=".pdf,.doc,.docx">
+                            <div class="form-text">
+                                <small class="text-muted">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Kosongkan jika tidak ingin mengubah file. Format yang didukung: PDF, DOC, DOCX. Maksimal 10MB.
+                                </small>
                             </div>
+                            @error('document_file')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
-
-                        <!-- Preview Area -->
-                        <div id="preview-area" class="row" style="display: none;">
-                            <div class="col-12">
-                                <h5 class="mb-3">Preview Dokumen Baru</h5>
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div id="preview-content" class="border p-3" style="min-height: 400px; background: white;">
-                                            <!-- Preview content will be loaded here -->
-                                        </div>
-                                    </div>
-                                </div>
+                        
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="is_active" name="is_active" value="1" 
+                                       {{ old('is_active', $document->is_active) ? 'checked' : '' }}>
+                                <label class="form-check-label" for="is_active">
+                                    Dokumen Aktif
+                                </label>
                             </div>
+                            <small class="text-muted">Centang untuk mengaktifkan dokumen</small>
+                        </div>
+                        
+                        <div class="d-flex justify-content-end gap-2">
+                            <a href="{{ route('admin.documents.show', $document) }}" class="btn btn-secondary">
+                                <i class="fas fa-times me-2"></i>Batal
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Simpan Perubahan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Current Document Info -->
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-info">Dokumen Saat Ini</h6>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center mx-auto" style="width: 60px; height: 60px;">
+                            <i class="fas fa-file-pdf text-white fa-2x"></i>
                         </div>
                     </div>
-
-                    <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save"></i> Update Dokumen
-                        </button>
-                        <button type="button" id="preview-btn" class="btn btn-info">
-                            <i class="fas fa-eye"></i> Preview Perubahan
-                        </button>
-                        <a href="{{ route('admin.documents.show', $document) }}" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left"></i> Batal
-                        </a>
+                    
+                    <div class="mb-2">
+                        <strong>Nomor Dokumen:</strong><br>
+                        <small class="text-muted">{{ $document->document_number }}</small>
+                    </div>
+                    
+                    <div class="mb-2">
+                        <strong>Nama File:</strong><br>
+                        <small class="text-muted">{{ $document->file_name }}</small>
+                    </div>
+                    
+                    <div class="mb-2">
+                        <strong>Ukuran:</strong><br>
+                        <small class="text-muted">{{ $document->getFormattedFileSize() }}</small>
+                    </div>
+                    
+                    <div class="mb-2">
+                        <strong>Tipe:</strong><br>
+                        <small class="text-muted">{{ $document->mime_type }}</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <strong>Status:</strong><br>
                         @if($document->is_active)
-                        <a href="{{ route('admin.documents.download', $document) }}" class="btn btn-success">
-                            <i class="fas fa-download"></i> Download Versi Saat Ini
-                        </a>
+                            <span class="badge bg-success">Aktif</span>
+                        @else
+                            <span class="badge bg-secondary">Nonaktif</span>
                         @endif
                     </div>
-                </form>
+                    
+                    <div class="d-grid gap-2">
+                        <a href="{{ route('admin.documents.download', $document) }}" class="btn btn-success btn-sm">
+                            <i class="fas fa-download me-2"></i>Download
+                        </a>
+                        
+                        <a href="{{ route('admin.documents.preview', $document) }}" target="_blank" class="btn btn-info btn-sm">
+                            <i class="fas fa-external-link-alt me-2"></i>Preview
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Guidelines -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-warning">Panduan Edit</h6>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h6><i class="fas fa-info-circle me-2"></i>Petunjuk:</h6>
+                        <ul class="mb-0 small">
+                            <li>Kosongkan field file jika tidak ingin mengubah dokumen</li>
+                            <li>File baru akan menggantikan file lama</li>
+                            <li>Pastikan format file sesuai (PDF, DOC, DOCX)</li>
+                            <li>Ukuran file maksimal 10MB</li>
+                            <li>Nomor dokumen akan tetap sama</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="alert alert-warning">
+                        <h6><i class="fas fa-exclamation-triangle me-2"></i>Perhatian:</h6>
+                        <ul class="mb-0 small">
+                            <li>Perubahan akan mempengaruhi dokumen yang sudah ada</li>
+                            <li>Pastikan file yang diupload sudah benar</li>
+                            <li>Backup file lama jika diperlukan</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -141,219 +198,46 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
-    // Template variables untuk setiap jenis surat
-    const templateVariables = {
-        'surat_keterangan_domisili': [
-            { name: 'nama', label: 'Nama Lengkap', type: 'text', required: true },
-            { name: 'nik', label: 'NIK', type: 'text', required: true },
-            { name: 'tempat_lahir', label: 'Tempat Lahir', type: 'text', required: true },
-            { name: 'tanggal_lahir', label: 'Tanggal Lahir', type: 'date', required: true },
-            { name: 'jenis_kelamin', label: 'Jenis Kelamin', type: 'select', options: ['Laki-laki', 'Perempuan'], required: true },
-            { name: 'alamat_lengkap', label: 'Alamat Lengkap', type: 'textarea', required: true },
-            { name: 'rt_rw', label: 'RT/RW', type: 'text', required: true },
-            { name: 'kelurahan', label: 'Kelurahan/Desa', type: 'text', required: true },
-            { name: 'kecamatan', label: 'Kecamatan', type: 'text', required: true },
-            { name: 'lama_tinggal', label: 'Lama Tinggal', type: 'text', required: true },
-            { name: 'keperluan', label: 'Keperluan', type: 'textarea', required: true }
-        ],
-        'surat_keterangan_usaha': [
-            { name: 'nama', label: 'Nama Lengkap', type: 'text', required: true },
-            { name: 'nik', label: 'NIK', type: 'text', required: true },
-            { name: 'tempat_lahir', label: 'Tempat Lahir', type: 'text', required: true },
-            { name: 'tanggal_lahir', label: 'Tanggal Lahir', type: 'date', required: true },
-            { name: 'alamat', label: 'Alamat', type: 'textarea', required: true },
-            { name: 'nama_usaha', label: 'Nama Usaha', type: 'text', required: true },
-            { name: 'jenis_usaha', label: 'Jenis Usaha', type: 'text', required: true },
-            { name: 'alamat_usaha', label: 'Alamat Usaha', type: 'textarea', required: true },
-            { name: 'modal_usaha', label: 'Modal Usaha', type: 'text', required: false },
-            { name: 'lama_usaha', label: 'Lama Usaha', type: 'text', required: true },
-            { name: 'keperluan', label: 'Keperluan', type: 'textarea', required: true }
-        ],
-        'surat_keterangan_tidak_mampu': [
-            { name: 'nama', label: 'Nama Lengkap', type: 'text', required: true },
-            { name: 'nik', label: 'NIK', type: 'text', required: true },
-            { name: 'tempat_lahir', label: 'Tempat Lahir', type: 'text', required: true },
-            { name: 'tanggal_lahir', label: 'Tanggal Lahir', type: 'date', required: true },
-            { name: 'alamat', label: 'Alamat', type: 'textarea', required: true },
-            { name: 'penghasilan_perbulan', label: 'Penghasilan Per Bulan', type: 'text', required: true },
-            { name: 'jumlah_tanggungan', label: 'Jumlah Tanggungan', type: 'number', required: true },
-            { name: 'pekerjaan', label: 'Pekerjaan', type: 'text', required: true },
-            { name: 'keperluan_bantuan', label: 'Keperluan Bantuan', type: 'textarea', required: true }
-        ],
-        'surat_pengantar_nikah': [
-            { name: 'nama', label: 'Nama Lengkap', type: 'text', required: true },
-            { name: 'nik', label: 'NIK', type: 'text', required: true },
-            { name: 'tempat_lahir', label: 'Tempat Lahir', type: 'text', required: true },
-            { name: 'tanggal_lahir', label: 'Tanggal Lahir', type: 'date', required: true },
-            { name: 'alamat', label: 'Alamat', type: 'textarea', required: true },
-            { name: 'nama_calon_pasangan', label: 'Nama Calon Pasangan', type: 'text', required: true },
-            { name: 'tempat_lahir_pasangan', label: 'Tempat Lahir Pasangan', type: 'text', required: true },
-            { name: 'tanggal_lahir_pasangan', label: 'Tanggal Lahir Pasangan', type: 'date', required: true },
-            { name: 'alamat_pasangan', label: 'Alamat Pasangan', type: 'textarea', required: true },
-            { name: 'rencana_tanggal_nikah', label: 'Rencana Tanggal Nikah', type: 'date', required: true }
-        ],
-        'surat_keterangan_kelahiran': [
-            { name: 'nama_bayi', label: 'Nama Bayi', type: 'text', required: true },
-            { name: 'jenis_kelamin', label: 'Jenis Kelamin', type: 'select', options: ['Laki-laki', 'Perempuan'], required: true },
-            { name: 'tempat_lahir', label: 'Tempat Lahir', type: 'text', required: true },
-            { name: 'tanggal_lahir', label: 'Tanggal Lahir', type: 'datetime-local', required: true },
-            { name: 'nama_ayah', label: 'Nama Ayah', type: 'text', required: true },
-            { name: 'nik_ayah', label: 'NIK Ayah', type: 'text', required: true },
-            { name: 'nama_ibu', label: 'Nama Ibu', type: 'text', required: true },
-            { name: 'nik_ibu', label: 'NIK Ibu', type: 'text', required: true },
-            { name: 'alamat_orangtua', label: 'Alamat Orang Tua', type: 'textarea', required: true }
-        ],
-        'surat_keterangan_kematian': [
-            { name: 'nama_almarhum', label: 'Nama Almarhum/Almarhumah', type: 'text', required: true },
-            { name: 'nik_almarhum', label: 'NIK Almarhum/Almarhumah', type: 'text', required: true },
-            { name: 'jenis_kelamin', label: 'Jenis Kelamin', type: 'select', options: ['Laki-laki', 'Perempuan'], required: true },
-            { name: 'umur', label: 'Umur', type: 'number', required: true },
-            { name: 'tanggal_kematian', label: 'Tanggal Kematian', type: 'datetime-local', required: true },
-            { name: 'tempat_kematian', label: 'Tempat Kematian', type: 'text', required: true },
-            { name: 'sebab_kematian', label: 'Sebab Kematian', type: 'text', required: true },
-            { name: 'nama_pelapor', label: 'Nama Pelapor', type: 'text', required: true },
-            { name: 'hubungan_pelapor', label: 'Hubungan dengan Almarhum', type: 'text', required: true }
-        ]
-    };
-
-    // Current document data
-    const currentDocument = @json($document);
-    const templateName = currentDocument.template_name;
-    const existingVariables = currentDocument.template_variables || {};
-
-    // Populate template variables
-    function populateTemplateVariables() {
-        const container = $('#variables-container');
-        container.empty();
-        
-        if (templateName && templateVariables[templateName]) {
-            const variables = templateVariables[templateName];
-            
-            variables.forEach(function(variable) {
-                let inputHtml = '';
-                const existingValue = existingVariables[variable.name] || '';
-                
-                if (variable.type === 'select') {
-                    inputHtml = `<select name="template_variables[${variable.name}]" class="form-control ${variable.required ? 'required' : ''}">`;
-                    inputHtml += '<option value="">Pilih...</option>';
-                    variable.options.forEach(function(option) {
-                        const selected = existingValue === option ? 'selected' : '';
-                        inputHtml += `<option value="${option}" ${selected}>${option}</option>`;
-                    });
-                    inputHtml += '</select>';
-                } else if (variable.type === 'textarea') {
-                    inputHtml = `<textarea name="template_variables[${variable.name}]" class="form-control ${variable.required ? 'required' : ''}" rows="3">${existingValue}</textarea>`;
-                } else {
-                    inputHtml = `<input type="${variable.type}" name="template_variables[${variable.name}]" class="form-control ${variable.required ? 'required' : ''}" value="${existingValue}">`;
-                }
-                
-                const fieldHtml = `
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">${variable.label} ${variable.required ? '<span class="text-danger">*</span>' : ''}</label>
-                        ${inputHtml}
-                    </div>
-                `;
-                
-                container.append(fieldHtml);
-            });
-        }
-    }
-
-    // Handle preview button
-    $('#preview-btn').click(function() {
-        // Validate required fields
-        let isValid = true;
-        $('.required').each(function() {
-            if (!$(this).val()) {
-                $(this).addClass('is-invalid');
-                isValid = false;
-            } else {
-                $(this).removeClass('is-invalid');
+    // File size validation
+    $('#document_file').on('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const fileSize = file.size / 1024 / 1024; // Convert to MB
+            if (fileSize > 10) {
+                alert('Ukuran file terlalu besar. Maksimal 10MB.');
+                $(this).val('');
+                return;
             }
-        });
+            
+            // Show file info
+            const fileName = file.name;
+            const fileSizeMB = fileSize.toFixed(2);
+            $(this).next('.form-text').html(
+                `<small class="text-success">
+                    <i class="fas fa-check-circle me-1"></i>
+                    File dipilih: ${fileName} (${fileSizeMB} MB)
+                </small>`
+            );
+        }
+    });
+    
+    // Form validation
+    $('form').on('submit', function(e) {
+        const serviceRequest = $('#service_request_id').val();
+        const templateName = $('#template_name').val().trim();
         
-        if (!isValid) {
-            alert('Lengkapi semua field yang wajib diisi');
+        if (!serviceRequest) {
+            e.preventDefault();
+            alert('Silakan pilih permohonan layanan.');
+            $('#service_request_id').focus();
             return;
         }
         
-        // Show loading
-        $('#preview-content').html('<div class="text-center"><i class="fas fa-spinner fa-spin fa-2x"></i><br>Memuat preview...</div>');
-        $('#preview-area').show();
-        
-        // Simulate preview content (in real implementation, this would be an AJAX call)
-        setTimeout(function() {
-            let previewHtml = `
-                <div class="text-center mb-4">
-                    <h4>PEMERINTAH KABUPATEN/KOTA</h4>
-                    <h4>KECAMATAN [NAMA KECAMATAN]</h4>
-                    <hr>
-                </div>
-                <div class="text-center mb-4">
-                    <h5><u>${templateName.replace(/_/g, ' ').toUpperCase()}</u></h5>
-                    <p>Nomor: ${currentDocument.document_number}</p>
-                </div>
-                <div class="mb-4">
-                    <p>Yang bertanda tangan di bawah ini, Camat [NAMA KECAMATAN], menerangkan bahwa:</p>
-                </div>
-            `;
-            
-            // Add template-specific content
-            const variables = templateVariables[templateName];
-            if (variables) {
-                previewHtml += '<table class="table table-borderless">';
-                variables.forEach(function(variable) {
-                    const value = $(`[name="template_variables[${variable.name}]"]`).val() || '[' + variable.label.toUpperCase() + ']';
-                    previewHtml += `<tr><td width="30%">${variable.label}</td><td>: ${value}</td></tr>`;
-                });
-                previewHtml += '</table>';
-            }
-            
-            previewHtml += `
-                <div class="mt-4">
-                    <p>Demikian surat keterangan ini dibuat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.</p>
-                </div>
-                <div class="row mt-5">
-                    <div class="col-6"></div>
-                    <div class="col-6 text-center">
-                        <p>[TEMPAT], ${new Date().toLocaleDateString('id-ID')}</p>
-                        <p>Camat [NAMA KECAMATAN]</p>
-                        <br><br><br>
-                        <p><u>[NAMA CAMAT]</u></p>
-                        <p>NIP. [NIP CAMAT]</p>
-                    </div>
-                </div>
-            `;
-            
-            $('#preview-content').html(previewHtml);
-        }, 1000);
-    });
-
-    // Initialize template variables
-    populateTemplateVariables();
-
-    // Form validation
-    $('form').on('submit', function(e) {
-        let isValid = true;
-        $('.required').each(function() {
-            if (!$(this).val()) {
-                $(this).addClass('is-invalid');
-                isValid = false;
-            } else {
-                $(this).removeClass('is-invalid');
-            }
-        });
-        
-        if (!isValid) {
+        if (!templateName) {
             e.preventDefault();
-            alert('Lengkapi semua field yang wajib diisi');
-            return false;
-        }
-        
-        // Confirm if user wants to regenerate document
-        if (!confirm('Apakah Anda yakin ingin mengupdate dokumen ini? File PDF akan dibuat ulang dan menggantikan file yang sudah ada.')) {
-            e.preventDefault();
-            return false;
+            alert('Silakan masukkan nama template.');
+            $('#template_name').focus();
+            return;
         }
     });
 });

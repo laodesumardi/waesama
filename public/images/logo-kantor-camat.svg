@@ -1,0 +1,62 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="60" cy="60" r="60" fill="url(#gradient1)"/>
+  
+  <!-- Outer Ring -->
+  <circle cx="60" cy="60" r="55" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.3"/>
+  
+  <!-- Government Building -->
+  <g transform="translate(30, 35)">
+    <!-- Main Building Base -->
+    <rect x="10" y="35" width="40" height="25" fill="#ffffff" rx="2"/>
+    
+    <!-- Building Columns -->
+    <rect x="12" y="35" width="4" height="25" fill="#e8f4fd"/>
+    <rect x="18" y="35" width="4" height="25" fill="#e8f4fd"/>
+    <rect x="24" y="35" width="4" height="25" fill="#e8f4fd"/>
+    <rect x="30" y="35" width="4" height="25" fill="#e8f4fd"/>
+    <rect x="36" y="35" width="4" height="25" fill="#e8f4fd"/>
+    <rect x="42" y="35" width="4" height="25" fill="#e8f4fd"/>
+    
+    <!-- Building Roof -->
+    <polygon points="5,35 30,20 55,35" fill="#ffffff"/>
+    <polygon points="8,35 30,23 52,35" fill="#e8f4fd"/>
+    
+    <!-- Flag Pole -->
+    <rect x="28" y="10" width="2" height="15" fill="#ffffff"/>
+    
+    <!-- Indonesian Flag -->
+    <rect x="30" y="10" width="12" height="8" fill="#ffffff" rx="1"/>
+    <rect x="30" y="10" width="12" height="4" fill="#ff0000"/>
+    
+    <!-- Building Entrance -->
+    <rect x="25" y="50" width="10" height="10" fill="#001d3d" rx="1"/>
+    <rect x="27" y="52" width="6" height="8" fill="#003366" rx="0.5"/>
+    
+    <!-- Windows -->
+    <rect x="15" y="40" width="3" height="4" fill="#001d3d" rx="0.5"/>
+    <rect x="20" y="40" width="3" height="4" fill="#001d3d" rx="0.5"/>
+    <rect x="37" y="40" width="3" height="4" fill="#001d3d" rx="0.5"/>
+    <rect x="42" y="40" width="3" height="4" fill="#001d3d" rx="0.5"/>
+  </g>
+  
+  <!-- Decorative Elements -->
+  <g transform="translate(60, 60)">
+    <!-- Garuda Wings Inspiration -->
+    <path d="M-25,-15 Q-30,-10 -25,-5 Q-20,-10 -25,-15" fill="#ffffff" opacity="0.6"/>
+    <path d="M25,-15 Q30,-10 25,-5 Q20,-10 25,-15" fill="#ffffff" opacity="0.6"/>
+  </g>
+  
+  <!-- Text Elements -->
+  <text x="60" y="95" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="8" font-weight="bold">KANTOR CAMAT</text>
+  <text x="60" y="105" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="6" opacity="0.8">PELAYANAN PUBLIK</text>
+  
+  <!-- Gradient Definitions -->
+  <defs>
+    <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#001d3d;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#003366;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0066cc;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+</svg>

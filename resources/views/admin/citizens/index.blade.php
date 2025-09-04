@@ -71,7 +71,7 @@
                     </div>
                     <div class="flex-1">
                         <p class="text-xs sm:text-sm font-medium text-gray-600 mb-1">Total Penduduk</p>
-                        <p class="text-xl sm:text-2xl lg:text-3xl font-bold" style="color: #003566;">{{ number_format($stats['total']) }}</p>
+                        <p class="text-xl sm:text-2xl lg:text-3xl font-bold" style="color: #003566;">{{ number_format($stats['total'] ?? 0) }}</p>
                     </div>
                 </div>
             </div>
@@ -83,7 +83,7 @@
                     </div>
                     <div class="flex-1">
                         <p class="text-xs sm:text-sm font-medium text-gray-600 mb-1">Laki-laki</p>
-                        <p class="text-xl sm:text-2xl lg:text-3xl font-bold" style="color: #16a34a;">{{ number_format($stats['male']) }}</p>
+                        <p class="text-xl sm:text-2xl lg:text-3xl font-bold" style="color: #16a34a;">{{ number_format($stats['male'] ?? 0) }}</p>
                     </div>
                 </div>
             </div>
@@ -95,7 +95,7 @@
                     </div>
                     <div class="flex-1">
                         <p class="text-xs sm:text-sm font-medium text-gray-600 mb-1">Perempuan</p>
-                        <p class="text-xl sm:text-2xl lg:text-3xl font-bold" style="color: #ec4899;">{{ number_format($stats['female']) }}</p>
+                        <p class="text-xl sm:text-2xl lg:text-3xl font-bold" style="color: #ec4899;">{{ number_format($stats['female'] ?? 0) }}</p>
                     </div>
                 </div>
             </div>
@@ -107,7 +107,7 @@
                     </div>
                     <div class="flex-1">
                         <p class="text-xs sm:text-sm font-medium text-gray-600 mb-1">Aktif</p>
-                        <p class="text-xl sm:text-2xl lg:text-3xl font-bold" style="color: #10b981;">{{ number_format($stats['active']) }}</p>
+                        <p class="text-xl sm:text-2xl lg:text-3xl font-bold" style="color: #10b981;">{{ number_format($stats['active'] ?? 0) }}</p>
                     </div>
                 </div>
             </div>
@@ -119,14 +119,12 @@
                     </div>
                     <div class="flex-1">
                         <p class="text-xs sm:text-sm font-medium text-gray-600 mb-1">Tidak Aktif</p>
-                        <p class="text-xl sm:text-2xl lg:text-3xl font-bold" style="color: #ef4444;">{{ number_format($stats['inactive']) }}</p>
+                        <p class="text-xl sm:text-2xl lg:text-3xl font-bold" style="color: #ef4444;">{{ number_format($stats['inactive'] ?? 0) }}</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-
 
     <!-- Success Message -->
     @if(session('success'))
@@ -166,11 +164,13 @@
                     <label for="village_id" class="block text-sm font-medium text-gray-700 mb-2">Desa</label>
                     <select name="village_id" id="village_id" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                         <option value="">Semua Desa</option>
-                        @foreach($villages as $village)
-                            <option value="{{ $village->id }}" {{ request('village_id') == $village->id ? 'selected' : '' }}>
-                                {{ $village->name }}
-                            </option>
-                        @endforeach
+                        @if(isset($villages))
+                            @foreach($villages as $village)
+                                <option value="{{ $village->id }}" {{ request('village_id') == $village->id ? 'selected' : '' }}>
+                                    {{ $village->name }}
+                                </option>
+                            @endforeach
+                        @endif
                     </select>
                 </div>
                 
@@ -307,7 +307,13 @@
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h3 class="text-lg font-semibold text-gray-900">Data Penduduk</h3>
-                    <p class="text-sm text-gray-600 mt-1">Menampilkan {{ $citizens->count() }} dari {{ $citizens->total() }} data</p>
+                    <p class="text-sm text-gray-600 mt-1">
+                        @if(isset($citizens))
+                            Menampilkan {{ $citizens->count() }} dari {{ $citizens->total() }} data
+                        @else
+                            Tidak ada data tersedia
+                        @endif
+                    </p>
                 </div>
                 <div class="flex items-center space-x-2 text-sm text-gray-500">
                     <i class="fas fa-table"></i>
@@ -335,30 +341,34 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse($citizens as $citizen)
-                        <tr class="hover:bg-gray-50 transition-colors duration-200">
-                            <td class="px-4 sm:px-6 py-4 whitespace-nowrap">
-                                <input type="checkbox" class="citizen-checkbox rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" value="{{ $citizen->id }}" onchange="updateBulkActions()">
-                            </td>
-                            <td class="px-4 sm:px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm font-medium text-gray-900">{{ $citizen->nik }}</div>
-                            </td>
-                            <td class="px-4 sm:px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center">
-                                    <div class="w-10 h-10 rounded-full flex items-center justify-center mr-3" style="background-color: #e6f3ff;">
-                                        <i class="fas fa-user text-sm" style="color: #003566;"></i>
+                    @if(isset($citizens) && $citizens->count() > 0)
+                        @foreach($citizens as $citizen)
+                            <tr class="hover:bg-gray-50 transition-colors duration-200">
+                                <td class="px-4 sm:px-6 py-4 whitespace-nowrap">
+                                    <input type="checkbox" class="citizen-checkbox rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" value="{{ $citizen->id }}" onchange="updateBulkActions()">
+                                </td>
+                                <td class="px-4 sm:px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-gray-900">{{ $citizen->nik ?? 'N/A' }}</div>
+                                </td>
+                                <td class="px-4 sm:px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full flex items-center justify-center mr-3" style="background-color: #e6f3ff;">
+                                            <i class="fas fa-user text-sm" style="color: #003566;"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-medium text-gray-900">{{ $citizen->name ?? 'N/A' }}</div>
+                                            <div class="text-xs text-gray-500">
+                                                {{ $citizen->birth_place ?? 'N/A' }}, 
+                                                {{ $citizen->birth_date ? $citizen->birth_date->format('d/m/Y') : 'N/A' }}
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <div class="text-sm font-medium text-gray-900">{{ $citizen->name }}</div>
-                                        <div class="text-xs text-gray-500">{{ $citizen->birth_place }}, {{ $citizen->birth_date ? $citizen->birth_date->format('d/m/Y') : '-' }}</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-4 sm:px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center">
-                                    @if($citizen->gender == 'L')
-                                        <div class="w-8 h-8 rounded-full flex items-center justify-center mr-2" style="background-color: #f0fdf4;">
-                                            <i class="fas fa-male text-xs" style="color: #16a34a;"></i>
+                                </td>
+                                <td class="px-4 sm:px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        @if($citizen->gender == 'L')
+                                            <div class="w-8 h-8 rounded-full flex items-center justify-center mr-2" style="background-color: #f0fdf4;">
+                                                <i class="fas fa-male text-xs" style="color: #16a34a;"></i>
                                         </div>
                                         <span class="text-sm text-gray-900">Laki-laki</span>
                                     @else
@@ -370,7 +380,9 @@
                                 </div>
                             </td>
                             <td class="px-4 sm:px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900">{{ $citizen->village->name }}</div>
+                                <div class="text-sm text-gray-900">
+                                    {{ $citizen->village ? $citizen->village->name : 'Tidak ada data' }}
+                                </div>
                             </td>
                             <td class="px-4 sm:px-6 py-4 whitespace-nowrap">
                                 @if($citizen->is_active)
@@ -403,7 +415,8 @@
                                 </div>
                             </td>
                         </tr>
-                    @empty
+                        @endforeach
+                    @else
                         <tr>
                             <td colspan="7" class="px-4 sm:px-6 py-12 text-center">
                                 <div class="flex flex-col items-center justify-center">
@@ -419,84 +432,91 @@
                                 </div>
                             </td>
                         </tr>
-                    @endforelse
+                    @endif
                 </tbody>
             </table>
         </div>
 
         <!-- Mobile Cards (Hidden on desktop, shown on mobile) -->
         <div class="admin-mobile-cards block sm:hidden">
-            @forelse($citizens as $citizen)
-                <div class="p-4 border-b border-gray-200 last:border-b-0">
-                    <div class="flex items-start justify-between mb-3">
-                        <div class="flex items-center">
-                            <input type="checkbox" class="citizen-checkbox rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 mr-3" value="{{ $citizen->id }}" onchange="updateBulkActions()">
-                            <div class="w-10 h-10 rounded-full flex items-center justify-center mr-3" style="background-color: #e6f3ff;">
-                                <i class="fas fa-user text-sm" style="color: #003566;"></i>
+            @if(isset($citizens) && $citizens->count() > 0)
+                @foreach($citizens as $citizen)
+                    <div class="p-4 border-b border-gray-200 last:border-b-0">
+                        <div class="flex items-start justify-between mb-3">
+                            <div class="flex items-center">
+                                <input type="checkbox" class="citizen-checkbox rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 mr-3" value="{{ $citizen->id }}" onchange="updateBulkActions()">
+                                <div class="w-10 h-10 rounded-full flex items-center justify-center mr-3" style="background-color: #e6f3ff;">
+                                    <i class="fas fa-user text-sm" style="color: #003566;"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-900">{{ $citizen->name ?? 'N/A' }}</h4>
+                                    <p class="text-xs text-gray-500">NIK: {{ $citizen->nik ?? 'N/A' }}</p>
+                                </div>
+                            </div>
+                            @if($citizen->is_active)
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium" style="background-color: #ecfdf5; color: #10b981;">
+                                    <i class="fas fa-check-circle mr-1"></i>
+                                    Aktif
+                                </span>
+                            @else
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium" style="background-color: #fef2f2; color: #ef4444;">
+                                    <i class="fas fa-times-circle mr-1"></i>
+                                    Tidak Aktif
+                                </span>
+                            @endif
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-3 text-sm mb-4">
+                            <div>
+                                <span class="text-gray-500 text-xs">Jenis Kelamin</span>
+                                <div class="flex items-center mt-1">
+                                    @if($citizen->gender == 'L')
+                                        <div class="w-6 h-6 rounded-full flex items-center justify-center mr-2" style="background-color: #f0fdf4;">
+                                            <i class="fas fa-male text-xs" style="color: #16a34a;"></i>
+                                        </div>
+                                        <span class="text-gray-900 text-sm">Laki-laki</span>
+                                    @else
+                                        <div class="w-6 h-6 rounded-full flex items-center justify-center mr-2" style="background-color: #fdf2f8;">
+                                            <i class="fas fa-female text-xs" style="color: #ec4899;"></i>
+                                        </div>
+                                        <span class="text-gray-900 text-sm">Perempuan</span>
+                                    @endif
+                                </div>
                             </div>
                             <div>
-                                <h4 class="font-medium text-gray-900">{{ $citizen->name }}</h4>
-                                <p class="text-xs text-gray-500">NIK: {{ $citizen->nik }}</p>
+                                <span class="text-gray-500 text-xs">Desa</span>
+                                <p class="text-gray-900 text-sm mt-1">
+                                    {{ $citizen->village ? $citizen->village->name : 'Tidak ada data' }}
+                                </p>
                             </div>
                         </div>
-                        @if($citizen->is_active)
-                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium" style="background-color: #ecfdf5; color: #10b981;">
-                                <i class="fas fa-check-circle mr-1"></i>
-                                Aktif
-                            </span>
-                        @else
-                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium" style="background-color: #fef2f2; color: #ef4444;">
-                                <i class="fas fa-times-circle mr-1"></i>
-                                Tidak Aktif
-                            </span>
-                        @endif
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-3 text-sm mb-4">
-                        <div>
-                            <span class="text-gray-500 text-xs">Jenis Kelamin</span>
-                            <div class="flex items-center mt-1">
-                                @if($citizen->gender == 'L')
-                                    <div class="w-6 h-6 rounded-full flex items-center justify-center mr-2" style="background-color: #f0fdf4;">
-                                        <i class="fas fa-male text-xs" style="color: #16a34a;"></i>
-                                    </div>
-                                    <span class="text-gray-900 text-sm">Laki-laki</span>
-                                @else
-                                    <div class="w-6 h-6 rounded-full flex items-center justify-center mr-2" style="background-color: #fdf2f8;">
-                                        <i class="fas fa-female text-xs" style="color: #ec4899;"></i>
-                                    </div>
-                                    <span class="text-gray-900 text-sm">Perempuan</span>
-                                @endif
-                            </div>
+                        
+                        <div class="mb-4">
+                            <span class="text-gray-500 text-xs">Tempat, Tanggal Lahir</span>
+                            <p class="text-gray-900 text-sm mt-1">
+                                {{ $citizen->birth_place ?? 'N/A' }}, 
+                                {{ $citizen->birth_date ? $citizen->birth_date->format('d/m/Y') : 'N/A' }}
+                            </p>
                         </div>
-                        <div>
-                            <span class="text-gray-500 text-xs">Desa</span>
-                            <p class="text-gray-900 text-sm mt-1">{{ $citizen->village->name }}</p>
+                        
+                        <div class="flex justify-end space-x-2 pt-3 border-t border-gray-100">
+                            <a href="{{ route('admin.citizens.show', $citizen) }}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200" style="background-color: #e6f3ff; color: #003566;" title="Lihat Detail">
+                                <i class="fas fa-eye text-xs"></i>
+                            </a>
+                            <a href="{{ route('admin.citizens.edit', $citizen) }}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200" style="background-color: #fef3c7; color: #d97706;" title="Edit Data">
+                                <i class="fas fa-edit text-xs"></i>
+                            </a>
+                            <form action="{{ route('admin.citizens.destroy', $citizen) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="inline-flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200" style="background-color: #fef2f2; color: #ef4444;" title="Hapus Data">
+                                    <i class="fas fa-trash text-xs"></i>
+                                </button>
+                            </form>
                         </div>
                     </div>
-                    
-                    <div class="mb-4">
-                        <span class="text-gray-500 text-xs">Tempat, Tanggal Lahir</span>
-                        <p class="text-gray-900 text-sm mt-1">{{ $citizen->birth_place }}, {{ $citizen->birth_date ? $citizen->birth_date->format('d/m/Y') : '-' }}</p>
-                    </div>
-                    
-                    <div class="flex justify-end space-x-2 pt-3 border-t border-gray-100">
-                        <a href="{{ route('admin.citizens.show', $citizen) }}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200" style="background-color: #e6f3ff; color: #003566;" title="Lihat Detail">
-                            <i class="fas fa-eye text-xs"></i>
-                        </a>
-                        <a href="{{ route('admin.citizens.edit', $citizen) }}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200" style="background-color: #fef3c7; color: #d97706;" title="Edit Data">
-                            <i class="fas fa-edit text-xs"></i>
-                        </a>
-                        <form action="{{ route('admin.citizens.destroy', $citizen) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="inline-flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200" style="background-color: #fef2f2; color: #ef4444;" title="Hapus Data">
-                                <i class="fas fa-trash text-xs"></i>
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            @empty
+                @endforeach
+            @else
                 <div class="p-8 text-center">
                     <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto" style="background-color: #f3f4f6;">
                         <i class="fas fa-users text-2xl text-gray-400"></i>
@@ -508,17 +528,23 @@
                         Tambah Penduduk Pertama
                     </a>
                 </div>
-            @endforelse
+            @endif
         </div>
 
         <!-- Pagination -->
         <div class="p-4 sm:p-6 border-t border-gray-200">
             <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
                 <div class="text-sm text-gray-600">
-                    Menampilkan {{ $citizens->firstItem() ?? 0 }} - {{ $citizens->lastItem() ?? 0 }} dari {{ $citizens->total() }} data
+                    @if(isset($citizens) && $citizens->count() > 0)
+                        Menampilkan {{ $citizens->firstItem() ?? 0 }} - {{ $citizens->lastItem() ?? 0 }} dari {{ $citizens->total() }} data
+                    @else
+                        Tidak ada data untuk ditampilkan
+                    @endif
                 </div>
                 <div>
-                    {{ $citizens->appends(request()->query())->links() }}
+                    @if(isset($citizens))
+                        {{ $citizens->appends(request()->query())->links() }}
+                    @endif
                 </div>
             </div>
         </div>
@@ -621,280 +647,283 @@
         </div>
     </div>
 
+    <!-- Success/Error Notifications -->
     @if(session('success'))
-        <div class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+        <div class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50" id="successNotification">
             {{ session('success') }}
         </div>
         <script>
             setTimeout(function() {
-                document.querySelector('.fixed.top-4').remove();
+                const notification = document.getElementById('successNotification');
+                if (notification) {
+                    notification.remove();
+                }
             }, 3000);
         </script>
     @endif
 
     @if(session('error'))
-         <div class="fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
-             {{ session('error') }}
-         </div>
-         <script>
-             setTimeout(function() {
-                 document.querySelector('.fixed.top-4').remove();
-             }, 3000);
-         </script>
-     @endif
+        <div class="fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50" id="errorNotification">
+            {{ session('error') }}
+        </div>
+        <script>
+            setTimeout(function() {
+                const notification = document.getElementById('errorNotification');
+                if (notification) {
+                    notification.remove();
+                }
+            }, 3000);
+        </script>
+    @endif
 
-     <script>
-         // Toggle advanced filters
-         document.getElementById('toggleAdvanced').addEventListener('click', function() {
-              const advancedFilters = document.getElementById('advancedFilters');
-              const filterChevron = document.getElementById('filterChevron');
-              
-              advancedFilters.classList.toggle('hidden');
-              
-              if (advancedFilters.classList.contains('hidden')) {
-                  filterChevron.classList.remove('fa-chevron-up', 'rotate-180');
-                  filterChevron.classList.add('fa-chevron-down');
-                  this.setAttribute('aria-expanded', 'false');
-              } else {
-                  filterChevron.classList.remove('fa-chevron-down');
-                  filterChevron.classList.add('fa-chevron-up', 'rotate-180');
-                  this.setAttribute('aria-expanded', 'true');
-              }
-          });
+    <script>
+        // Toggle advanced filters
+        document.getElementById('toggleAdvanced').addEventListener('click', function() {
+            const advancedFilters = document.getElementById('advancedFilters');
+            const filterChevron = document.getElementById('filterChevron');
+            
+            advancedFilters.classList.toggle('hidden');
+            
+            if (advancedFilters.classList.contains('hidden')) {
+                filterChevron.classList.remove('fa-chevron-up', 'rotate-180');
+                filterChevron.classList.add('fa-chevron-down');
+                this.setAttribute('aria-expanded', 'false');
+            } else {
+                filterChevron.classList.remove('fa-chevron-down');
+                filterChevron.classList.add('fa-chevron-up', 'rotate-180');
+                this.setAttribute('aria-expanded', 'true');
+            }
+        });
 
-         // Auto-submit form when dropdown changes
-         document.querySelectorAll('select[name="village_id"], select[name="status"], select[name="gender"], select[name="marital_status"], select[name="religion"], select[name="sort_by"], select[name="sort_order"]').forEach(function(select) {
-             select.addEventListener('change', function() {
-                 this.form.submit();
-             });
-         });
+        // Auto-submit form when dropdown changes
+        document.querySelectorAll('select[name="village_id"], select[name="status"], select[name="gender"], select[name="marital_status"], select[name="religion"], select[name="sort_by"], select[name="sort_order"]').forEach(function(select) {
+            select.addEventListener('change', function() {
+                this.form.submit();
+            });
+        });
 
-         // Show advanced filters if any advanced filter is active
-          document.addEventListener('DOMContentLoaded', function() {
-              const hasAdvancedFilters = {{ request()->hasAny(['gender', 'marital_status', 'religion', 'age_from', 'age_to', 'sort_by']) ? 'true' : 'false' }};
-              if (hasAdvancedFilters) {
-                  const advancedFilters = document.getElementById('advancedFilters');
-                  const filterChevron = document.getElementById('filterChevron');
-                  const toggleButton = document.getElementById('toggleAdvanced');
-                  
-                  advancedFilters.classList.remove('hidden');
-                  filterChevron.classList.remove('fa-chevron-down');
-                  filterChevron.classList.add('fa-chevron-up', 'rotate-180');
-                  toggleButton.setAttribute('aria-expanded', 'true');
-              }
-              
-              // Initialize tooltips for action buttons
-              const actionButtons = document.querySelectorAll('[title]');
-              actionButtons.forEach(button => {
-                  button.addEventListener('mouseenter', function() {
-                      this.style.transform = 'scale(1.05)';
-                  });
-                  button.addEventListener('mouseleave', function() {
-                      this.style.transform = 'scale(1)';
-                  });
-              });
-          });
+        // Show advanced filters if any advanced filter is active
+        document.addEventListener('DOMContentLoaded', function() {
+            const hasAdvancedFilters = {{ request()->hasAny(['gender', 'marital_status', 'religion', 'age_from', 'age_to', 'sort_by']) ? 'true' : 'false' }};
+            if (hasAdvancedFilters) {
+                const advancedFilters = document.getElementById('advancedFilters');
+                const filterChevron = document.getElementById('filterChevron');
+                const toggleButton = document.getElementById('toggleAdvanced');
+                
+                advancedFilters.classList.remove('hidden');
+                filterChevron.classList.remove('fa-chevron-down');
+                filterChevron.classList.add('fa-chevron-up', 'rotate-180');
+                toggleButton.setAttribute('aria-expanded', 'true');
+            }
+            
+            // Initialize tooltips for action buttons
+            const actionButtons = document.querySelectorAll('[title]');
+            actionButtons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.05)';
+                });
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        });
 
-         // Modal functions
-         function openImportModal() {
-             document.getElementById('importModal').classList.remove('hidden');
-         }
+        // Modal functions
+        function openImportModal() {
+            document.getElementById('importModal').classList.remove('hidden');
+        }
 
-         function closeImportModal() {
-             document.getElementById('importModal').classList.add('hidden');
-             // Reset form
-             document.getElementById('importForm').reset();
-             document.getElementById('fileName').classList.add('hidden');
-         }
+        function closeImportModal() {
+            document.getElementById('importModal').classList.add('hidden');
+            // Reset form
+            document.getElementById('importForm').reset();
+            document.getElementById('fileName').classList.add('hidden');
+        }
 
-         function updateFileName() {
-             const fileInput = document.getElementById('fileInput');
-             const fileName = document.getElementById('fileName');
-             const fileNameText = document.getElementById('fileNameText');
-             
-             if (fileInput.files.length > 0) {
-                 fileNameText.textContent = fileInput.files[0].name;
-                 fileName.classList.remove('hidden');
-             } else {
-                 fileName.classList.add('hidden');
-             }
-         }
+        function updateFileName() {
+            const fileInput = document.getElementById('fileInput');
+            const fileName = document.getElementById('fileName');
+            const fileNameText = document.getElementById('fileNameText');
+            
+            if (fileInput.files.length > 0) {
+                fileNameText.textContent = fileInput.files[0].name;
+                fileName.classList.remove('hidden');
+            } else {
+                fileName.classList.add('hidden');
+            }
+        }
 
-         // Close modal when clicking outside
-         document.getElementById('importModal').addEventListener('click', function(e) {
-             if (e.target === this) {
-                 closeImportModal();
-             }
-         });
+        // Close modal when clicking outside
+        document.getElementById('importModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeImportModal();
+            }
+        });
 
-         // Export loading function
-         function showExportLoading(element) {
-             const originalText = element.innerHTML;
-             element.innerHTML = '<i class="fas fa-spinner fa-spin mr-3 text-blue-600"></i>Mengunduh...';
-             element.style.pointerEvents = 'none';
-             
-             setTimeout(function() {
-                 element.innerHTML = originalText;
-                 element.style.pointerEvents = 'auto';
-             }, 3000);
-         }
+        // Export loading function
+        function showExportLoading(element) {
+            const originalText = element.innerHTML;
+            element.innerHTML = '<i class="fas fa-spinner fa-spin mr-3 text-blue-600"></i>Mengunduh...';
+            element.style.pointerEvents = 'none';
+            
+            setTimeout(function() {
+                element.innerHTML = originalText;
+                element.style.pointerEvents = 'auto';
+            }, 3000);
+        }
 
-         // Bulk Actions Functions
-         function toggleSelectAll() {
-             const selectAllCheckbox = document.getElementById('selectAll');
-             const citizenCheckboxes = document.querySelectorAll('.citizen-checkbox');
-             
-             citizenCheckboxes.forEach(checkbox => {
-                 checkbox.checked = selectAllCheckbox.checked;
-             });
-             
-             updateBulkActions();
-         }
+        // Bulk Actions Functions
+        function toggleSelectAll() {
+            const selectAllCheckbox = document.getElementById('selectAll');
+            const citizenCheckboxes = document.querySelectorAll('.citizen-checkbox');
+            
+            citizenCheckboxes.forEach(checkbox => {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+            
+            updateBulkActions();
+        }
 
-         function updateBulkActions() {
-             const citizenCheckboxes = document.querySelectorAll('.citizen-checkbox');
-             const checkedBoxes = document.querySelectorAll('.citizen-checkbox:checked');
-             const bulkActionsBar = document.getElementById('bulkActionsBar');
-             const selectedCount = document.getElementById('selectedCount');
-             const selectAllCheckbox = document.getElementById('selectAll');
-             
-             selectedCount.textContent = checkedBoxes.length;
-             
-             if (checkedBoxes.length > 0) {
-                 bulkActionsBar.classList.remove('hidden');
-             } else {
-                 bulkActionsBar.classList.add('hidden');
-             }
-             
-             // Update select all checkbox state
-             if (checkedBoxes.length === citizenCheckboxes.length) {
-                 selectAllCheckbox.checked = true;
-                 selectAllCheckbox.indeterminate = false;
-             } else if (checkedBoxes.length > 0) {
-                 selectAllCheckbox.checked = false;
-                 selectAllCheckbox.indeterminate = true;
-             } else {
-                 selectAllCheckbox.checked = false;
-                 selectAllCheckbox.indeterminate = false;
-             }
-         }
+        function updateBulkActions() {
+            const citizenCheckboxes = document.querySelectorAll('.citizen-checkbox');
+            const checkedBoxes = document.querySelectorAll('.citizen-checkbox:checked');
+            const bulkActionsBar = document.getElementById('bulkActionsBar');
+            const selectedCount = document.getElementById('selectedCount');
+            const selectAllCheckbox = document.getElementById('selectAll');
+            
+            selectedCount.textContent = checkedBoxes.length;
+            
+            if (checkedBoxes.length > 0) {
+                bulkActionsBar.classList.remove('hidden');
+            } else {
+                bulkActionsBar.classList.add('hidden');
+            }
+            
+            // Update select all checkbox state
+            if (checkedBoxes.length === citizenCheckboxes.length && citizenCheckboxes.length > 0) {
+                selectAllCheckbox.checked = true;
+                selectAllCheckbox.indeterminate = false;
+            } else if (checkedBoxes.length > 0) {
+                selectAllCheckbox.checked = false;
+                selectAllCheckbox.indeterminate = true;
+            } else {
+                selectAllCheckbox.checked = false;
+                selectAllCheckbox.indeterminate = false;
+            }
+        }
 
-         function getSelectedIds() {
-             const checkedBoxes = document.querySelectorAll('.citizen-checkbox:checked');
-             return Array.from(checkedBoxes).map(checkbox => checkbox.value);
-         }
+        function getSelectedIds() {
+            const checkedBoxes = document.querySelectorAll('.citizen-checkbox:checked');
+            return Array.from(checkedBoxes).map(checkbox => checkbox.value);
+        }
 
-         function clearSelection() {
-             const citizenCheckboxes = document.querySelectorAll('.citizen-checkbox');
-             const selectAllCheckbox = document.getElementById('selectAll');
-             
-             citizenCheckboxes.forEach(checkbox => {
-                 checkbox.checked = false;
-             });
-             selectAllCheckbox.checked = false;
-             selectAllCheckbox.indeterminate = false;
-             
-             updateBulkActions();
-         }
+        function clearSelection() {
+            const citizenCheckboxes = document.querySelectorAll('.citizen-checkbox');
+            const selectAllCheckbox = document.getElementById('selectAll');
+            
+            citizenCheckboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            selectAllCheckbox.checked = false;
+            selectAllCheckbox.indeterminate = false;
+            
+            updateBulkActions();
+        }
 
-         function bulkActivate() {
-             const selectedIds = getSelectedIds();
-             if (selectedIds.length === 0) {
-                 alert('Pilih minimal satu data untuk diaktifkan.');
-                 return;
-             }
-             
-             if (confirm(`Apakah Anda yakin ingin mengaktifkan ${selectedIds.length} data penduduk?`)) {
-                 performBulkAction('activate', selectedIds);
-             }
-         }
+        function bulkActivate() {
+            const selectedIds = getSelectedIds();
+            if (selectedIds.length === 0) {
+                alert('Pilih minimal satu data untuk diaktifkan.');
+                return;
+            }
+            
+            if (confirm(`Apakah Anda yakin ingin mengaktifkan ${selectedIds.length} data penduduk?`)) {
+                performBulkAction('activate', selectedIds);
+            }
+        }
 
-         function bulkDeactivate() {
-             const selectedIds = getSelectedIds();
-             if (selectedIds.length === 0) {
-                 alert('Pilih minimal satu data untuk dinonaktifkan.');
-                 return;
-             }
-             
-             if (confirm(`Apakah Anda yakin ingin menonaktifkan ${selectedIds.length} data penduduk?`)) {
-                 performBulkAction('deactivate', selectedIds);
-             }
-         }
+        function bulkDeactivate() {
+            const selectedIds = getSelectedIds();
+            if (selectedIds.length === 0) {
+                alert('Pilih minimal satu data untuk dinonaktifkan.');
+                return;
+            }
+            
+            if (confirm(`Apakah Anda yakin ingin menonaktifkan ${selectedIds.length} data penduduk?`)) {
+                performBulkAction('deactivate', selectedIds);
+            }
+        }
 
-         function bulkDelete() {
-             const selectedIds = getSelectedIds();
-             if (selectedIds.length === 0) {
-                 alert('Pilih minimal satu data untuk dihapus.');
-                 return;
-             }
-             
-             if (confirm(`PERINGATAN: Apakah Anda yakin ingin menghapus ${selectedIds.length} data penduduk? Tindakan ini tidak dapat dibatalkan!`)) {
-                 performBulkAction('delete', selectedIds);
-             }
-         }
+        function bulkDelete() {
+            const selectedIds = getSelectedIds();
+            if (selectedIds.length === 0) {
+                alert('Pilih minimal satu data untuk dihapus.');
+                return;
+            }
+            
+            if (confirm(`PERINGATAN: Apakah Anda yakin ingin menghapus ${selectedIds.length} data penduduk? Tindakan ini tidak dapat dibatalkan!`)) {
+                performBulkAction('delete', selectedIds);
+            }
+        }
 
-         function bulkExport() {
-             const selectedIds = getSelectedIds();
-             if (selectedIds.length === 0) {
-                 alert('Pilih minimal satu data untuk diekspor.');
-                 return;
-             }
-             
-             // Create form and submit for export
-             const form = document.createElement('form');
-             form.method = 'POST';
-             form.action = '{{ route("admin.citizens.bulk-export") }}';
-             
-             const csrfToken = document.createElement('input');
-             csrfToken.type = 'hidden';
-             csrfToken.name = '_token';
-             csrfToken.value = '{{ csrf_token() }}';
-             form.appendChild(csrfToken);
-             
-             selectedIds.forEach(id => {
-                 const input = document.createElement('input');
-                 input.type = 'hidden';
-                 input.name = 'ids[]';
-                 input.value = id;
-                 form.appendChild(input);
-             });
-             
-             document.body.appendChild(form);
-             form.submit();
-             document.body.removeChild(form);
-         }
+        function bulkExport() {
+            const selectedIds = getSelectedIds();
+            if (selectedIds.length === 0) {
+                alert('Pilih minimal satu data untuk diekspor.');
+                return;
+            }
+            
+            // Create form and submit for export
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '{{ route("admin.citizens.bulk-export") }}';
+            
+            const csrfToken = document.createElement('input');
+            csrfToken.type = 'hidden';
+            csrfToken.name = '_token';
+            csrfToken.value = '{{ csrf_token() }}';
+            form.appendChild(csrfToken);
+            
+            selectedIds.forEach(id => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'ids[]';
+                input.value = id;
+                form.appendChild(input);
+            });
+            
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
+        }
 
-         function performBulkAction(action, ids) {
-             const form = document.createElement('form');
-             form.method = 'POST';
-             form.action = '{{ route("admin.citizens.bulk-action") }}';
-             
-             const csrfToken = document.createElement('input');
-             csrfToken.type = 'hidden';
-             csrfToken.name = '_token';
-             csrfToken.value = '{{ csrf_token() }}';
-             form.appendChild(csrfToken);
-             
-             const actionInput = document.createElement('input');
-             actionInput.type = 'hidden';
-             actionInput.name = 'action';
-             actionInput.value = action;
-             form.appendChild(actionInput);
-             
-             ids.forEach(id => {
-                 const input = document.createElement('input');
-                 input.type = 'hidden';
-                 input.name = 'ids[]';
-                 input.value = id;
-                 form.appendChild(input);
-             });
-             
-             document.body.appendChild(form);
-             form.submit();
-         }
-
-
-     </script>
-
-
- </x-admin-layout>
+        function performBulkAction(action, ids) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '{{ route("admin.citizens.bulk-action") }}';
+            
+            const csrfToken = document.createElement('input');
+            csrfToken.type = 'hidden';
+            csrfToken.name = '_token';
+            csrfToken.value = '{{ csrf_token() }}';
+            form.appendChild(csrfToken);
+            
+            const actionInput = document.createElement('input');
+            actionInput.type = 'hidden';
+            actionInput.name = 'action';
+            actionInput.value = action;
+            form.appendChild(actionInput);
+            
+            ids.forEach(id => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'ids[]';
+                input.value = id;
+                form.appendChild(input);
+            });
+            
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
+</x-admin-layout>
