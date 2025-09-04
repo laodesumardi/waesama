@@ -52,7 +52,7 @@
                             <!-- Tanggal Lahir -->
                             <div>
                                 <label for="birth_date" class="block text-sm font-medium text-gray-700">Tanggal Lahir *</label>
-                                <input type="date" name="birth_date" id="birth_date" value="{{ old('birth_date', $citizen->birth_date) }}" 
+                                <input type="date" name="birth_date" id="birth_date" value="{{ old('birth_date', $citizen->birth_date ? $citizen->birth_date->format('Y-m-d') : '') }}" 
                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 @error('birth_date') border-red-500 @enderror">
                                 @error('birth_date')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
